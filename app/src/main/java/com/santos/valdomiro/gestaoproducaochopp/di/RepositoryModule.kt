@@ -1,8 +1,12 @@
 package com.santos.valdomiro.gestaoproducaochopp.di
 
+import com.santos.valdomiro.gestaoproducaochopp.features.barril.data.repository.BarrilRepositoryImpl
+import com.santos.valdomiro.gestaoproducaochopp.features.barril.domain.repository.BarrilRepository
+import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
+import jakarta.inject.Singleton
 
 @Module
 @InstallIn(SingletonComponent::class)
@@ -26,12 +30,12 @@ abstract class RepositoryModule {
 //        usuarioFirestoreRepositoryImpl: UsuarioFirestoreFirestoreRepositoryImpl
 //    ): UsuarioFirestoreRepository
 //
-//    @Binds
-//    @Singleton
-//    abstract fun bindBarrilRepository(
-//        barrilRepositoryImpl: BarrilRepositoryImpl
-//    ): BarrilRepository
-//
+    @Binds
+    @Singleton
+    abstract fun bindBarrilRepository(
+        barrilRepositoryImpl: BarrilRepositoryImpl
+    ): BarrilRepository
+
 //    @Binds
 //    @Singleton
 //    abstract fun bindProdutoRepository(

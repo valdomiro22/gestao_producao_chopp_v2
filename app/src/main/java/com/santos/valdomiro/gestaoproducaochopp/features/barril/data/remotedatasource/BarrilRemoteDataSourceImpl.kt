@@ -3,10 +3,10 @@ package com.santos.valdomiro.gestaoproducaochopp.features.barril.data.remotedata
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.FirebaseFirestoreException
 import com.santos.valdomiro.gestaoproducaochopp.common.exceptions.AcessoNegadoException
-import com.santos.valdomiro.gestaoproducaochopp.common.exceptions.ErroBancoDadosDesconhecidoException
+import com.santos.valdomiro.gestaoproducaochopp.common.exceptions.ErroRemoteDBException
 import com.santos.valdomiro.gestaoproducaochopp.common.exceptions.NaoEncontradoException
 import com.santos.valdomiro.gestaoproducaochopp.common.exceptions.ServicoIndisponivelException
-import com.santos.valdomiro.gestaoproducaochopp.features.barril.data.dto.BarrilDto
+import com.santos.valdomiro.gestaoproducaochopp.features.barril.data.model.BarrilRemoteModel
 import kotlinx.coroutines.tasks.await
 import javax.inject.Inject
 
@@ -16,9 +16,9 @@ class BarrilRemoteDataSourceImpl @Inject constructor(
 
     private val barrilCollection = "barris"
 
-    override suspend fun insertBarril(barril: BarrilDto) {
+    override suspend fun insertBarril(barril: BarrilRemoteModel) {
         mapearExecution {
-            if (barril.id.isNullOrEmpty()) {
+            if (barril.id.isEmpty()) {
                 throw IllegalArgumentException("Erro: Tentativa de salvar Barril sem ID")
             }
 
@@ -29,7 +29,7 @@ class BarrilRemoteDataSourceImpl @Inject constructor(
         }
     }
 
-    override suspend fun updateBarril(id: String, barril: BarrilDto) {
+    override suspend fun updateBarril(id: String, barril: BarrilRemoteModel) {
         mapearExecution {
             firestore.collection(barrilCollection)
                 .document(id)
@@ -38,14 +38,14 @@ class BarrilRemoteDataSourceImpl @Inject constructor(
         }
     }
 
-    override suspend fun getBarril(id: String): BarrilDto? {
+    override suspend fun getBarril(id: String): BarrilRemoteModel? {
         return mapearExecution {
             val snapshot = firestore.collection(barrilCollection)
                 .document(id)
                 .get()
                 .await()
 
-            snapshot.toObject(BarrilDto::class.java)
+            snapshot.toObject(BarrilRemoteModel::class.java)
         }
     }
 
@@ -58,13 +58,13 @@ class BarrilRemoteDataSourceImpl @Inject constructor(
         }
     }
 
-    override suspend fun getAllBarris(): List<BarrilDto> {
+    override suspend fun getAllBarris(): List<BarrilRemoteModel> {
         return mapearExecution {
             val snapshot = firestore.collection(barrilCollection)
                 .get()
                 .await()
 
-            snapshot.documents.mapNotNull { it.toObject(BarrilDto::class.java) }
+            snapshot.documents.mapNotNull { it.toObject(BarrilRemoteModel::class.java) }
         }
     }
 
@@ -80,7 +80,7 @@ class BarrilRemoteDataSourceImpl @Inject constructor(
                 FirebaseFirestoreException.Code.PERMISSION_DENIED -> AcessoNegadoException(e)
                 FirebaseFirestoreException.Code.NOT_FOUND -> NaoEncontradoException(e)
                 FirebaseFirestoreException.Code.UNAVAILABLE -> ServicoIndisponivelException(e)
-                else -> ErroBancoDadosDesconhecidoException(e)
+                else -> ErroRemoteDBException(e)
             }
         } catch (e: Exception) {
             throw e
