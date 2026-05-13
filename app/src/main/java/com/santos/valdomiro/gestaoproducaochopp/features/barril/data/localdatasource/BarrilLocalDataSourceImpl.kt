@@ -25,12 +25,12 @@ class BarrilLocalDataSourceImpl @Inject constructor(
     }
 
     override suspend fun updateStatusSincronizacao(
-        id: String,
+        barrilId: String,
         statusSincronizacao: StatusSincronizacao
     ) {
         mapearExceptions {
             val linhasAfetadas = barrilDao.updateStatusSincronizacao(
-                id = id,
+                id = barrilId,
                 statusSincronizacao = statusSincronizacao.name
             )
 

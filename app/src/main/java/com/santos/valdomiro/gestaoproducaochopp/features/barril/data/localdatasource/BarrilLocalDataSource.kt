@@ -5,15 +5,10 @@ import com.santos.valdomiro.gestaoproducaochopp.features.barril.data.model.Statu
 import kotlinx.coroutines.flow.Flow
 
 interface BarrilLocalDataSource {
-
     suspend fun insertBarril(barril: BarrilLocalModel)
-
     suspend fun updateBarril(barril: BarrilLocalModel)
-
-    suspend fun updateStatusSincronizacao(id: String, statusSincronizacao: StatusSincronizacao)
-
+    suspend fun updateStatusSincronizacao(barrilId: String, statusSincronizacao: StatusSincronizacao)
     suspend fun deleteBarril(barril: BarrilLocalModel)
-
     fun getOneById(barrilId: String): Flow<BarrilLocalModel?>
     fun getAllBarris(): Flow<List<BarrilLocalModel>>
 }
