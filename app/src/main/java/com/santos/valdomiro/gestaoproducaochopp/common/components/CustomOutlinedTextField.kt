@@ -13,24 +13,26 @@ import androidx.compose.ui.unit.dp
 
 @Composable
 fun CustomOutlinedTextField(
+    modifier: Modifier = Modifier,
     value: String,
     onValueChange: (String) -> Unit,
-    placeholder: String,
+    placeholder: String? = null,
+    label: String,
     isErro: Boolean,
     icone: @Composable (() -> Unit)? = null,
     inputType: KeyboardType = KeyboardType.Text
 ) {
     OutlinedTextField(
+        modifier = modifier,
         value = value,
         maxLines = 1,
         onValueChange = onValueChange,
-        placeholder = { Text(placeholder) },
-        modifier = Modifier.fillMaxWidth(),
+        placeholder = { Text(placeholder ?: "") },
         keyboardOptions = KeyboardOptions(keyboardType = inputType),
         shape = RoundedCornerShape(10.dp),
         leadingIcon = icone,
+        label = { Text(label) },
         isError = isErro,
-
     )
 }
 
@@ -41,7 +43,7 @@ fun GreetingPreview() {
     CustomOutlinedTextField(
         value = value,
         onValueChange = {},
-        "Email",
+        label = "Nome",
         isErro = false,
     )
 }

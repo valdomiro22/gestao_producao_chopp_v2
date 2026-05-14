@@ -2,11 +2,14 @@ package com.santos.valdomiro.gestaoproducaochopp.screens
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Menu
+import androidx.compose.material3.Button
 import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -23,8 +26,11 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.santos.valdomiro.gestaoproducaochopp.common.AppDrawer
+import com.santos.valdomiro.gestaoproducaochopp.navigation.LocalNavController
+import com.santos.valdomiro.gestaoproducaochopp.navigation.Route
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -34,6 +40,7 @@ fun HomeScreen(
 
     val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
     val scope = rememberCoroutineScope()
+    val navController = LocalNavController.current
 
     ModalNavigationDrawer(
         drawerState = drawerState,
@@ -81,6 +88,15 @@ fun HomeScreen(
                     fontSize = 32.sp,
                     fontWeight = FontWeight.SemiBold
                 )
+                Spacer(modifier = Modifier.height(32.dp))
+
+                Button(
+                    onClick = {
+                        navController.navigate(Route.ListaBarrisRoute.route)
+                    }
+                ) {
+                    Text("Lista de Barris")
+                }
 
             }
         }

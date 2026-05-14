@@ -24,7 +24,7 @@ object DatabaseModule {
             klass = ProducaoDatabase::class.java,
             name = "producao_database"
         )
-            .fallbackToDestructiveMigration()
+            .fallbackToDestructiveMigration(false)
             .build()
     }
 }

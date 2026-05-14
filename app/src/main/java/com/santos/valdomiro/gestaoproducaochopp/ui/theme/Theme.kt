@@ -1,8 +1,8 @@
 package com.santos.valdomiro.gestaoproducaochopp.ui.theme
 
-import android.app.Activity
 import android.os.Build
 import androidx.compose.foundation.isSystemInDarkTheme
+import androidx.compose.material3.ColorScheme
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.darkColorScheme
 import androidx.compose.material3.dynamicDarkColorScheme
@@ -11,48 +11,95 @@ import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.platform.LocalContext
 
-private val DarkColorScheme = darkColorScheme(
-    primary = Purple80,
-    secondary = PurpleGrey80,
-    tertiary = Pink80
+private val LightColorSchemeSoft = lightColorScheme(
+    primary = PrimaryLightSoft,
+    onPrimary = OnPrimaryLightSoft,
+
+    primaryContainer = PrimaryContainerLightSoft,
+    onPrimaryContainer = OnPrimaryContainerLightSoft,
+
+    secondary = SecondaryLightSoft,
+    onSecondary = OnSecondaryLightSoft,
+
+    secondaryContainer = SecondaryContainerLightSoft,
+    onSecondaryContainer = OnSecondaryContainerLightSoft,
+
+    tertiary = TertiaryLightSoft,
+    onTertiary = OnTertiaryLightSoft,
+
+    background = BackgroundLightSoft,
+    onBackground = OnBackgroundLightSoft,
+
+    surface = SurfaceLightSoft,
+    onSurface = OnSurfaceLightSoft,
+
+    surfaceVariant = SurfaceVariantLightSoft,
+    onSurfaceVariant = OnSurfaceVariantLightSoft,
+
+    outline = OutlineLightSoft,
+    outlineVariant = OutlineVariantLightSoft,
+
+    error = ErrorLightSoft,
+    onError = OnErrorLightSoft
 )
 
-private val LightColorScheme = lightColorScheme(
-    primary = Purple40,
-    secondary = PurpleGrey40,
-    tertiary = Pink40
+private val DarkColorSchemeSoft = darkColorScheme(
+    primary = PrimaryDarkSoft,
+    onPrimary = OnPrimaryDarkSoft,
 
-    /* Other default colors to override
-    background = Color(0xFFFFFBFE),
-    surface = Color(0xFFFFFBFE),
-    onPrimary = Color.White,
-    onSecondary = Color.White,
-    onTertiary = Color.White,
-    onBackground = Color(0xFF1C1B1F),
-    onSurface = Color(0xFF1C1B1F),
-    */
+    primaryContainer = PrimaryContainerDarkSoft,
+    onPrimaryContainer = OnPrimaryContainerDarkSoft,
+
+    secondary = SecondaryDarkSoft,
+    onSecondary = OnSecondaryDarkSoft,
+
+    secondaryContainer = SecondaryContainerDarkSoft,
+    onSecondaryContainer = OnSecondaryContainerDarkSoft,
+
+    tertiary = TertiaryDarkSoft,
+    onTertiary = OnTertiaryDarkSoft,
+
+    background = BackgroundDarkSoft,
+    onBackground = OnBackgroundDarkSoft,
+
+    surface = SurfaceDarkSoft,
+    onSurface = OnSurfaceDarkSoft,
+
+    surfaceVariant = SurfaceVariantDarkSoft,
+    onSurfaceVariant = OnSurfaceVariantDarkSoft,
+
+    outline = OutlineDarkSoft,
+    outlineVariant = OutlineVariantDarkSoft,
+
+    error = ErrorDarkSoft,
+    onError = OnErrorDarkSoft
 )
 
 @Composable
 fun GestaoProducaoChoppTheme(
     darkTheme: Boolean = isSystemInDarkTheme(),
-    // Dynamic color is available on Android 12+
-    dynamicColor: Boolean = true,
+    dynamicColor: Boolean = false,
     content: @Composable () -> Unit
 ) {
-    val colorScheme = when {
+    val colorScheme: ColorScheme = when {
         dynamicColor && Build.VERSION.SDK_INT >= Build.VERSION_CODES.S -> {
             val context = LocalContext.current
-            if (darkTheme) dynamicDarkColorScheme(context) else dynamicLightColorScheme(context)
+
+            if (darkTheme) {
+                dynamicDarkColorScheme(context)
+            } else {
+                dynamicLightColorScheme(context)
+            }
         }
 
-        darkTheme -> DarkColorScheme
-        else -> LightColorScheme
+        darkTheme -> DarkColorSchemeSoft
+        else -> LightColorSchemeSoft
     }
 
     MaterialTheme(
         colorScheme = colorScheme,
-        typography = Typography,
+        typography = AppTypography,
+        shapes = AppShapes,
         content = content
     )
 }

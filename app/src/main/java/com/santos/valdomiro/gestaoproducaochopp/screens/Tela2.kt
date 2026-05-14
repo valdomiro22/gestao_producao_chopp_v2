@@ -25,6 +25,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
 import com.santos.valdomiro.gestaoproducaochopp.common.AppDrawer
+import com.santos.valdomiro.gestaoproducaochopp.navigation.LocalNavController
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -34,6 +35,7 @@ fun Tela2(
 
     val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
     val scope = rememberCoroutineScope()
+    val navController = LocalNavController.current
 
     ModalNavigationDrawer(
         drawerState = drawerState,

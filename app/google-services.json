@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "200141120844",
+    "project_id": "gestao-producao-chopp",
+    "storage_bucket": "gestao-producao-chopp.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:200141120844:android:1508589afb084e5278dbe9",
+        "android_client_info": {
+          "package_name": "com.santos.valdomiro.gestaoproducaochopp"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDg4hUyeAm37nq6ISi4Ou4OWbZXyOshsx8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

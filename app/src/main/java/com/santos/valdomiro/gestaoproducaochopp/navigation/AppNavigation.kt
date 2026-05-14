@@ -6,6 +6,8 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import com.santos.valdomiro.gestaoproducaochopp.features.barril.presentation.adicionarbarril.AdicionarBarrilScreen
+import com.santos.valdomiro.gestaoproducaochopp.features.barril.presentation.listabarris.ListaBarrisScreen
 import com.santos.valdomiro.gestaoproducaochopp.screens.HomeScreen
 import com.santos.valdomiro.gestaoproducaochopp.screens.Tela2
 
@@ -28,10 +30,19 @@ fun AppNavigation(
                     onOpenDrawer = onOpenDrawer
                 )
             }
+
             composable(Route.Tela2Route.route) {
                 Tela2(
                     onOpenDrawer = onOpenDrawer
                 )
+            }
+
+            composable(Route.ListaBarrisRoute.route) {
+                ListaBarrisScreen()
+            }
+
+            composable(Route.AdicionarBarrilRoute.route) {
+                AdicionarBarrilScreen()
             }
         }
     }

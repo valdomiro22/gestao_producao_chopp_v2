@@ -11,7 +11,7 @@ import androidx.compose.ui.unit.dp
 @Composable
 fun ButtomFillMaxWidth(
     onClick: () -> Unit,
-    nome: String,
+    text: String,
 ) {
     Button(
         modifier = Modifier
@@ -20,7 +20,7 @@ fun ButtomFillMaxWidth(
         onClick = onClick
     ) {
 
-        Text(nome)
+        Text(text)
 
     }
 }
