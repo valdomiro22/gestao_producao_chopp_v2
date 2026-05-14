@@ -11,7 +11,7 @@ data class BarrilLocalModel(
     val nome: String,
     val volume: Int,
     val criadoEm: Long,
-    val atualizadoEm: Long,
+    val editadoEm: Long?,
     val descartavel: Boolean,
     val statusSincronizacao: StatusSincronizacao
 )

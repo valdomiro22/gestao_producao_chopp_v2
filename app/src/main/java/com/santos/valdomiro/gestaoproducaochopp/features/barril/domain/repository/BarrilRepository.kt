@@ -6,10 +6,10 @@ import com.santos.valdomiro.gestaoproducaochopp.features.barril.domain.entity.Ba
 import kotlinx.coroutines.flow.Flow
 
 interface BarrilRepository {
-    suspend fun insertBarril(barril: BarrilLocalModel): Result<Unit>
-    suspend fun updateBarril(barril: BarrilLocalModel): Result<Unit>
+    suspend fun insertBarril(barril: BarrilEntity): Result<Unit>
+    suspend fun updateBarril(barril: BarrilEntity): Result<Unit>
     suspend fun updateStatusSincronizacao(barrilId: String, statusSincronizacao: StatusSincronizacao): Result<Unit>
-    suspend fun deleteBarril(barril: BarrilLocalModel): Result<Unit>
-    fun getOneById(barrilId: String): Flow<BarrilLocalModel?>
-    fun getAllBarris(): Flow<List<BarrilLocalModel>>
+    suspend fun deleteBarril(barril: BarrilEntity): Result<Unit>
+    fun getOneById(barrilId: String): Flow<BarrilEntity?>
+    fun getAllBarris(): Flow<List<BarrilEntity>>
 }

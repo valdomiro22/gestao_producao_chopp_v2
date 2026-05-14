@@ -11,7 +11,7 @@ fun BarrilRemoteModel.toEntity() = BarrilEntity(
     id = this.id,
     nome = this.nome,
     volume = this.volume,
-    atualizadoEm = this.atualizadoEm?.toInstant() ?: Instant.now(),
+    editadoEm = this.editadoEm?.toInstant() ?: Instant.now(),
     statusSincronizacao = StatusSincronizacao.SINCRONIZADO,
     criadoEm = this.criadoEm?.toInstant() ?: Instant.now(),
     descartavel = this.descartavel
@@ -23,7 +23,7 @@ fun BarrilEntity.toRemoteModel() = BarrilRemoteModel(
     nome = this.nome,
     volume = this.volume,
     criadoEm = this.criadoEm.toTimestamp(),
-    atualizadoEm = this.atualizadoEm.toTimestamp(),
+    editadoEm = this.editadoEm.toTimestamp(),
     descartavel = this.descartavel
 )
 
@@ -35,7 +35,7 @@ fun BarrilLocalModel.toEntity() = BarrilEntity(
     statusSincronizacao = this.statusSincronizacao,
     criadoEm = Instant.ofEpochMilli(criadoEm),
     descartavel = this.descartavel,
-    atualizadoEm = Instant.ofEpochMilli(atualizadoEm),
+    editadoEm = Instant.ofEpochMilli(editadoEm),
 )
 
 /** Converte Entity para LocalModel */
@@ -45,6 +45,6 @@ fun BarrilEntity.toLocalModel() = BarrilLocalModel(
     volume = this.volume,
     criadoEm = this.criadoEm.toEpochMilli(),
     statusSincronizacao = this.statusSincronizacao,
-    atualizadoEm = this.atualizadoEm.toEpochMilli(),
+    editadoEm = this.editadoEm.toEpochMilli(),
     descartavel = this.descartavel
 )

@@ -8,7 +8,7 @@ data class BarrilEntity(
     val nome: String,
     val volume: Int,
     val criadoEm: Instant,
-    val atualizadoEm: Instant,
+    val editadoEm: Instant? = null,
     val descartavel: Boolean,
     val statusSincronizacao: StatusSincronizacao,
 )

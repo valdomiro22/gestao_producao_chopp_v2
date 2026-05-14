@@ -2,10 +2,11 @@ package com.santos.valdomiro.gestaoproducaochopp.features.barril.data.repository
 
 import com.santos.valdomiro.gestaoproducaochopp.features.barril.data.localdatasource.BarrilLocalDataSource
 import com.santos.valdomiro.gestaoproducaochopp.features.barril.data.mapper.toEntity
+import com.santos.valdomiro.gestaoproducaochopp.features.barril.data.mapper.toLocalModel
 import com.santos.valdomiro.gestaoproducaochopp.features.barril.data.mapper.toRemoteModel
-import com.santos.valdomiro.gestaoproducaochopp.features.barril.data.model.BarrilLocalModel
 import com.santos.valdomiro.gestaoproducaochopp.features.barril.data.model.StatusSincronizacao
 import com.santos.valdomiro.gestaoproducaochopp.features.barril.data.remotedatasource.BarrilRemoteDataSource
+import com.santos.valdomiro.gestaoproducaochopp.features.barril.domain.entity.BarrilEntity
 import com.santos.valdomiro.gestaoproducaochopp.features.barril.domain.repository.BarrilRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
@@ -16,17 +17,17 @@ class BarrilRepositoryImpl @Inject constructor(
     private val remoteDataSource: BarrilRemoteDataSource
 ) : BarrilRepository {
 
-    override suspend fun insertBarril(barril: BarrilLocalModel): Result<Unit> {
+    override suspend fun insertBarril(barril: BarrilEntity): Result<Unit> {
         return try {
             val barrilPendente = barril.copy(
                 statusSincronizacao = StatusSincronizacao.AGUARDANDO_ENVIO
             )
 
-            localDataSource.insertBarril(barrilPendente)
+            localDataSource.insertBarril(barrilPendente.toLocalModel())
 
             try {
                 remoteDataSource.insertBarril(
-                    barrilPendente.toEntity().toRemoteModel()
+                    barrilPendente.toRemoteModel()
                 )
 
                 localDataSource.updateStatusSincronizacao(
@@ -42,17 +43,17 @@ class BarrilRepositoryImpl @Inject constructor(
         }
     }
 
-    override suspend fun updateBarril(barril: BarrilLocalModel): Result<Unit> {
+    override suspend fun updateBarril(barril: BarrilEntity): Result<Unit> {
         return try {
             val barrilPendente = barril.copy(
                 statusSincronizacao = StatusSincronizacao.AGUARDANDO_ATUALIZACAO
             )
-            localDataSource.updateBarril(barrilPendente)
+            localDataSource.updateBarril(barrilPendente.toLocalModel())
 
             try {
                 remoteDataSource.updateBarril(
                     id = barrilPendente.id,
-                    barril = barrilPendente.toEntity().toRemoteModel()
+                    barril = barrilPendente.toRemoteModel()
                 )
 
                 localDataSource.updateStatusSincronizacao(
@@ -84,20 +85,20 @@ class BarrilRepositoryImpl @Inject constructor(
         }
     }
 
-    override suspend fun deleteBarril(barril: BarrilLocalModel): Result<Unit> {
+    override suspend fun deleteBarril(barril: BarrilEntity): Result<Unit> {
         return try {
             val barrilParaExcluir = barril.copy(
                 statusSincronizacao = StatusSincronizacao.AGUARDANDO_EXCLUSAO
             )
 
-            localDataSource.updateBarril(barrilParaExcluir)
+            localDataSource.updateBarril(barrilParaExcluir.toLocalModel())
 
             try {
                 remoteDataSource.deleteBarril(
-                    id = barrilParaExcluir.id
+                    id = barrilParaExcluir.id  // TODO - Enviar o barril inteiro, como no locaDataSource()
                 )
 
-                localDataSource.deleteBarril(barril = barrilParaExcluir)
+                localDataSource.deleteBarril(barril = barrilParaExcluir.toLocalModel())
             } catch (e: Exception) {
             }
 
@@ -107,7 +108,7 @@ class BarrilRepositoryImpl @Inject constructor(
         }
     }
 
-    override fun getOneById(barrilId: String): Flow<BarrilLocalModel?> {
+    override fun getOneById(barrilId: String): Flow<BarrilEntity?> {
         return localDataSource.getOneById(barrilId)
             .map { barril ->
                 if (barril == null) {
@@ -115,17 +116,21 @@ class BarrilRepositoryImpl @Inject constructor(
                 } else if (barril.statusSincronizacao == StatusSincronizacao.AGUARDANDO_EXCLUSAO) {
                     null
                 } else {
-                    barril
+                    barril.toEntity()
                 }
             }
     }
 
-    override fun getAllBarris(): Flow<List<BarrilLocalModel>> {
+    override fun getAllBarris(): Flow<List<BarrilEntity>> {
         return localDataSource.getAllBarris()
-            .map { listaBarris ->
-                listaBarris.filter { barril ->
-                    barril.statusSincronizacao != StatusSincronizacao.AGUARDANDO_EXCLUSAO
-                }
+            .map { listaBarrisLocal ->
+                listaBarrisLocal
+                    .filter { barrilLocal ->
+                        barrilLocal.statusSincronizacao != StatusSincronizacao.AGUARDANDO_EXCLUSAO
+                    }
+                    .map { barrilLocal ->
+                        barrilLocal.toEntity()
+                    }
             }
     }
 }

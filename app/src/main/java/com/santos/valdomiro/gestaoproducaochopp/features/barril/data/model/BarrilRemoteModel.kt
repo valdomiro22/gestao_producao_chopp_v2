@@ -7,7 +7,7 @@ data class BarrilRemoteModel(
     val nome: String = "",
     val volume: Int = 0,
     val criadoEm: Timestamp? = null,
-    val atualizadoEm: Timestamp? = null,
+    val editadoEm: Timestamp? = null,
     val descartavel: Boolean = false
 ) {
 
@@ -17,7 +17,7 @@ data class BarrilRemoteModel(
             "nome" to nome,
             "volume" to volume,
             "criadoEm" to criadoEm,
-            "atualizadoEm" to atualizadoEm,
+            "atualizadoEm" to editadoEm,
             "descartavel" to descartavel
         )
     }
