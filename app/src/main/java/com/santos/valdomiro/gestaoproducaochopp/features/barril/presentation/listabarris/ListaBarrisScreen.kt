@@ -133,7 +133,7 @@ fun ListaBarrisScreen(
                             ItemListaBarril(
                                 barril = barril,
                                 onEditarClick = {},
-                                onDeletarClick = {  },
+                                onDeletarClick = { viewModel.deletarBarril(barril = barril) },
                             )
                         }
                     }

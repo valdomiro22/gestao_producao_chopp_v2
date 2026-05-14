@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.santos.valdomiro.gestaoproducaochopp.common.state.UiState
 import com.santos.valdomiro.gestaoproducaochopp.features.barril.domain.entity.BarrilEntity
+import com.santos.valdomiro.gestaoproducaochopp.features.barril.domain.usecases.DeleteBarrilUseCase
 import com.santos.valdomiro.gestaoproducaochopp.features.barril.domain.usecases.GetAllBarrisUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -15,7 +16,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class ListaBarrisViewModel @Inject constructor(
-    private val getAllBarrisUseCase: GetAllBarrisUseCase
+    private val getAllBarrisUseCase: GetAllBarrisUseCase,
+    private val deletarBarrilUseCase: DeleteBarrilUseCase
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow<UiState<List<BarrilEntity>>>(UiState.Loading)
@@ -33,6 +35,20 @@ class ListaBarrisViewModel @Inject constructor(
                 }
                 .collect { listaBarris ->
                     _uiState.value = UiState.Success(listaBarris)
+                }
+        }
+    }
+
+    fun deletarBarril(barril: BarrilEntity) {
+        viewModelScope.launch {
+            _uiState.value = UiState.Loading
+
+            deletarBarrilUseCase(barril = barril)
+                .onSuccess { getAll() }
+                .onFailure { exception ->
+                    _uiState.value = UiState.Error(
+                        exception.message ?: "Erro al deletar barril"
+                    )
                 }
         }
     }
