@@ -1,4 +1,4 @@
-package com.santos.valdomiro.gestaoproducaochopp.features.barril.data.model
+package com.santos.valdomiro.gestaoproducaochopp.common.enums
 
 enum class StatusSincronizacao {
     SINCRONIZADO,

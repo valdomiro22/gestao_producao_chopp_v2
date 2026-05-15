@@ -2,7 +2,7 @@ package com.santos.valdomiro.gestaoproducaochopp.features.barril.presentation.sc
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.santos.valdomiro.gestaoproducaochopp.features.barril.data.model.StatusSincronizacao
+import com.santos.valdomiro.gestaoproducaochopp.common.enums.StatusSincronizacao
 import com.santos.valdomiro.gestaoproducaochopp.features.barril.domain.entity.BarrilEntity
 import com.santos.valdomiro.gestaoproducaochopp.features.barril.domain.usecases.GetOneBarrilUseCase
 import com.santos.valdomiro.gestaoproducaochopp.features.barril.domain.usecases.UpdateBarrilParams

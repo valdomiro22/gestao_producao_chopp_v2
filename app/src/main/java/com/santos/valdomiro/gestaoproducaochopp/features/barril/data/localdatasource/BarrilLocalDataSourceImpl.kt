@@ -7,7 +7,7 @@ import com.santos.valdomiro.gestaoproducaochopp.common.exceptions.RegistroDuplic
 import com.santos.valdomiro.gestaoproducaochopp.common.exceptions.RegistroInvalidoException
 import com.santos.valdomiro.gestaoproducaochopp.features.barril.data.dao.BarrilDao
 import com.santos.valdomiro.gestaoproducaochopp.features.barril.data.model.BarrilLocalModel
-import com.santos.valdomiro.gestaoproducaochopp.features.barril.data.model.StatusSincronizacao
+import com.santos.valdomiro.gestaoproducaochopp.common.enums.StatusSincronizacao
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
 import javax.inject.Inject

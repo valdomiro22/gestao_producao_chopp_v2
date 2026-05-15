@@ -1,51 +1,48 @@
-package com.santos.valdomiro.gestaoproducaochopp.features.barril.data.mapper
+package com.santos.valdomiro.gestaoproducaochopp.features.produto.data.mapper
 
-import com.santos.valdomiro.gestaoproducaochopp.features.barril.data.model.BarrilLocalModel
-import com.santos.valdomiro.gestaoproducaochopp.features.barril.data.model.BarrilRemoteModel
 import com.santos.valdomiro.gestaoproducaochopp.common.enums.StatusSincronizacao
 import com.santos.valdomiro.gestaoproducaochopp.common.helper.toTimestamp
-import com.santos.valdomiro.gestaoproducaochopp.features.barril.domain.entity.BarrilEntity
+import com.santos.valdomiro.gestaoproducaochopp.features.produto.data.model.ProdutoLocalModel
+import com.santos.valdomiro.gestaoproducaochopp.features.produto.data.model.ProdutoRemoteModel
+import com.santos.valdomiro.gestaoproducaochopp.features.produto.domain.entity.ProdutoEntity
 import java.time.Instant
 
 /** Converte RemoteModel para Entity */
-fun BarrilRemoteModel.toEntity() = BarrilEntity(
+fun ProdutoRemoteModel.toEntity() = ProdutoEntity(
     id = this.id,
     nome = this.nome,
-    volume = this.volume,
     editadoEm = this.editadoEm?.toInstant() ?: Instant.now(),
     statusSincronizacao = StatusSincronizacao.SINCRONIZADO,
     criadoEm = this.criadoEm?.toInstant() ?: Instant.now(),
-    descartavel = this.descartavel
+    prazoValidade = this.prazoValidade
 )
 
 /** Converte Entity para RemoteModel */
-fun BarrilEntity.toRemoteModel() = BarrilRemoteModel(
+fun ProdutoEntity.toRemoteModel() = ProdutoRemoteModel(
     id = this.id,
     nome = this.nome,
-    volume = this.volume,
     criadoEm = this.criadoEm.toTimestamp(),
     editadoEm = this.editadoEm?.toTimestamp(),
-    descartavel = this.descartavel
+    prazoValidade = this.prazoValidade,
+    statusSincronizacao = this.statusSincronizacao,
 )
 
 /** Converte LocalModel para Entity */
-fun BarrilLocalModel.toEntity() = BarrilEntity(
+fun ProdutoLocalModel.toEntity() = ProdutoEntity(
     id = this.id,
     nome = this.nome,
-    volume = this.volume,
     statusSincronizacao = this.statusSincronizacao,
     criadoEm = Instant.ofEpochMilli(criadoEm),
-    descartavel = this.descartavel,
     editadoEm = Instant.ofEpochMilli(criadoEm),
+    prazoValidade = this.prazoValidade,
 )
 
 /** Converte Entity para LocalModel */
-fun BarrilEntity.toLocalModel() = BarrilLocalModel(
+fun ProdutoEntity.toLocalModel() = ProdutoLocalModel(
     id = this.id,
     nome = this.nome,
-    volume = this.volume,
     criadoEm = this.criadoEm.toEpochMilli(),
     statusSincronizacao = this.statusSincronizacao,
     editadoEm = this.editadoEm?.toEpochMilli(),
-    descartavel = this.descartavel
+    prazoValidade = this.prazoValidade,
 )

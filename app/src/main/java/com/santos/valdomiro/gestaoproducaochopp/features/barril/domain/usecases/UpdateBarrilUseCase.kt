@@ -1,6 +1,6 @@
 package com.santos.valdomiro.gestaoproducaochopp.features.barril.domain.usecases
 
-import com.santos.valdomiro.gestaoproducaochopp.features.barril.data.model.StatusSincronizacao
+import com.santos.valdomiro.gestaoproducaochopp.common.enums.StatusSincronizacao
 import com.santos.valdomiro.gestaoproducaochopp.features.barril.domain.entity.BarrilEntity
 import com.santos.valdomiro.gestaoproducaochopp.features.barril.domain.repository.BarrilRepository
 import java.time.Instant

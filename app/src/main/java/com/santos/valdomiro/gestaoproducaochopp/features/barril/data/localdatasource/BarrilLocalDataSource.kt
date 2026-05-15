@@ -1,7 +1,7 @@
 package com.santos.valdomiro.gestaoproducaochopp.features.barril.data.localdatasource
 
 import com.santos.valdomiro.gestaoproducaochopp.features.barril.data.model.BarrilLocalModel
-import com.santos.valdomiro.gestaoproducaochopp.features.barril.data.model.StatusSincronizacao
+import com.santos.valdomiro.gestaoproducaochopp.common.enums.StatusSincronizacao
 import kotlinx.coroutines.flow.Flow
 
 interface BarrilLocalDataSource {

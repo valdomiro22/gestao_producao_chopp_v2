@@ -4,7 +4,7 @@ import com.santos.valdomiro.gestaoproducaochopp.features.barril.data.localdataso
 import com.santos.valdomiro.gestaoproducaochopp.features.barril.data.mapper.toEntity
 import com.santos.valdomiro.gestaoproducaochopp.features.barril.data.mapper.toLocalModel
 import com.santos.valdomiro.gestaoproducaochopp.features.barril.data.mapper.toRemoteModel
-import com.santos.valdomiro.gestaoproducaochopp.features.barril.data.model.StatusSincronizacao
+import com.santos.valdomiro.gestaoproducaochopp.common.enums.StatusSincronizacao
 import com.santos.valdomiro.gestaoproducaochopp.features.barril.data.remotedatasource.BarrilRemoteDataSource
 import com.santos.valdomiro.gestaoproducaochopp.features.barril.domain.entity.BarrilEntity
 import com.santos.valdomiro.gestaoproducaochopp.features.barril.domain.repository.BarrilRepository
