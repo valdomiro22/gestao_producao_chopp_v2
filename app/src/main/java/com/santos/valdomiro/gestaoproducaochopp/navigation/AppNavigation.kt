@@ -4,10 +4,13 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import com.santos.valdomiro.gestaoproducaochopp.features.barril.presentation.adicionarbarril.AdicionarBarrilScreen
-import com.santos.valdomiro.gestaoproducaochopp.features.barril.presentation.listabarris.ListaBarrisScreen
+import androidx.navigation.navArgument
+import com.santos.valdomiro.gestaoproducaochopp.features.barril.presentation.screens.adicionarbarril.AdicionarBarrilScreen
+import com.santos.valdomiro.gestaoproducaochopp.features.barril.presentation.screens.editarbarril.EditarBarrilScreen
+import com.santos.valdomiro.gestaoproducaochopp.features.barril.presentation.screens.listabarris.ListaBarrisScreen
 import com.santos.valdomiro.gestaoproducaochopp.screens.HomeScreen
 import com.santos.valdomiro.gestaoproducaochopp.screens.Tela2
 
@@ -31,10 +34,12 @@ fun AppNavigation(
                 )
             }
 
-            composable(Route.Tela2Route.route) {
-                Tela2(
-                    onOpenDrawer = onOpenDrawer
-                )
+            composable(
+                route = "editar-barril/{barrilId}",
+                arguments = listOf(navArgument("barrilId") { type = NavType.StringType })
+            ) { backStackEntry ->
+                val barrilId = backStackEntry.arguments?.getString("barrilId") ?: return@composable
+                EditarBarrilScreen(barrilId = barrilId)
             }
 
             composable(Route.ListaBarrisRoute.route) {

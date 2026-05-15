@@ -1,8 +1,7 @@
-package com.santos.valdomiro.gestaoproducaochopp.features.barril.presentation.listabarris
+package com.santos.valdomiro.gestaoproducaochopp.features.barril.presentation.screens.listabarris
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.calculateEndPadding
 import androidx.compose.foundation.layout.calculateStartPadding
@@ -33,7 +32,6 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.santos.valdomiro.gestaoproducaochopp.common.components.EmptyListState
 import com.santos.valdomiro.gestaoproducaochopp.common.components.ErroComponent
@@ -112,7 +110,7 @@ fun ListaBarrisScreen(
                     (state as? UiState.Success<List<BarrilEntity>>)?.data ?: emptyList()
 
                 if (listaBarris.isEmpty()) {
-                    EmptyListState()
+                    EmptyListState(mensagem = "Toque no botão + para adicionar um barril e utilizar na produção.")
                 } else {
                     LazyColumn(
                         modifier = Modifier
@@ -132,7 +130,13 @@ fun ListaBarrisScreen(
                         ) { barril ->
                             ItemListaBarril(
                                 barril = barril,
-                                onEditarClick = {},
+                                onEditarClick = {
+                                    navController.navigate(
+                                        Route.EditarBarrilRoute.criarRota(
+                                            barrilId = barril.id
+                                        )
+                                    )
+                                },
                                 onDeletarClick = { viewModel.deletarBarril(barril = barril) },
                             )
                         }

@@ -24,7 +24,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
 @Composable
-fun EmptyListState(modifier: Modifier = Modifier) {
+fun EmptyListState(modifier: Modifier = Modifier, mensagem: String) {
     Column(
         modifier = modifier
             .fillMaxSize()
@@ -64,7 +64,7 @@ fun EmptyListState(modifier: Modifier = Modifier) {
 
         // Mensagem de Instrução
         Text(
-            text = "Toque no botão + para adicionar um contador e começar a organizar suas tarefas.",
+            text = mensagem,
             style = MaterialTheme.typography.bodyLarge.copy(
                 lineHeight = 24.sp,
                 color = MaterialTheme.colorScheme.onSurfaceVariant
@@ -77,5 +77,5 @@ fun EmptyListState(modifier: Modifier = Modifier) {
 @Preview(showBackground = true)
 @Composable
 fun PreviewEmptyListState() {
-    EmptyListState()
+    EmptyListState(mensagem = "Toque no botão + para adicionar um barril e utilizar na produção.")
 }

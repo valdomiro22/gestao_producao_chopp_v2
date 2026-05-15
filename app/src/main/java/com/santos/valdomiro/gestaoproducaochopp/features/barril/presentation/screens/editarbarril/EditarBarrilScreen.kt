@@ -1,6 +1,5 @@
-package com.santos.valdomiro.gestaoproducaochopp.features.barril.presentation.adicionarbarril
+package com.santos.valdomiro.gestaoproducaochopp.features.barril.presentation.screens.editarbarril
 
-import android.widget.Toast
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -41,19 +40,22 @@ import com.santos.valdomiro.gestaoproducaochopp.ui.theme.AppTopBarColors
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun AdicionarBarrilScreen(
+fun EditarBarrilScreen(
+    barrilId: String,
     modifier: Modifier = Modifier,
-    viewModel: AdicionarBarrilViewModel = hiltViewModel()
+    viewModel: EditarBarrilViewModel = hiltViewModel()
 ) {
-
     val navController = LocalNavController.current
     val state by viewModel.uiState.collectAsState()
     val context = LocalContext.current
 
-    LaunchedEffect(state.isSuccess) {
-        if (state.isSuccess) {
+    LaunchedEffect(Unit) {
+        viewModel.buscarBarril(barrilId = barrilId)
+    }
+
+    LaunchedEffect(state.isEditSuccess) {
+        if (state.isEditSuccess) {
             navController.popBackStack()
-            Toast.makeText(context, "Barril salvo", Toast.LENGTH_SHORT).show()
         }
     }
 
@@ -62,7 +64,7 @@ fun AdicionarBarrilScreen(
             TopAppBar(
                 title = {
                     Text(
-                        text = "Adicionar Barril",
+                        text = "Editar Barril",
                         modifier = Modifier.fillMaxWidth(),
                         textAlign = TextAlign.Center
                     )
@@ -133,11 +135,12 @@ fun AdicionarBarrilScreen(
             Spacer(modifier = Modifier.height(16.dp))
 
             ButtomFillMaxWidth(
-                onClick = { viewModel.inserirBarril() },
-                text = "Salva"
+                onClick = { viewModel.editarBarril() },
+                text = "Editar"
             )
 
             if (state.isLoading) CarregandoComponent(cor = MaterialTheme.colorScheme.primary)
         }
     }
+
 }

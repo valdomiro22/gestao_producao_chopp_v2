@@ -10,6 +10,8 @@ sealed class Route(
     data object HomeRoute: Route(route = "home", title = "Home")
     data object Tela2Route: Route(route = "tela2", title = "Tela 2")
     data object AdicionarBarrilRoute: Route(route = "adicionar-barril", title = "Adicionar Barril")
-    data object EditarBarrilRoute: Route(route = "editar-barril", title = "Editar Barril")
+    data object EditarBarrilRoute: Route(route = "editar-barril/{barrilId}", title = "Editar Barril") {
+        fun criarRota(barrilId: String) = "editar-barril/$barrilId"
+    }
     data object ListaBarrisRoute: Route(route = "lista-barris", title = "Lista de Barris")
 }

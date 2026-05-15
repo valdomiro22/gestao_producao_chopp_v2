@@ -1,4 +1,4 @@
-package com.santos.valdomiro.gestaoproducaochopp.features.barril.presentation.adicionarbarril
+package com.santos.valdomiro.gestaoproducaochopp.features.barril.presentation.screens.adicionarbarril
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope

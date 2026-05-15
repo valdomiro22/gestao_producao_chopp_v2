@@ -21,7 +21,7 @@ class GetOneBarrilUseCase @Inject constructor(
                 if (barril != null) {
                     Result.success(barril)
                 } else {
-                    Result.failure(Exception("Contador não encontrado com o ID: $barrilId"))
+                    Result.failure(Exception("Barril não encontrado com o ID: $barrilId"))
                 }
             }
     }

@@ -1,4 +1,4 @@
-package com.santos.valdomiro.gestaoproducaochopp.features.barril.presentation.listabarris
+package com.santos.valdomiro.gestaoproducaochopp.features.barril.presentation.screens.listabarris
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope

@@ -49,7 +49,7 @@ class UpdateBarrilUseCase @Inject constructor(
             statusSincronizacao = StatusSincronizacao.AGUARDANDO_ATUALIZACAO,
         )
 
-        repository.insertBarril(barril = barril)
+        repository.updateBarril(barril = barril)
             .getOrElse {
                 return Result.failure(it)
             }
