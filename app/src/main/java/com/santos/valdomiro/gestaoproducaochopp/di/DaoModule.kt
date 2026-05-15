@@ -1,6 +1,6 @@
 package com.santos.valdomiro.gestaoproducaochopp.di
 
-import com.santos.valdomiro.gestaoproducaochopp.features.barril.data.dao.BarrilDao
+import com.santos.valdomiro.gestaoproducaochopp.features.barril.data.produtodao.BarrilDao
 import com.santos.valdomiro.gestaoproducaochopp.features.database.ProducaoDatabase
 import dagger.Module
 import dagger.Provides

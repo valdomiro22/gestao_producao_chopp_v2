@@ -1,4 +1,4 @@
-package com.santos.valdomiro.gestaoproducaochopp.features.barril.data.dao
+package com.santos.valdomiro.gestaoproducaochopp.features.barril.data.produtodao
 
 import androidx.room.Dao
 import androidx.room.Delete
