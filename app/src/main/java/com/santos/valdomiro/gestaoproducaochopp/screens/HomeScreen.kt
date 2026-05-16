@@ -97,6 +97,16 @@ fun HomeScreen(
                 ) {
                     Text("Lista de Barris")
                 }
+                Spacer(modifier = Modifier.height(16.dp))
+
+                Button(
+                    onClick = {
+                        navController.navigate(Route.ListaProdutosRoute.route)
+                    }
+                ) {
+                    Text("Lista de Produtos")
+                }
+                Spacer(modifier = Modifier.height(16.dp))
 
             }
         }

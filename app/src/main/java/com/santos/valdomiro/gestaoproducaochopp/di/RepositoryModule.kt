@@ -2,6 +2,8 @@ package com.santos.valdomiro.gestaoproducaochopp.di
 
 import com.santos.valdomiro.gestaoproducaochopp.features.barril.data.repository.BarrilRepositoryImpl
 import com.santos.valdomiro.gestaoproducaochopp.features.barril.domain.repository.BarrilRepository
+import com.santos.valdomiro.gestaoproducaochopp.features.produto.data.repository.ProdutoRepositoryImpl
+import com.santos.valdomiro.gestaoproducaochopp.features.produto.domain.repository.ProdutoRepository
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
@@ -36,12 +38,12 @@ abstract class RepositoryModule {
         barrilRepositoryImpl: BarrilRepositoryImpl
     ): BarrilRepository
 
-//    @Binds
-//    @Singleton
-//    abstract fun bindProdutoRepository(
-//        produtoRepositoryImpl: ProdutoRepositoryImpl
-//    ): ProdutoRepository
-//
+    @Binds
+    @Singleton
+    abstract fun bindProdutoRepository(
+        produtoRepositoryImpl: ProdutoRepositoryImpl
+    ): ProdutoRepository
+
 //    @Binds
 //    @Singleton
 //    abstract fun bindGradeRepository(

@@ -11,6 +11,8 @@ import androidx.navigation.navArgument
 import com.santos.valdomiro.gestaoproducaochopp.features.barril.presentation.screens.adicionarbarril.AdicionarBarrilScreen
 import com.santos.valdomiro.gestaoproducaochopp.features.barril.presentation.screens.editarbarril.EditarBarrilScreen
 import com.santos.valdomiro.gestaoproducaochopp.features.barril.presentation.screens.listabarris.ListaBarrisScreen
+import com.santos.valdomiro.gestaoproducaochopp.features.produto.presentation.screens.adicionarproduto.AdicionarProdutoScreen
+import com.santos.valdomiro.gestaoproducaochopp.features.produto.presentation.screens.listaprodutos.ListaProdutosScreen
 import com.santos.valdomiro.gestaoproducaochopp.screens.HomeScreen
 import com.santos.valdomiro.gestaoproducaochopp.screens.Tela2
 
@@ -46,8 +48,16 @@ fun AppNavigation(
                 ListaBarrisScreen()
             }
 
+            composable(Route.ListaProdutosRoute.route) {
+                ListaProdutosScreen()
+            }
+
             composable(Route.AdicionarBarrilRoute.route) {
                 AdicionarBarrilScreen()
+            }
+
+            composable(Route.AdicionarProdutoRoute.route) {
+                AdicionarProdutoScreen()
             }
         }
     }

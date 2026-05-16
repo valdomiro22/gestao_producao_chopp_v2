@@ -19,6 +19,7 @@ class ProdutoRepositoryImpl @Inject constructor(
 
     override suspend fun insertProduto(produto: ProdutoEntity): Result<Unit> {
         return try {
+
             val produtoPendente = produto.copy(
                 statusSincronizacao = StatusSincronizacao.AGUARDANDO_ENVIO
             )

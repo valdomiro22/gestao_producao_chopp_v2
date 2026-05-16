@@ -4,6 +4,10 @@ import com.santos.valdomiro.gestaoproducaochopp.features.barril.data.localdataso
 import com.santos.valdomiro.gestaoproducaochopp.features.barril.data.localdatasource.BarrilLocalDataSourceImpl
 import com.santos.valdomiro.gestaoproducaochopp.features.barril.data.remotedatasource.BarrilRemoteDataSource
 import com.santos.valdomiro.gestaoproducaochopp.features.barril.data.remotedatasource.BarrilRemoteDataSourceImpl
+import com.santos.valdomiro.gestaoproducaochopp.features.produto.data.localdatasource.ProdutoLocalDataSource
+import com.santos.valdomiro.gestaoproducaochopp.features.produto.data.localdatasource.ProdutoLocalDataSourceImpl
+import com.santos.valdomiro.gestaoproducaochopp.features.produto.data.remotedatasource.ProdutoRemoteDataSource
+import com.santos.valdomiro.gestaoproducaochopp.features.produto.data.remotedatasource.ProdutoRemoteDataSourceImpl
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
@@ -34,10 +38,14 @@ abstract class DataSourceModule {
     @Singleton
     abstract fun bindBarrilLocalDataSource(impl: BarrilLocalDataSourceImpl): BarrilLocalDataSource
 
-//    @Binds
-//    @Singleton
-//    abstract fun bindProdutoRemoteDataSource(impl: ProdutoRemoteDataSourceImpl): ProdutoRemoteDataSource
-//
+    @Binds
+    @Singleton
+    abstract fun bindProdutoRemoteDataSource(impl: ProdutoRemoteDataSourceImpl): ProdutoRemoteDataSource
+
+    @Binds
+    @Singleton
+    abstract fun bindProdutoLocalDataSource(impl: ProdutoLocalDataSourceImpl): ProdutoLocalDataSource
+
 //    @Binds
 //    @Singleton
 //    abstract fun bindGradeRemoteDataSource(impl: GradeRemoteDataSourceImpl): GradeRemoteDataSource
