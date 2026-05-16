@@ -106,7 +106,7 @@ class EditarBarrilViewModel @Inject constructor(
                     _uiState.update {
                         it.copy(
                             isLoading = false,
-                            erro = erro.message ?: "Erro ao inserir barril"
+                            erro = erro.message ?: "Erro ao editar barril"
                         )
                     }
                 }

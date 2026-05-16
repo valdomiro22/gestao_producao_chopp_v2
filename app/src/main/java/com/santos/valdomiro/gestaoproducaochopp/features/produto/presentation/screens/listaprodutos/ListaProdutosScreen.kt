@@ -141,11 +141,11 @@ fun ListaProdutosScreen(
                             ItemListaProduto(
                                 produto = produto,
                                 onEditarClick = {
-//                                    navController.navigate(
-//                                        Route.EditarBarrilRoute.criarRota(
-//                                            produtoId = produto.id
-//                                        )
-//                                    )
+                                    navController.navigate(
+                                        Route.EditarProdutoRoute.criarRota(
+                                            produtoId = produto.id
+                                        )
+                                    )
                                 },
                                 onDeletarClick = { viewModel.deleteProduto(produto = produto) },
                             )

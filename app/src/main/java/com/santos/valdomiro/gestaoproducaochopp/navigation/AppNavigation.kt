@@ -12,6 +12,7 @@ import com.santos.valdomiro.gestaoproducaochopp.features.barril.presentation.scr
 import com.santos.valdomiro.gestaoproducaochopp.features.barril.presentation.screens.editarbarril.EditarBarrilScreen
 import com.santos.valdomiro.gestaoproducaochopp.features.barril.presentation.screens.listabarris.ListaBarrisScreen
 import com.santos.valdomiro.gestaoproducaochopp.features.produto.presentation.screens.adicionarproduto.AdicionarProdutoScreen
+import com.santos.valdomiro.gestaoproducaochopp.features.produto.presentation.screens.editarproduto.EditarProdutoScreen
 import com.santos.valdomiro.gestaoproducaochopp.features.produto.presentation.screens.listaprodutos.ListaProdutosScreen
 import com.santos.valdomiro.gestaoproducaochopp.screens.HomeScreen
 import com.santos.valdomiro.gestaoproducaochopp.screens.Tela2
@@ -36,14 +37,6 @@ fun AppNavigation(
                 )
             }
 
-            composable(
-                route = "editar-barril/{barrilId}",
-                arguments = listOf(navArgument("barrilId") { type = NavType.StringType })
-            ) { backStackEntry ->
-                val barrilId = backStackEntry.arguments?.getString("barrilId") ?: return@composable
-                EditarBarrilScreen(barrilId = barrilId)
-            }
-
             composable(Route.ListaBarrisRoute.route) {
                 ListaBarrisScreen()
             }
@@ -58,6 +51,22 @@ fun AppNavigation(
 
             composable(Route.AdicionarProdutoRoute.route) {
                 AdicionarProdutoScreen()
+            }
+
+            composable(
+                route = "editar-barril/{barrilId}",
+                arguments = listOf(navArgument("barrilId") { type = NavType.StringType })
+            ) { backStackEntry ->
+                val barrilId = backStackEntry.arguments?.getString("barrilId") ?: return@composable
+                EditarBarrilScreen(barrilId = barrilId)
+            }
+
+            composable(
+                route = "editar-produto/{produtoId}",
+                arguments = listOf(navArgument("produtoId") { type = NavType.StringType })
+            ) { backStackEntry ->
+                val produtoId = backStackEntry.arguments?.getString("produtoId") ?: return@composable
+                EditarProdutoScreen(produtoId = produtoId)
             }
         }
     }
