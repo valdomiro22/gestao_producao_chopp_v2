@@ -36,7 +36,7 @@ fun BarrilLocalModel.toEntity() = BarrilEntity(
     statusSincronizacao = this.statusSincronizacao,
     criadoEm = Instant.ofEpochMilli(criadoEm),
     descartavel = this.descartavel,
-    editadoEm = Instant.ofEpochMilli(criadoEm),
+    editadoEm = editadoEm?.let { Instant.ofEpochMilli(it) },
 )
 
 /** Converte Entity para LocalModel */
