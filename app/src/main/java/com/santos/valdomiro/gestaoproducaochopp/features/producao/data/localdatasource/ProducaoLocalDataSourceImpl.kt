@@ -1,60 +1,60 @@
-package com.santos.valdomiro.gestaoproducaochopp.features.barril.data.localdatasource
+package com.santos.valdomiro.gestaoproducaochopp.features.producao.data.localdatasource
 
 import android.database.sqlite.SQLiteConstraintException
 import android.database.sqlite.SQLiteException
+import com.santos.valdomiro.gestaoproducaochopp.common.enums.StatusSincronizacao
 import com.santos.valdomiro.gestaoproducaochopp.common.exceptions.ErroBancoDadosDesconhecidoException
 import com.santos.valdomiro.gestaoproducaochopp.common.exceptions.RegistroDuplicadoException
 import com.santos.valdomiro.gestaoproducaochopp.common.exceptions.RegistroInvalidoException
-import com.santos.valdomiro.gestaoproducaochopp.features.barril.data.barrildao.BarrilDao
-import com.santos.valdomiro.gestaoproducaochopp.features.barril.data.model.BarrilLocalModel
-import com.santos.valdomiro.gestaoproducaochopp.common.enums.StatusSincronizacao
+import com.santos.valdomiro.gestaoproducaochopp.features.producao.data.model.ProducaoLocalModel
+import com.santos.valdomiro.gestaoproducaochopp.features.producao.data.producaodao.ProducaoDao
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
 import javax.inject.Inject
 
-class BarrilLocalDataSourceImpl @Inject constructor(
-    private val barrilDao: BarrilDao
-) : BarrilLocalDataSource {
+class ProducaoLocalDataSourceImpl @Inject constructor(
+    private val producaoDao: ProducaoDao
+) : ProducaoLocalDataSource {
 
-    override suspend fun insertBarril(barril: BarrilLocalModel) {
-        mapearExceptions { barrilDao.insert(barril = barril) }
+    override suspend fun insertProducao(producao: ProducaoLocalModel) {
+        mapearExceptions { producaoDao.insert(producao = producao) }
     }
 
-    override suspend fun updateBarril(barril: BarrilLocalModel) {
-        mapearExceptions { barrilDao.update(barril = barril) }
+    override suspend fun updateProducao(producao: ProducaoLocalModel) {
+        mapearExceptions { producaoDao.update(producao = producao) }
     }
 
     override suspend fun updateStatusSincronizacao(
-        barrilId: String,
+        producaoId: String,
         statusSincronizacao: StatusSincronizacao
     ) {
         mapearExceptions {
-            val linhasAfetadas = barrilDao.updateStatusSincronizacao(
-                id = barrilId,
+            val linhasAfetadas = producaoDao.updateStatusSincronizacao(
+                id = producaoId,
                 statusSincronizacao = statusSincronizacao.name
             )
 
             if (linhasAfetadas == 0) {
                 throw RegistroInvalidoException(
-                    IllegalStateException("Barril não encontrado para atualizar status.")
+                    IllegalStateException("Produção não encontrada para atualizar status.")
                 )
             }
         }
     }
 
-    override fun getOneById(barrilId: String): Flow<BarrilLocalModel?> {
-        return barrilDao.getOneById(id = barrilId)
+    override suspend fun deleteProducao(producao: ProducaoLocalModel) {
+        mapearExceptions { producaoDao.delete(producao = producao) }
+    }
+
+    override fun getOneById(producaoId: String): Flow<ProducaoLocalModel?> {
+        return producaoDao.getOneById(producaoId = producaoId)
             .catch { e ->
                 throw mapearException(e)
             }
     }
 
-    override suspend fun deleteBarril(barril: BarrilLocalModel) {
-        mapearExceptions { barrilDao.delete(barril = barril) }
-    }
-
-    override fun getAllBarris(): Flow<List<BarrilLocalModel>> {
-        return barrilDao.getAll()
+    override fun getAllProducoes(): Flow<List<ProducaoLocalModel>> {
+        return producaoDao.getAll()
             .catch { e ->
                 throw mapearException(e)
             }

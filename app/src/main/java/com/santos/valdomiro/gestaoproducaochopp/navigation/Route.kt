@@ -30,4 +30,15 @@ sealed class Route(
         fun criarRota(gradeId: String) = "editar-grade/$gradeId"
     }
 
+    // Produções
+    data object AdicionarProducaoRoute: Route(route = "adicionar-producao/{gradeId}", title = "Adicionar Produção") {
+        fun criarRota(gradeId: String) = "adicionar-producao/$gradeId"
+    }
+    data object ListaProducoesRoute: Route(route = "lista-producoes/{gradeId}", title = "Lista de Produções") {
+        fun criarRota(gradeId: String) = "lista-producoes/$gradeId"
+    }
+    data object EditarProducaoRoute: Route(route = "editar-producao/{producaoId}", title = "Editar Produção") {
+        fun criarRota(producaoId: String) = "editar-producao/$producaoId"
+    }
+
 }

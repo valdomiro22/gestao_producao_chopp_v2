@@ -1,4 +1,4 @@
-package com.santos.valdomiro.gestaoproducaochopp.features.grade.presentation.screens.listagrades
+package com.santos.valdomiro.gestaoproducaochopp.features.producao.presentation.screens.listaproducoes
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -11,12 +11,10 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.LargeFloatingActionButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
@@ -38,18 +36,18 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.santos.valdomiro.gestaoproducaochopp.common.components.EmptyListState
 import com.santos.valdomiro.gestaoproducaochopp.common.components.ErroComponent
 import com.santos.valdomiro.gestaoproducaochopp.common.state.UiState
-import com.santos.valdomiro.gestaoproducaochopp.features.grade.domain.entity.GradeEntity
-import com.santos.valdomiro.gestaoproducaochopp.features.grade.presentation.components.ItemListaGrade
+import com.santos.valdomiro.gestaoproducaochopp.features.producao.domain.entity.ProducaoDetalhada
+import com.santos.valdomiro.gestaoproducaochopp.features.producao.presentation.components.ItemListaProducao
 import com.santos.valdomiro.gestaoproducaochopp.navigation.LocalNavController
 import com.santos.valdomiro.gestaoproducaochopp.navigation.Route
 import com.santos.valdomiro.gestaoproducaochopp.ui.theme.AppTopBarColors
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ListaGradesScreen(
-    viewModel: ListaGradesViewModel = hiltViewModel(),
+fun ListaProducaoScreen(
+    gradeId: String,
+    viewModel: ListaProducaoViewModel = hiltViewModel()
 ) {
-
     val context = LocalContext.current
     val navController = LocalNavController.current
     val state by viewModel.uiState.collectAsState()
@@ -63,7 +61,7 @@ fun ListaGradesScreen(
             TopAppBar(
                 title = {
                     Text(
-                        text = "Lista de Grades",
+                        text = "Lista de Produções",
                         modifier = Modifier.fillMaxWidth(),
                         textAlign = TextAlign.Center
                     )
@@ -77,13 +75,19 @@ fun ListaGradesScreen(
         },
         floatingActionButton = {
             LargeFloatingActionButton(
-                onClick = { navController.navigate(Route.AdicionarGradeRoute.route) },
+                onClick = {
+                    navController.navigate(
+                        Route.AdicionarProducaoRoute.criarRota(
+                            gradeId = gradeId
+                        )
+                    )
+                },
                 containerColor = MaterialTheme.colorScheme.secondary,
-                contentColor = Color(0xFFFFFFFF)
+                contentColor = Color.White
             ) {
                 Icon(
                     imageVector = Icons.Default.Add,
-                    contentDescription = "Adicionar Grade"
+                    contentDescription = "Adicionar Produção"
                 )
             }
         }
@@ -103,16 +107,16 @@ fun ListaGradesScreen(
             state.isError -> {
                 ErroComponent(
                     mensagem = (state as? UiState.Error)?.message
-                        ?: "Erro desconhecido ao listar contadores"
+                        ?: "Erro desconhecido ao listar produções"
                 )
             }
 
             state.isSuccess -> {
-                val listaGrades =
-                    (state as? UiState.Success<List<GradeEntity>>)?.data ?: emptyList()
+                val listaProducoes =
+                    (state as? UiState.Success<List<ProducaoDetalhada>>)?.data ?: emptyList()
 
-                if (listaGrades.isEmpty()) {
-                    EmptyListState(mensagem = "Toque no botão + para adicionar uma grade e utilizar na produção.")
+                if (listaProducoes.isEmpty()) {
+                    EmptyListState(mensagem = "Toque no botão + para adicionar uma produção.")
                 } else {
                     LazyColumn(
                         modifier = Modifier
@@ -127,19 +131,20 @@ fun ListaGradesScreen(
                         verticalArrangement = Arrangement.spacedBy(10.dp)
                     ) {
                         items(
-                            items = listaGrades,
-                            key = { grade -> grade.id }
-                        ) { grade ->
-                            ItemListaGrade(
-                                grade = grade,
-                                onEditarClick = {
-                                    navController.navigate(
-                                        Route.EditarGradeRoute.criarRota(
-                                            gradeId = grade.id
-                                        )
-                                    )
+                            items = listaProducoes,
+                            key = { item -> item.producao.id }
+                        ) { item ->
+                            ItemListaProducao(
+                                producao = item.producao,
+                                barril = item.barril,
+                                produto = item.produto,
+                                onDeletarClick = {
+                                    // viewModel.deletar(item.producao)
                                 },
-                                onDeletarClick = { viewModel.deletarGrade(grade = grade) },
+                                onDetalhesClick = {
+                                    // navController.navigate(...)
+                                },
+                                onEditarClick = {},
                                 navController = navController,
                             )
                         }

@@ -1,5 +1,6 @@
 package com.santos.valdomiro.gestaoproducaochopp.features.grade.presentation.components
 
+import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -24,11 +25,14 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavHostController
 import com.santos.valdomiro.gestaoproducaochopp.common.enums.StatusSincronizacao
 import com.santos.valdomiro.gestaoproducaochopp.features.grade.domain.entity.GradeEntity
+import com.santos.valdomiro.gestaoproducaochopp.navigation.Route
 import java.time.Instant
 import java.time.LocalDate
 import java.time.ZoneId
@@ -40,6 +44,7 @@ fun ItemListaGrade(
     grade: GradeEntity,
     onEditarClick: () -> Unit,
     onDeletarClick: () -> Unit,
+    navController: NavHostController,
     modifier: Modifier = Modifier
 ) {
     // Formatadores baseados no fuso horário do sistema para extrair os dados do Instant da Grade
@@ -59,6 +64,7 @@ fun ItemListaGrade(
             containerColor = MaterialTheme.colorScheme.surface
         ),
         shape = RoundedCornerShape(12.dp),
+        onClick = { navController.navigate(Route.ListaProducoesRoute.criarRota(grade.id)) }
     ) {
         Row(
             modifier = Modifier
@@ -183,7 +189,8 @@ fun GradeFocoDataPreview() {
             grade = gradeMock,
             onEditarClick = {},
             onDeletarClick = {},
-            modifier = Modifier.padding(8.dp)
+            modifier = Modifier.padding(8.dp),
+            navController = NavHostController(LocalContext.current)
         )
     }
 }

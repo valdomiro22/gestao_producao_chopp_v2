@@ -8,6 +8,10 @@ import com.santos.valdomiro.gestaoproducaochopp.features.grade.data.localdatasou
 import com.santos.valdomiro.gestaoproducaochopp.features.grade.data.localdatasource.GradeLocalDataSourceImpl
 import com.santos.valdomiro.gestaoproducaochopp.features.grade.data.remotedatasource.GradeRemoteDataSource
 import com.santos.valdomiro.gestaoproducaochopp.features.grade.data.remotedatasource.GradeRemoteDataSourceImpl
+import com.santos.valdomiro.gestaoproducaochopp.features.producao.data.localdatasource.ProducaoLocalDataSource
+import com.santos.valdomiro.gestaoproducaochopp.features.producao.data.localdatasource.ProducaoLocalDataSourceImpl
+import com.santos.valdomiro.gestaoproducaochopp.features.producao.data.remotedatasource.ProducaoRemoteDatasource
+import com.santos.valdomiro.gestaoproducaochopp.features.producao.data.remotedatasource.ProducaoRemoteDatasourceImpl
 import com.santos.valdomiro.gestaoproducaochopp.features.produto.data.localdatasource.ProdutoLocalDataSource
 import com.santos.valdomiro.gestaoproducaochopp.features.produto.data.localdatasource.ProdutoLocalDataSourceImpl
 import com.santos.valdomiro.gestaoproducaochopp.features.produto.data.remotedatasource.ProdutoRemoteDataSource
@@ -61,10 +65,15 @@ abstract class DataSourceModule {
     @Singleton
     abstract fun bindGradeLocalDataSource(impl: GradeLocalDataSourceImpl): GradeLocalDataSource
 
-//    @Binds
-//    @Singleton
-//    abstract fun bindProducaoRemoteDataSource(impl: ProducaoRemoteDatasourceImpl): ProducaoRemoteDatasource
-//
+    // Produção
+    @Binds
+    @Singleton
+    abstract fun bindProducaoRemoteDataSource(impl: ProducaoRemoteDatasourceImpl): ProducaoRemoteDatasource
+
+    @Binds
+    @Singleton
+    abstract fun bindProducaoLocalDataSource(impl: ProducaoLocalDataSourceImpl): ProducaoLocalDataSource
+
 //    @Binds
 //    @Singleton
 //    abstract fun bindQtHorariaRemoteDataSource(impl: QuantidadeHorariaRemoteDatasourceImpl): QuantidadeHorariaRemoteDatasource
