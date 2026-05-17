@@ -112,7 +112,7 @@ fun EditarProdutoScreen(
                 inputType = KeyboardType.Number
             )
             if (state.erroPrazoValidade != null) ErroComponent(state.erroPrazoValidade!!)
-            if (state.erro != null) ErroComponent(state.erro!!)
+            if (state.erroGeral != null) ErroComponent(state.erroGeral!!)
             Spacer(modifier = Modifier.height(8.dp))
 
             ButtomFillMaxWidth(

@@ -7,7 +7,7 @@ data class AdicionarBarrilState(
 
     val erroNome: String? = null,
     val erroVolume: String? = null,
-    val erro: String? = null,
+    val erroGeral: String? = null,
 
     val isLoading: Boolean = false,
     val isSuccess: Boolean = false,

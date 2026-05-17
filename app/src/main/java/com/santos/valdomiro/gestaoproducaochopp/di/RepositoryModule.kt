@@ -2,6 +2,8 @@ package com.santos.valdomiro.gestaoproducaochopp.di
 
 import com.santos.valdomiro.gestaoproducaochopp.features.barril.data.repository.BarrilRepositoryImpl
 import com.santos.valdomiro.gestaoproducaochopp.features.barril.domain.repository.BarrilRepository
+import com.santos.valdomiro.gestaoproducaochopp.features.grade.data.repository.GradeRepositoryImpl
+import com.santos.valdomiro.gestaoproducaochopp.features.grade.domain.repository.GradeRepository
 import com.santos.valdomiro.gestaoproducaochopp.features.produto.data.repository.ProdutoRepositoryImpl
 import com.santos.valdomiro.gestaoproducaochopp.features.produto.domain.repository.ProdutoRepository
 import dagger.Binds
@@ -31,25 +33,28 @@ abstract class RepositoryModule {
 //    abstract fun bindUsuarioRepository(
 //        usuarioFirestoreRepositoryImpl: UsuarioFirestoreFirestoreRepositoryImpl
 //    ): UsuarioFirestoreRepository
-//
+
+    // Barril
     @Binds
     @Singleton
     abstract fun bindBarrilRepository(
         barrilRepositoryImpl: BarrilRepositoryImpl
     ): BarrilRepository
 
+    // Produto
     @Binds
     @Singleton
     abstract fun bindProdutoRepository(
         produtoRepositoryImpl: ProdutoRepositoryImpl
     ): ProdutoRepository
 
-//    @Binds
-//    @Singleton
-//    abstract fun bindGradeRepository(
-//        gradeRepositoryImpl: GradeRepositoryImpl
-//    ): GradeRepository
-//
+    // Grade
+    @Binds
+    @Singleton
+    abstract fun bindGradeRepository(
+        gradeRepositoryImpl: GradeRepositoryImpl
+    ): GradeRepository
+
 //    @Binds
 //    @Singleton
 //    abstract fun bindProducaoRepository(

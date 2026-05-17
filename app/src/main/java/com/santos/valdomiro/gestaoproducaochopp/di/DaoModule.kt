@@ -2,6 +2,7 @@ package com.santos.valdomiro.gestaoproducaochopp.di
 
 import com.santos.valdomiro.gestaoproducaochopp.features.barril.data.produtodao.BarrilDao
 import com.santos.valdomiro.gestaoproducaochopp.features.database.ProducaoDatabase
+import com.santos.valdomiro.gestaoproducaochopp.features.grade.data.gradedao.GradeDao
 import com.santos.valdomiro.gestaoproducaochopp.features.produto.data.produtodao.ProdutoDao
 import dagger.Module
 import dagger.Provides
@@ -27,6 +28,14 @@ object DaoModule {
         database: ProducaoDatabase
     ): ProdutoDao {
         return database.produtoDao()
+    }
+
+    @Provides
+    @Singleton
+    fun provideGradeDao(
+        database: ProducaoDatabase
+    ): GradeDao {
+        return database.gradeDao()
     }
 
 }

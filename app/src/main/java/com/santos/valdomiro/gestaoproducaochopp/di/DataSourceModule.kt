@@ -4,6 +4,10 @@ import com.santos.valdomiro.gestaoproducaochopp.features.barril.data.localdataso
 import com.santos.valdomiro.gestaoproducaochopp.features.barril.data.localdatasource.BarrilLocalDataSourceImpl
 import com.santos.valdomiro.gestaoproducaochopp.features.barril.data.remotedatasource.BarrilRemoteDataSource
 import com.santos.valdomiro.gestaoproducaochopp.features.barril.data.remotedatasource.BarrilRemoteDataSourceImpl
+import com.santos.valdomiro.gestaoproducaochopp.features.grade.data.localdatasource.GradeLocalDataSource
+import com.santos.valdomiro.gestaoproducaochopp.features.grade.data.localdatasource.GradeLocalDataSourceImpl
+import com.santos.valdomiro.gestaoproducaochopp.features.grade.data.remotedatasource.GradeRemoteDataSource
+import com.santos.valdomiro.gestaoproducaochopp.features.grade.data.remotedatasource.GradeRemoteDataSourceImpl
 import com.santos.valdomiro.gestaoproducaochopp.features.produto.data.localdatasource.ProdutoLocalDataSource
 import com.santos.valdomiro.gestaoproducaochopp.features.produto.data.localdatasource.ProdutoLocalDataSourceImpl
 import com.santos.valdomiro.gestaoproducaochopp.features.produto.data.remotedatasource.ProdutoRemoteDataSource
@@ -30,6 +34,7 @@ abstract class DataSourceModule {
 //    @Singleton
 //    abstract fun bindUsuarioRemoteDataSource(impl: UsuarioRemoteDataSourceImpl): UsuarioRemoteDataSource
 
+    // Barril
     @Binds
     @Singleton
     abstract fun bindBarrilRemoteDataSource(impl: BarrilRemoteDataSourceImpl): BarrilRemoteDataSource
@@ -38,6 +43,7 @@ abstract class DataSourceModule {
     @Singleton
     abstract fun bindBarrilLocalDataSource(impl: BarrilLocalDataSourceImpl): BarrilLocalDataSource
 
+    // Produto
     @Binds
     @Singleton
     abstract fun bindProdutoRemoteDataSource(impl: ProdutoRemoteDataSourceImpl): ProdutoRemoteDataSource
@@ -46,10 +52,15 @@ abstract class DataSourceModule {
     @Singleton
     abstract fun bindProdutoLocalDataSource(impl: ProdutoLocalDataSourceImpl): ProdutoLocalDataSource
 
-//    @Binds
-//    @Singleton
-//    abstract fun bindGradeRemoteDataSource(impl: GradeRemoteDataSourceImpl): GradeRemoteDataSource
-//
+    // Grade
+    @Binds
+    @Singleton
+    abstract fun bindGradeRemoteDataSource(impl: GradeRemoteDataSourceImpl): GradeRemoteDataSource
+
+    @Binds
+    @Singleton
+    abstract fun bindGradeLocalDataSource(impl: GradeLocalDataSourceImpl): GradeLocalDataSource
+
 //    @Binds
 //    @Singleton
 //    abstract fun bindProducaoRemoteDataSource(impl: ProducaoRemoteDatasourceImpl): ProducaoRemoteDatasource

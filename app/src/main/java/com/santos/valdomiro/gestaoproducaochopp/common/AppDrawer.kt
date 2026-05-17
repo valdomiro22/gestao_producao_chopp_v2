@@ -47,7 +47,6 @@ fun AppDrawer(
         // Itens Principais
         val drawerItems = listOf(
             Route.HomeRoute,
-            Route.Tela2Route,
         )
 
         Column(

@@ -6,25 +6,33 @@ import com.santos.valdomiro.gestaoproducaochopp.features.grade.data.model.GradeL
 import com.santos.valdomiro.gestaoproducaochopp.features.grade.data.model.GradeRemoteModel
 import com.santos.valdomiro.gestaoproducaochopp.features.grade.domain.entity.GradeEntity
 import java.time.Instant
+import java.time.LocalDate
+import java.time.ZoneOffset
 
 /** Converte RemoteModel para Entity */
 fun GradeRemoteModel.toEntity() = GradeEntity(
     id = this.id,
     numero = this.numero,
-    data = this.data?.toInstant() ?: Instant.now(),
+    data = this.data
+        ?.toInstant()
+        ?.atZone(ZoneOffset.UTC)
+        ?.toLocalDate()
+        ?: LocalDate.now(),
     quantidadeBarris = this.quantidadeBarris,
     volumeHlNecessario = this.volumeHlNecessario,
     criadoEm = this.criadoEm?.toInstant() ?: Instant.now(),
-    editadoEm = this.editadoEm?.toInstant() ?: Instant.now(),
+    editadoEm = this.editadoEm?.toInstant(),
     statusSincronizacao = StatusSincronizacao.SINCRONIZADO,
 )
-
 
 /** Converte Entity para RemoteModel */
 fun GradeEntity.toRemoteModel() = GradeRemoteModel(
     id = this.id,
     numero = this.numero,
-    data = this.data.toTimestamp(),
+    data = this.data
+        .atStartOfDay(ZoneOffset.UTC)
+        .toInstant()
+        .toTimestamp(),
     quantidadeBarris = this.quantidadeBarris,
     volumeHlNecessario = this.volumeHlNecessario,
     criadoEm = this.criadoEm.toTimestamp(),
@@ -35,22 +43,27 @@ fun GradeEntity.toRemoteModel() = GradeRemoteModel(
 fun GradeLocalModel.toEntity() = GradeEntity(
     id = this.id,
     numero = this.numero,
-    data = Instant.ofEpochMilli(data),
+    data = Instant.ofEpochMilli(this.data)
+        .atZone(ZoneOffset.UTC)
+        .toLocalDate(),
     quantidadeBarris = this.quantidadeBarris,
     volumeHlNecessario = this.volumeHlNecessario,
-    criadoEm = Instant.ofEpochMilli(criadoEm),
-    editadoEm = editadoEm?.let { Instant.ofEpochMilli(it) },
-    statusSincronizacao = StatusSincronizacao.SINCRONIZADO,
+    criadoEm = Instant.ofEpochMilli(this.criadoEm),
+    editadoEm = this.editadoEm?.let { Instant.ofEpochMilli(it) },
+    statusSincronizacao = this.statusSincronizacao,
 )
 
 /** Converte Entity para LocalModel */
 fun GradeEntity.toLocalModel() = GradeLocalModel(
     id = this.id,
     numero = this.numero,
-    data = this.data.toEpochMilli(),
+    data = this.data
+        .atStartOfDay(ZoneOffset.UTC)
+        .toInstant()
+        .toEpochMilli(),
     quantidadeBarris = this.quantidadeBarris,
     volumeHlNecessario = this.volumeHlNecessario,
     criadoEm = this.criadoEm.toEpochMilli(),
     editadoEm = this.editadoEm?.toEpochMilli(),
-    statusSincronizacao = StatusSincronizacao.SINCRONIZADO,
+    statusSincronizacao = this.statusSincronizacao,
 )

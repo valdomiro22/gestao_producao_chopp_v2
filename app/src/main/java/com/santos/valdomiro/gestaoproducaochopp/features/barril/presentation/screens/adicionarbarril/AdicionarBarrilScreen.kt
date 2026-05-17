@@ -129,7 +129,7 @@ fun AdicionarBarrilScreen(
                     checked = state.descartavel,
                 )
             }
-            if (state.erro != null) ErroComponent(state.erro!!)
+            if (state.erroGeral != null) ErroComponent(state.erroGeral!!)
             Spacer(modifier = Modifier.height(16.dp))
 
             ButtomFillMaxWidth(

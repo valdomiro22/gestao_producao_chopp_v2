@@ -38,7 +38,7 @@ class AdicionarBarrilViewModel @Inject constructor(
         if (!validar(state = currentState)) return
 
         viewModelScope.launch {
-            _uiState.update { it.copy(isLoading = true, erro = null) }
+            _uiState.update { it.copy(isLoading = true, erroGeral = null) }
 
             val volumeInt = currentState.volume.toIntOrNull()
                 ?: run {
@@ -69,7 +69,7 @@ class AdicionarBarrilViewModel @Inject constructor(
                     _uiState.update { it.copy(isLoading = false, isSuccess = true) }
                 }
                 .onFailure { erro ->
-                    _uiState.update { it.copy(isLoading = false, erro = erro.message) }
+                    _uiState.update { it.copy(isLoading = false, erroGeral = erro.message) }
                 }
         }
     }

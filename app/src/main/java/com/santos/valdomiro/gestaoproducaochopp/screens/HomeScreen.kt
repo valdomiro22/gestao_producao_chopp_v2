@@ -31,6 +31,7 @@ import androidx.compose.ui.unit.sp
 import com.santos.valdomiro.gestaoproducaochopp.common.AppDrawer
 import com.santos.valdomiro.gestaoproducaochopp.navigation.LocalNavController
 import com.santos.valdomiro.gestaoproducaochopp.navigation.Route
+import com.santos.valdomiro.gestaoproducaochopp.ui.theme.AppTopBarColors
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -68,10 +69,8 @@ fun HomeScreen(
                         }
                     },
                     colors = TopAppBarDefaults.topAppBarColors(
-                        containerColor = MaterialTheme.colorScheme.primaryContainer,
-                        titleContentColor = MaterialTheme.colorScheme.onPrimaryContainer,
-                        navigationIconContentColor = MaterialTheme.colorScheme.onPrimaryContainer,
-                        actionIconContentColor = MaterialTheme.colorScheme.onPrimaryContainer
+                        containerColor = MaterialTheme.colorScheme.background,
+                        titleContentColor = AppTopBarColors.titleColor(),
                     )
                 )
             },
@@ -105,6 +104,15 @@ fun HomeScreen(
                     }
                 ) {
                     Text("Lista de Produtos")
+                }
+                Spacer(modifier = Modifier.height(16.dp))
+
+                Button(
+                    onClick = {
+                        navController.navigate(Route.ListaGradesRoute.route)
+                    }
+                ) {
+                    Text("Lista de Grades")
                 }
                 Spacer(modifier = Modifier.height(16.dp))
 

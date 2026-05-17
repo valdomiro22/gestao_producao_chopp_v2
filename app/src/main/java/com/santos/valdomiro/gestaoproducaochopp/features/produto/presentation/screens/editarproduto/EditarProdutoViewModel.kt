@@ -40,7 +40,7 @@ class EditarProdutoViewModel @Inject constructor(
         produtoIdAtual = produtoId
 
         viewModelScope.launch {
-            _uiState.update { it.copy(isLoading = true, erro = null) }
+            _uiState.update { it.copy(isLoading = true, erroGeral = null) }
 
             getOneProdutoUseCase(produtoId = produtoId).collect { result ->
                 result.fold(
@@ -52,7 +52,7 @@ class EditarProdutoViewModel @Inject constructor(
                                 nome = produto.nome,
                                 prazoValidade = produto.prazoValidade.toString(),
                                 isLoading = false,
-                                erro = null
+                                erroGeral = null
                             )
                         }
                     },
@@ -60,7 +60,7 @@ class EditarProdutoViewModel @Inject constructor(
                         _uiState.update {
                             it.copy(
                                 isLoading = false,
-                                erro = erro.message ?: "Erro ao buscar prodto"
+                                erroGeral = erro.message ?: "Erro ao buscar prodto"
                             )
                         }
                     }
@@ -77,7 +77,7 @@ class EditarProdutoViewModel @Inject constructor(
         if (!validar(state = currentState)) return
 
         viewModelScope.launch {
-            _uiState.update { it.copy(isLoading = true, erro = null) }
+            _uiState.update { it.copy(isLoading = true, erroGeral = null) }
 
             val prazoValidade = currentState.prazoValidade.toIntOrNull()
                 ?: run {
@@ -111,7 +111,7 @@ class EditarProdutoViewModel @Inject constructor(
                     _uiState.update {
                         it.copy(
                             isLoading = false,
-                            erro = null,
+                            erroGeral = null,
                             isEditSuccess = true
                         )
                     }
@@ -120,7 +120,7 @@ class EditarProdutoViewModel @Inject constructor(
                     _uiState.update {
                         it.copy(
                             isLoading = false,
-                            erro = erro.message ?: "Erro ao editar produto"
+                            erroGeral = erro.message ?: "Erro ao editar produto"
                         )
                     }
                 }

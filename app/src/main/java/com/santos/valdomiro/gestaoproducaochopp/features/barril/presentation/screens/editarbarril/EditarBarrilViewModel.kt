@@ -31,7 +31,7 @@ class EditarBarrilViewModel @Inject constructor(
         barrilIdAtual = barrilId
 
         viewModelScope.launch {
-            _uiState.update { it.copy(isLoading = true, erro = null) }
+            _uiState.update { it.copy(isLoading = true, erroGeral = null) }
 
             getOneBarrilUseCase(barrilId).collect { result ->
                 result.fold(
@@ -44,7 +44,7 @@ class EditarBarrilViewModel @Inject constructor(
                                 volume = barril.volume.toString(),
                                 descartavel = barril.descartavel,
                                 isLoading = false,
-                                erro = null
+                                erroGeral = null
                             )
                         }
                     },
@@ -52,7 +52,7 @@ class EditarBarrilViewModel @Inject constructor(
                         _uiState.update {
                             it.copy(
                                 isLoading = false,
-                                erro = erro.message ?: "Erro ao buscar barril"
+                                erroGeral = erro.message ?: "Erro ao buscar barril"
                             )
                         }
                     }
@@ -68,7 +68,7 @@ class EditarBarrilViewModel @Inject constructor(
         if (!validar(currentState)) return
 
         viewModelScope.launch {
-            _uiState.update { it.copy(isLoading = true, erro = null) }
+            _uiState.update { it.copy(isLoading = true, erroGeral = null) }
 
             val volumeInt = currentState.volume.toIntOrNull()
                 ?: run {
@@ -100,13 +100,13 @@ class EditarBarrilViewModel @Inject constructor(
 
             updateBarrilUseCase(params = params)
                 .onSuccess {
-                    _uiState.update { it.copy(isLoading = false, erro = null, isEditSuccess = true) }
+                    _uiState.update { it.copy(isLoading = false, erroGeral = null, isEditSuccess = true) }
                 }
                 .onFailure { erro ->
                     _uiState.update {
                         it.copy(
                             isLoading = false,
-                            erro = erro.message ?: "Erro ao editar barril"
+                            erroGeral = erro.message ?: "Erro ao editar barril"
                         )
                     }
                 }

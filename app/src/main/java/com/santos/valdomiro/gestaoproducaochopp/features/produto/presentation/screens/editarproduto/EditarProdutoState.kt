@@ -6,7 +6,7 @@ data class EditarProdutoState(
 
     val erroNome: String? = null,
     val erroPrazoValidade: String? = null,
-    val erro: String? = null,
+    val erroGeral: String? = null,
 
     val isLoading: Boolean = false,
     val isSuccess: Boolean = false,
