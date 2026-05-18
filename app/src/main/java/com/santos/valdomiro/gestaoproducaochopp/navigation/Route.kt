@@ -7,7 +7,9 @@ sealed class Route(
     val title: String = "",
     val icon: ImageVector? = null
 ) {
-    data object HomeRoute: Route(route = "home", title = "Home")
+    data object HomeRoute: Route(route = "home/{producaoId}", title = "Home") {
+        fun criarRota(producaoId: String) = "home/$producaoId"
+    }
 
     // Barril
     data object AdicionarBarrilRoute: Route(route = "adicionar-barril", title = "Adicionar Barril")

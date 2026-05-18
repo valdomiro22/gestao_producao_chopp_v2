@@ -20,7 +20,7 @@ import com.santos.valdomiro.gestaoproducaochopp.features.producao.presentation.s
 import com.santos.valdomiro.gestaoproducaochopp.features.produto.presentation.screens.adicionarproduto.AdicionarProdutoScreen
 import com.santos.valdomiro.gestaoproducaochopp.features.produto.presentation.screens.editarproduto.EditarProdutoScreen
 import com.santos.valdomiro.gestaoproducaochopp.features.produto.presentation.screens.listaprodutos.ListaProdutosScreen
-import com.santos.valdomiro.gestaoproducaochopp.screens.HomeScreen
+import com.santos.valdomiro.gestaoproducaochopp.features.homescreen.screen.HomeScreen
 
 @Composable
 fun AppNavigation(
@@ -36,9 +36,14 @@ fun AppNavigation(
             startDestination = startDestination,
             modifier = modifier
         ) {
-            composable(Route.HomeRoute.route) {
+            composable(
+                route = "home/{producaoId}",
+                arguments = listOf(navArgument("producaoId") { type = NavType.StringType })
+            ) { backStackEntry ->
+                val producaoId = backStackEntry.arguments?.getString("producaoId") ?: return@composable
                 HomeScreen(
-                    onOpenDrawer = onOpenDrawer
+                    producaoId = producaoId,
+                    onOpenDrawer = onOpenDrawer,
                 )
             }
 

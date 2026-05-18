@@ -1,11 +1,10 @@
-package com.santos.valdomiro.gestaoproducaochopp.features.producao.presentation.screens.listaproducoes
+package com.santos.valdomiro.gestaoproducaochopp.features.producao.presentation.screens.buscarproducao
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.santos.valdomiro.gestaoproducaochopp.common.state.UiState
 import com.santos.valdomiro.gestaoproducaochopp.features.producao.domain.entity.ProducaoDetalhada
-import com.santos.valdomiro.gestaoproducaochopp.features.producao.domain.entity.ProducaoEntity
-import com.santos.valdomiro.gestaoproducaochopp.features.producao.domain.usecase.DeleteProducaoUseCase
+import com.santos.valdomiro.gestaoproducaochopp.features.producao.domain.usecase.GetOneProducaoUseCase
 import com.santos.valdomiro.gestaoproducaochopp.features.producao.domain.usecase.GetProducoesDetalhadasUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -14,16 +13,15 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class ListaProducaoViewModel @Inject constructor(
-    private val getProducoesDetalhadasUseCase: GetProducoesDetalhadasUseCase,
-    private val deleteProducaoUseCase: DeleteProducaoUseCase
+class BuscarProducaoViewModel @Inject constructor(
+    private val getUmaProducaoUseCase: GetOneProducaoUseCase,
+    private val getProducoesDetalhadasUseCase: GetProducoesDetalhadasUseCase
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow<UiState<List<ProducaoDetalhada>>>(UiState.Idle)
-
     val uiState = _uiState.asStateFlow()
 
-    fun getAll() {
+    fun buscarProducao(producaoId: String) {
         viewModelScope.launch {
             _uiState.value = UiState.Loading
 
@@ -39,20 +37,6 @@ class ListaProducaoViewModel @Inject constructor(
                     }
                 )
             }
-        }
-    }
-
-    fun deletarProducao(producao: ProducaoEntity) {
-        viewModelScope.launch {
-            _uiState.value = UiState.Loading
-
-            deleteProducaoUseCase(producao = producao)
-                .onSuccess { getAll() }
-                .onFailure { exception ->
-                    _uiState.value = UiState.Error(
-                        exception.message ?: "Erro al deletar produção"
-                    )
-                }
         }
     }
 }

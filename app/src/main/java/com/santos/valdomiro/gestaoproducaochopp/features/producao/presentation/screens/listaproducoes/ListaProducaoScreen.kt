@@ -112,8 +112,7 @@ fun ListaProducaoScreen(
             }
 
             state.isSuccess -> {
-                val listaProducoes =
-                    (state as? UiState.Success<List<ProducaoDetalhada>>)?.data ?: emptyList()
+                val listaProducoes = (state as? UiState.Success<List<ProducaoDetalhada>>)?.data ?: emptyList()
 
                 if (listaProducoes.isEmpty()) {
                     EmptyListState(mensagem = "Toque no botão + para adicionar uma produção.")

@@ -35,6 +35,7 @@ import androidx.navigation.NavHostController
 import com.santos.valdomiro.gestaoproducaochopp.features.barril.domain.entity.BarrilEntity
 import com.santos.valdomiro.gestaoproducaochopp.features.producao.domain.entity.ProducaoEntity
 import com.santos.valdomiro.gestaoproducaochopp.features.produto.domain.entity.ProdutoEntity
+import com.santos.valdomiro.gestaoproducaochopp.navigation.Route
 
 @Composable
 fun ItemListaProducao(
@@ -57,7 +58,7 @@ fun ItemListaProducao(
         modifier = modifier
             .fillMaxWidth()
             .padding(vertical = 6.dp),
-        onClick = { },
+        onClick = { navController.navigate(Route.HomeRoute.criarRota(producao.id)) },
         elevation = CardDefaults.cardElevation(defaultElevation = 3.dp),
         colors = CardDefaults.cardColors(
             containerColor = MaterialTheme.colorScheme.surface
