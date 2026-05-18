@@ -6,19 +6,17 @@ import com.santos.valdomiro.gestaoproducaochopp.common.state.UiState
 import com.santos.valdomiro.gestaoproducaochopp.features.producao.domain.entity.ProducaoDetalhada
 import com.santos.valdomiro.gestaoproducaochopp.features.producao.domain.entity.ProducaoEntity
 import com.santos.valdomiro.gestaoproducaochopp.features.producao.domain.usecase.DeleteProducaoUseCase
-import com.santos.valdomiro.gestaoproducaochopp.features.producao.domain.usecase.GetAllProducoesUseCase
 import com.santos.valdomiro.gestaoproducaochopp.features.producao.domain.usecase.GetProducoesDetalhadasUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.catch
-import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class ListaProducaoViewModel @Inject constructor(
-    private val getProducoesDetalhadasUseCase: GetProducoesDetalhadasUseCase
+    private val getProducoesDetalhadasUseCase: GetProducoesDetalhadasUseCase,
+    private val deleteProducaoUseCase: DeleteProducaoUseCase
 ) : ViewModel() {
 
     private val _uiState =
@@ -42,6 +40,20 @@ class ListaProducaoViewModel @Inject constructor(
                     }
                 )
             }
+        }
+    }
+
+    fun deletarProducao(producao: ProducaoEntity) {
+        viewModelScope.launch {
+            _uiState.value = UiState.Loading
+
+            deleteProducaoUseCase(producao = producao)
+                .onSuccess { getAll() }
+                .onFailure { exception ->
+                    _uiState.value = UiState.Error(
+                        exception.message ?: "Erro al deletar produção"
+                    )
+                }
         }
     }
 }

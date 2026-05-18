@@ -139,12 +139,9 @@ fun ListaProducaoScreen(
                                 barril = item.barril,
                                 produto = item.produto,
                                 onDeletarClick = {
-                                    // viewModel.deletar(item.producao)
+                                    viewModel.deletarProducao(item.producao)
                                 },
-                                onDetalhesClick = {
-                                    // navController.navigate(...)
-                                },
-                                onEditarClick = {},
+                                onEditarClick = { navController.navigate(Route.EditarProducaoRoute.criarRota(item.producao.id)) },
                                 navController = navController,
                             )
                         }

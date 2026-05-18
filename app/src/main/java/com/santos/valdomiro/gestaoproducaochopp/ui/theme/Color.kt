@@ -2,81 +2,84 @@ package com.santos.valdomiro.gestaoproducaochopp.ui.theme
 
 import androidx.compose.ui.graphics.Color
 
-// Base da identidade visual (Blue Lagoon)
-val LagoonDarkest = Color(0xFF0D1F23)
-val LagoonDark = Color(0xFF132E35)
-val LagoonMediumDark = Color(0xFF2D4A53)
-val LagoonMedium = Color(0xFF69818D)
-val LagoonLight = Color(0xFFAFB3B7)
-val LagoonSlate = Color(0xFF5A636A)
+// Base da identidade visual
+val ChoppBrown = Color(0xFF804012)
+val ChoppBrownDark = Color(0xFF3E2411)
+val ChoppAmber = Color(0xFFDB9F75)
 
-// Novas cores neutras derivadas para fundos e superfícies
-val BackgroundBlueLight = Color(0xFFF4F6F8) // Off-white frio
-val SurfaceBlueLight = Color(0xFFFFFFFF)
-val SurfaceVariantBlueLight = Color(0xFFDDE2E5)
+val OliveDark = Color(0xFF2F3A32)
+val OliveMedium = Color(0xFF545748)
+val DeepTeal = Color(0xFF122324)
 
-val BackgroundBlueDark = Color(0xFF080D0F) // Mais escuro que o LagoonDarkest para profundidade
-val SurfaceBlueDark = LagoonDarkest
-val SurfaceVariantBlueDark = LagoonDark
+// Novas cores neutras para deixar o app mais profissional
+val BackgroundSoftLight = Color(0xFFFFF8F2)
+val SurfaceSoftLight = Color(0xFFFFFFFF)
+val SurfaceVariantSoftLight = Color(0xFFF3E4D8)
 
-// TEMA CLARO - Sofisticado e limpo, com azuis escuros em destaque
-val PrimaryLightSoft = LagoonDark
+val BackgroundSoftDark = Color(0xFF101817)
+val SurfaceSoftDark = Color(0xFF1B2522)
+val SurfaceVariantSoftDark = Color(0xFF2A332E)
+
+
+// TEMA CLARO - mais limpo e menos pesado
+val PrimaryLightSoft = ChoppBrown
 val OnPrimaryLightSoft = Color.White
 
-val PrimaryContainerLightSoft = LagoonMedium
-val OnPrimaryContainerLightSoft = Color.White
+val PrimaryContainerLightSoft = Color(0xFFF1C7A6)
+val OnPrimaryContainerLightSoft = ChoppBrownDark
 
-val SecondaryLightSoft = LagoonMediumDark
+val SecondaryLightSoft = OliveMedium
 val OnSecondaryLightSoft = Color.White
 
-val SecondaryContainerLightSoft = LagoonLight
-val OnSecondaryContainerLightSoft = LagoonDarkest
+val SecondaryContainerLightSoft = Color(0xFFE1E4D5)
+val OnSecondaryContainerLightSoft = Color(0xFF25291F)
 
-val TertiaryLightSoft = LagoonSlate
+val TertiaryLightSoft = Color(0xFF9A5A25)
 val OnTertiaryLightSoft = Color.White
 
-val BackgroundLightSoft = BackgroundBlueLight
-val OnBackgroundLightSoft = LagoonDarkest
+val BackgroundLightSoft = BackgroundSoftLight
+val OnBackgroundLightSoft = ChoppBrownDark
 
-val SurfaceLightSoft = SurfaceBlueLight
-val OnSurfaceLightSoft = LagoonDarkest
+val SurfaceLightSoft = SurfaceSoftLight
+val OnSurfaceLightSoft = ChoppBrownDark
 
-val SurfaceVariantLightSoft = SurfaceVariantBlueLight
-val OnSurfaceVariantLightSoft = LagoonMediumDark
+val SurfaceVariantLightSoft = SurfaceVariantSoftLight
+val OnSurfaceVariantLightSoft = Color(0xFF5A4030)
 
-val OutlineLightSoft = LagoonMedium
-val OutlineVariantLightSoft = LagoonLight
+val OutlineLightSoft = Color(0xFF8B7565)
+val OutlineVariantLightSoft = Color(0xFFD8C4B6)
 
 val ErrorLightSoft = Color(0xFFBA1A1A)
 val OnErrorLightSoft = Color.White
 
-// TEMA ESCURO - Profundo e moderno, priorizando tons claros para leitura
-val PrimaryDarkSoft = LagoonLight
-val OnPrimaryDarkSoft = LagoonDarkest
 
-val PrimaryContainerDarkSoft = LagoonMediumDark
-val OnPrimaryContainerDarkSoft = LagoonLight
+// TEMA ESCURO - escuro, mas menos "verde pesado"
+val PrimaryDarkSoft = Color(0xFFE6B58F)
+val OnPrimaryDarkSoft = ChoppBrownDark
 
-val SecondaryDarkSoft = LagoonMedium
-val OnSecondaryDarkSoft = LagoonDarkest
+val PrimaryContainerDarkSoft = ChoppBrown
+val OnPrimaryContainerDarkSoft = Color.White
 
-val SecondaryContainerDarkSoft = LagoonDark
-val OnSecondaryContainerDarkSoft = LagoonLight
+val SecondaryDarkSoft = Color(0xFFBFC4AD)
+val OnSecondaryDarkSoft = Color(0xFF25291F)
 
-val TertiaryDarkSoft = LagoonLight
-val OnTertiaryDarkSoft = LagoonSlate
+val SecondaryContainerDarkSoft = OliveDark
+val OnSecondaryContainerDarkSoft = Color.White
 
-val BackgroundDarkSoft = BackgroundBlueDark
-val OnBackgroundDarkSoft = Color(0xFFE2E7EA)
+val TertiaryDarkSoft = ChoppAmber
+val OnTertiaryDarkSoft = ChoppBrownDark
 
-val SurfaceDarkSoft = SurfaceBlueDark
-val OnSurfaceDarkSoft = Color(0xFFE2E7EA)
+val BackgroundDarkSoft = BackgroundSoftDark
+val OnBackgroundDarkSoft = Color(0xFFF4EFE8)
 
-val SurfaceVariantDarkSoft = SurfaceVariantBlueDark
-val OnSurfaceVariantDarkSoft = LagoonLight
+val SurfaceDarkSoft = SurfaceSoftDark
+val OnSurfaceDarkSoft = Color(0xFFF4EFE8)
 
-val OutlineDarkSoft = LagoonMedium
-val OutlineVariantDarkSoft = LagoonMediumDark
+val SurfaceVariantDarkSoft = SurfaceVariantSoftDark
+val OnSurfaceVariantDarkSoft = Color(0xFFE6D4C5)
+
+val OutlineDarkSoft = Color(0xFF9B8D80)
+val OutlineVariantDarkSoft = Color(0xFF3A463F)
 
 val ErrorDarkSoft = Color(0xFFFFB4AB)
 val OnErrorDarkSoft = Color(0xFF690005)

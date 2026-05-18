@@ -1,4 +1,4 @@
-package com.santos.valdomiro.gestaoproducaochopp.features.producao.presentation.screens.adicionarproducao
+package com.santos.valdomiro.gestaoproducaochopp.features.producao.presentation.screens.editarproducao
 
 import android.widget.Toast
 import androidx.compose.foundation.layout.Arrangement
@@ -43,9 +43,9 @@ import com.santos.valdomiro.gestaoproducaochopp.navigation.LocalNavController
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun AdicionarProducaoScreen(
-    gradeId: String,
-    producaoViewModel: AdicionarProducaoViewModel = hiltViewModel(),
+fun EditarProducaoScreen(
+    producaoId: String,
+    producaoViewModel: EditarProducaoViewModel = hiltViewModel(),
     produtosViewModel: ListaProdutosViewModel = hiltViewModel(),
     barrisViewModel: ListaBarrisViewModel = hiltViewModel()
 ) {
@@ -57,12 +57,13 @@ fun AdicionarProducaoScreen(
     val context = LocalContext.current
 
     LaunchedEffect(Unit) {
+        producaoViewModel.buscarProducao(producaoId = producaoId)
         produtosViewModel.getAll()
         barrisViewModel.getAll()
     }
 
-    LaunchedEffect(producaoState.isSuccess) {
-        if (producaoState.isSuccess) {
+    LaunchedEffect(producaoState.isEditSuccess) {
+        if (producaoState.isEditSuccess) {
             navController.popBackStack()
             Toast.makeText(context, "Produção salva", Toast.LENGTH_SHORT).show()
         }
@@ -71,7 +72,7 @@ fun AdicionarProducaoScreen(
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text("Adicionar Produção") },
+                title = { Text("Editar Produção") },
                 navigationIcon = {
                     IconButton(onClick = { navController.popBackStack() }) {
                         Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Voltar")
@@ -187,7 +188,7 @@ fun AdicionarProducaoScreen(
             Spacer(modifier = Modifier.height(24.dp))
 
             ButtomFillMaxWidth(
-                onClick = { producaoViewModel.inserirProducao(gradeId = gradeId,) },
+                onClick = { producaoViewModel.atualizarProducao(producaoId = producaoId) },
                 text = "Salvar"
             )
 
