@@ -21,6 +21,7 @@ import com.santos.valdomiro.gestaoproducaochopp.features.produto.presentation.sc
 import com.santos.valdomiro.gestaoproducaochopp.features.produto.presentation.screens.editarproduto.EditarProdutoScreen
 import com.santos.valdomiro.gestaoproducaochopp.features.produto.presentation.screens.listaprodutos.ListaProdutosScreen
 import com.santos.valdomiro.gestaoproducaochopp.features.homescreen.screen.HomeScreen
+import com.santos.valdomiro.gestaoproducaochopp.features.movimentacao.presentation.screens.listamvproducao.ListaMovimentacaoScreen
 
 @Composable
 fun AppNavigation(
@@ -92,7 +93,7 @@ fun AppNavigation(
                 EditarGradeScreen(gradeId = gradeId)
             }
 
-            // Produções
+            // Produção
             composable(
                 route = "lista-producoes/{gradeId}",
                 arguments = listOf(navArgument("gradeId") { type = NavType.StringType })
@@ -113,6 +114,15 @@ fun AppNavigation(
             ) { backStackEntry ->
                 val producaoId = backStackEntry.arguments?.getString("producaoId") ?: return@composable
                 EditarProducaoScreen(producaoId = producaoId)
+            }
+
+            // Movimentação
+            composable(
+                route = "lista-movimentacao/{producaoId}",
+                arguments = listOf(navArgument("producaoId") { type = NavType.StringType })
+            ) { backStackEntry ->
+                val producaoId = backStackEntry.arguments?.getString("producaoId") ?: return@composable
+                ListaMovimentacaoScreen(producaoId = producaoId)
             }
 
         }

@@ -111,7 +111,8 @@ fun EditarProducaoScreen(
                     DropdownProduto(
                         listaProdutos = state.data,
                         produtoIdAtual = producaoState.produtoId,
-                        onProdutoSelecionado = producaoViewModel::onProdutoChanged
+                        onProdutoSelecionado = producaoViewModel::onProdutoChanged,
+                        navController = navController
                     )
                 }
 
@@ -144,7 +145,8 @@ fun EditarProducaoScreen(
                     DropdownBarril(
                         listaBarris = state.data,
                         barrilIdAtual = producaoState.barrilId,
-                        onBarrilSelecionado = producaoViewModel::onBarrilChanged
+                        onBarrilSelecionado = producaoViewModel::onBarrilChanged,
+                        navController = navController
                     )
                 }
 

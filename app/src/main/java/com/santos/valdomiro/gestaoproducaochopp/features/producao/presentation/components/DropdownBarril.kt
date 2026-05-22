@@ -15,7 +15,10 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.navigation.NavController
+import com.santos.valdomiro.gestaoproducaochopp.common.components.ButtomFillMaxWidth
 import com.santos.valdomiro.gestaoproducaochopp.features.barril.domain.entity.BarrilEntity
+import com.santos.valdomiro.gestaoproducaochopp.navigation.Route
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -23,7 +26,8 @@ fun DropdownBarril(
     listaBarris: List<BarrilEntity>,
     barrilIdAtual: String?,
     onBarrilSelecionado: (BarrilEntity) -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    navController: NavController
 ) {
     var expanded by remember { mutableStateOf(false) }
 
@@ -53,37 +57,44 @@ fun DropdownBarril(
         }
     }
 
-    ExposedDropdownMenuBox(
-        expanded = expanded,
-        onExpandedChange = { expanded = it },
-        modifier = modifier.fillMaxWidth()
-    ) {
-        OutlinedTextField(
-            value = textoBusca,
-            onValueChange = {
-                textoBusca = it
-                expanded = true
-            },
-            label = { Text("Barril") },
-            trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = expanded) },
-            modifier = Modifier
-                .fillMaxWidth()
-                .menuAnchor(ExposedDropdownMenuAnchorType.PrimaryEditable)
+    if (listaFiltrada.isEmpty()) {
+        ButtomFillMaxWidth(
+            onClick = { navController.navigate(Route.AdicionarBarrilRoute.route) },
+            text = "Adicionar Barril"
         )
-
-        ExposedDropdownMenu(
+    } else {
+        ExposedDropdownMenuBox(
             expanded = expanded,
-            onDismissRequest = { expanded = false }
+            onExpandedChange = { expanded = it },
+            modifier = modifier.fillMaxWidth()
         ) {
-            listaFiltrada.forEach { produto ->
-                DropdownMenuItem(
-                    text = { Text("Barril de ${produto.nome}") },
-                    onClick = {
-                        onBarrilSelecionado(produto)
-                        textoBusca = produto.nome
-                        expanded = false
-                    }
-                )
+            OutlinedTextField(
+                value = textoBusca,
+                onValueChange = {
+                    textoBusca = it
+                    expanded = true
+                },
+                label = { Text("Barril") },
+                trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = expanded) },
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .menuAnchor(ExposedDropdownMenuAnchorType.PrimaryEditable)
+            )
+
+            ExposedDropdownMenu(
+                expanded = expanded,
+                onDismissRequest = { expanded = false }
+            ) {
+                listaFiltrada.forEach { produto ->
+                    DropdownMenuItem(
+                        text = { Text("Barril de ${produto.nome}") },
+                        onClick = {
+                            onBarrilSelecionado(produto)
+                            textoBusca = produto.nome
+                            expanded = false
+                        }
+                    )
+                }
             }
         }
     }

@@ -8,6 +8,10 @@ import com.santos.valdomiro.gestaoproducaochopp.features.grade.data.localdatasou
 import com.santos.valdomiro.gestaoproducaochopp.features.grade.data.localdatasource.GradeLocalDataSourceImpl
 import com.santos.valdomiro.gestaoproducaochopp.features.grade.data.remotedatasource.GradeRemoteDataSource
 import com.santos.valdomiro.gestaoproducaochopp.features.grade.data.remotedatasource.GradeRemoteDataSourceImpl
+import com.santos.valdomiro.gestaoproducaochopp.features.movimentacao.data.localdatasource.MovimentacaoLocalDataSource
+import com.santos.valdomiro.gestaoproducaochopp.features.movimentacao.data.localdatasource.MovimentacaoLocalDataSourceImpl
+import com.santos.valdomiro.gestaoproducaochopp.features.movimentacao.data.remotedatasource.MovimentacaoRemoteDataSource
+import com.santos.valdomiro.gestaoproducaochopp.features.movimentacao.data.remotedatasource.MovimentacaoRemoteDataSourceImpl
 import com.santos.valdomiro.gestaoproducaochopp.features.producao.data.localdatasource.ProducaoLocalDataSource
 import com.santos.valdomiro.gestaoproducaochopp.features.producao.data.localdatasource.ProducaoLocalDataSourceImpl
 import com.santos.valdomiro.gestaoproducaochopp.features.producao.data.remotedatasource.ProducaoRemoteDatasource
@@ -74,8 +78,13 @@ abstract class DataSourceModule {
     @Singleton
     abstract fun bindProducaoLocalDataSource(impl: ProducaoLocalDataSourceImpl): ProducaoLocalDataSource
 
-//    @Binds
-//    @Singleton
-//    abstract fun bindQtHorariaRemoteDataSource(impl: QuantidadeHorariaRemoteDatasourceImpl): QuantidadeHorariaRemoteDatasource
+    // Movimentação
+    @Binds
+    @Singleton
+    abstract fun bindMovProducaoRemoteDataSource(impl: MovimentacaoRemoteDataSourceImpl): MovimentacaoRemoteDataSource
+
+    @Binds
+    @Singleton
+    abstract fun bindMovProducaoLocalDataSource(impl: MovimentacaoLocalDataSourceImpl): MovimentacaoLocalDataSource
 
 }

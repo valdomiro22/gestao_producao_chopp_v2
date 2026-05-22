@@ -56,6 +56,10 @@ import com.santos.valdomiro.gestaoproducaochopp.common.state.UiState
 import com.santos.valdomiro.gestaoproducaochopp.features.producao.presentation.screens.buscarproducao.BuscarProducaoDetalhadaViewModel
 import com.santos.valdomiro.gestaoproducaochopp.navigation.LocalNavController
 import com.santos.valdomiro.gestaoproducaochopp.features.homescreen.components.CardStatusProducaoComponent
+import com.santos.valdomiro.gestaoproducaochopp.features.homescreen.components.QuantidadeHorariaComponent
+import com.santos.valdomiro.gestaoproducaochopp.features.movimentacao.domain.entity.MovimentacaoEntity
+import com.santos.valdomiro.gestaoproducaochopp.features.movimentacao.presentation.screens.listamvproducao.ListaMovimentacaoViewModel
+import com.santos.valdomiro.gestaoproducaochopp.navigation.Route
 import com.santos.valdomiro.gestaoproducaochopp.ui.theme.AppTopBarColors
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -64,7 +68,8 @@ fun HomeScreen(
     producaoId: String,
     onOpenDrawer: () -> Unit,
     homeViewModel: HomeViewModel = hiltViewModel(),
-    buscarProducaoDetalhadaViewModel: BuscarProducaoDetalhadaViewModel = hiltViewModel()
+    buscarProducaoDetalhadaViewModel: BuscarProducaoDetalhadaViewModel = hiltViewModel(),
+    listaMovimentacaoViewModel: ListaMovimentacaoViewModel = hiltViewModel()
 ) {
 
     val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
@@ -74,6 +79,7 @@ fun HomeScreen(
 
     var menuExpandido by remember { mutableStateOf(false) }  // Para o controle do DropdownMenu
     val turnoAtual by homeViewModel.turnoSelecionado.collectAsState()
+    val movHorariaState by listaMovimentacaoViewModel.uiState.collectAsState()
 
     LaunchedEffect(Unit) {
         buscarProducaoDetalhadaViewModel.buscarProducaoDatalhada(producaoId)
@@ -136,6 +142,13 @@ fun HomeScreen(
                                         onClick = {
                                             menuExpandido = false
 //                                            navController.navigate(Route.ListaDeProdutosRoute.route)
+                                        }
+                                    )
+                                    DropdownMenuItem(
+                                        text = { Text("Histórico") },
+                                        onClick = {
+                                            menuExpandido = false
+                                            navController.navigate(Route.ListaMovimentacaoRoute.criarRota(producaoId = producaoId))
                                         }
                                     )
                                 }
@@ -219,6 +232,39 @@ fun HomeScreen(
                             }
                         }
                         Spacer(modifier = Modifier.height(8.dp))
+
+                        val listaMovimentacoes: List<MovimentacaoEntity> =
+                            (movHorariaState as? UiState.Success<List<MovimentacaoEntity>>)
+                                ?.data
+                                ?: emptyList()
+
+                        val mapaQuantidades: Map<String, MovimentacaoEntity> =
+                            listaMovimentacoes.associateBy { it.horarioReferente.toString() }
+
+                        // Seção de horários do turno selecionado
+                        val listaDeHorarios = turnoAtual.horarios
+                        QuantidadeHorariaComponent(
+                            horarios = listaDeHorarios,
+                            producao = pdDetalhada.producao,
+                            quantidades = mapaQuantidades,
+                            onRefresh = {
+                                listaMovimentacaoViewModel.getAllOfProducao(producaoId)
+                                buscarProducaoDetalhadaViewModel.buscarProducaoDatalhada(producaoId)
+                            }
+                        )
+                        Spacer(modifier = Modifier.height(8.dp))
+
+                        // Informações para o final de produção
+//                        ControleDoBuffer(
+//                            onClick = {
+//                                navController.navigate(
+//                                    Route.SimularFimProducaoRoute.criarRota(id = producaoId)
+//                                )
+//                            },
+//                            quantidadePendente = pendente,
+//                            tipoBarril = producao.barrilNome,
+//                            barrilId = producao.barrilId
+//                        )
 
                     }
 

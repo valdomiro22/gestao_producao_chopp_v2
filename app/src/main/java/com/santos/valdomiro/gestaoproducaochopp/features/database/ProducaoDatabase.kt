@@ -6,6 +6,8 @@ import com.santos.valdomiro.gestaoproducaochopp.features.barril.data.barrildao.B
 import com.santos.valdomiro.gestaoproducaochopp.features.barril.data.model.BarrilLocalModel
 import com.santos.valdomiro.gestaoproducaochopp.features.grade.data.gradedao.GradeDao
 import com.santos.valdomiro.gestaoproducaochopp.features.grade.data.model.GradeLocalModel
+import com.santos.valdomiro.gestaoproducaochopp.features.movimentacao.data.model.MovimentacaoLocalModel
+import com.santos.valdomiro.gestaoproducaochopp.features.movimentacao.data.movimentacao.MovimentacaoDao
 import com.santos.valdomiro.gestaoproducaochopp.features.producao.data.model.ProducaoLocalModel
 import com.santos.valdomiro.gestaoproducaochopp.features.producao.data.producaodao.ProducaoDao
 import com.santos.valdomiro.gestaoproducaochopp.features.produto.data.model.ProdutoLocalModel
@@ -16,9 +18,10 @@ import com.santos.valdomiro.gestaoproducaochopp.features.produto.data.produtodao
         BarrilLocalModel::class,
         ProdutoLocalModel::class,
         GradeLocalModel::class,
-        ProducaoLocalModel::class
+        ProducaoLocalModel::class,
+        MovimentacaoLocalModel::class
     ],
-    version = 1,
+    version = 2,
     exportSchema = true
 )
 abstract class ProducaoDatabase : RoomDatabase() {
@@ -26,4 +29,5 @@ abstract class ProducaoDatabase : RoomDatabase() {
     abstract fun produtoDao(): ProdutoDao
     abstract fun gradeDao(): GradeDao
     abstract fun producaoDao(): ProducaoDao
+    abstract fun movProducaoDao(): MovimentacaoDao
 }

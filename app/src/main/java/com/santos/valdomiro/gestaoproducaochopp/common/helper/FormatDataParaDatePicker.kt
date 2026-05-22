@@ -9,7 +9,7 @@ import java.util.Locale
 object DataParaDatePicker {
 
     fun LocalDate?.toEpochMillis(): Long? {
-        return this?.atStartOfDay(ZoneOffset.UTC) // 👈 CORRIGIDO
+        return this?.atStartOfDay(ZoneOffset.UTC)
             ?.toInstant()
             ?.toEpochMilli()
     }
@@ -17,7 +17,7 @@ object DataParaDatePicker {
     fun Long?.toLocalDate(): LocalDate? {
         return this?.let {
             Instant.ofEpochMilli(it)
-                .atZone(ZoneOffset.UTC) // 👈 CORRIGIDO
+                .atZone(ZoneOffset.UTC)
                 .toLocalDate()
         }
     }

@@ -4,6 +4,8 @@ import com.santos.valdomiro.gestaoproducaochopp.features.barril.data.repository.
 import com.santos.valdomiro.gestaoproducaochopp.features.barril.domain.repository.BarrilRepository
 import com.santos.valdomiro.gestaoproducaochopp.features.grade.data.repository.GradeRepositoryImpl
 import com.santos.valdomiro.gestaoproducaochopp.features.grade.domain.repository.GradeRepository
+import com.santos.valdomiro.gestaoproducaochopp.features.movimentacao.data.repository.MovimentacaoRepositoryImpl
+import com.santos.valdomiro.gestaoproducaochopp.features.movimentacao.domain.repository.MovimentacaoRepository
 import com.santos.valdomiro.gestaoproducaochopp.features.producao.data.repository.ProducaoRepositoryImpl
 import com.santos.valdomiro.gestaoproducaochopp.features.producao.domain.repository.ProducaoRepository
 import com.santos.valdomiro.gestaoproducaochopp.features.produto.data.repository.ProdutoRepositoryImpl
@@ -64,10 +66,10 @@ abstract class RepositoryModule {
         producaoRepositoryImpl: ProducaoRepositoryImpl
     ): ProducaoRepository
 
-//    @Binds
-//    @Singleton
-//abstract fun binQtHorariaRepository(
-//        qtHorariaRepositoryImpl: QuantidadeHorariaRepositoryImpl
-//    ): QuantidadeHorariaRepository
+    @Binds
+    @Singleton
+abstract fun binMovProducaoRepository(
+        movProducaoRepositoryImpl: MovimentacaoRepositoryImpl
+    ): MovimentacaoRepository
 
 }

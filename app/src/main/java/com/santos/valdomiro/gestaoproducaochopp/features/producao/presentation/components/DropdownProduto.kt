@@ -15,7 +15,10 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.navigation.NavController
+import com.santos.valdomiro.gestaoproducaochopp.common.components.ButtomFillMaxWidth
 import com.santos.valdomiro.gestaoproducaochopp.features.produto.domain.entity.ProdutoEntity
+import com.santos.valdomiro.gestaoproducaochopp.navigation.Route
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -23,7 +26,8 @@ fun DropdownProduto(
     listaProdutos: List<ProdutoEntity>,
     produtoIdAtual: String?,
     onProdutoSelecionado: (ProdutoEntity) -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    navController: NavController
 ) {
     var expanded by remember { mutableStateOf(false) }
 
@@ -53,38 +57,46 @@ fun DropdownProduto(
         }
     }
 
-    ExposedDropdownMenuBox(
-        expanded = expanded,
-        onExpandedChange = { expanded = it },
-        modifier = modifier.fillMaxWidth()
-    ) {
-        OutlinedTextField(
-            value = textoBusca,
-            onValueChange = {
-                textoBusca = it
-                expanded = true
-            },
-            label = { Text("Produto") },
-            trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = expanded) },
-            modifier = Modifier
-                .fillMaxWidth()
-                .menuAnchor(ExposedDropdownMenuAnchorType.PrimaryEditable)
+    if (listaFiltrada.isEmpty()) {
+        ButtomFillMaxWidth(
+            onClick = { navController.navigate(Route.AdicionarProdutoRoute.route) },
+            text = "Adicionar Produto"
         )
-
-        ExposedDropdownMenu(
+    } else {
+        ExposedDropdownMenuBox(
             expanded = expanded,
-            onDismissRequest = { expanded = false }
+            onExpandedChange = { expanded = it },
+            modifier = modifier.fillMaxWidth()
         ) {
-            listaFiltrada.forEach { produto ->
-                DropdownMenuItem(
-                    text = { Text(produto.nome) },
-                    onClick = {
-                        onProdutoSelecionado(produto)
-                        textoBusca = produto.nome
-                        expanded = false
-                    }
-                )
+            OutlinedTextField(
+                value = textoBusca,
+                onValueChange = {
+                    textoBusca = it
+                    expanded = true
+                },
+                label = { Text("Produto") },
+                trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = expanded) },
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .menuAnchor(ExposedDropdownMenuAnchorType.PrimaryEditable)
+            )
+
+            ExposedDropdownMenu(
+                expanded = expanded,
+                onDismissRequest = { expanded = false }
+            ) {
+                listaFiltrada.forEach { produto ->
+                    DropdownMenuItem(
+                        text = { Text(produto.nome) },
+                        onClick = {
+                            onProdutoSelecionado(produto)
+                            textoBusca = produto.nome
+                            expanded = false
+                        }
+                    )
+                }
             }
         }
     }
+
 }
