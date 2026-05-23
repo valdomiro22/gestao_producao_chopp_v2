@@ -5,15 +5,16 @@ import com.santos.valdomiro.gestaoproducaochopp.features.movimentacao.domain.rep
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
-class GetMovimentacoesPorHorarioUseCase @Inject constructor(
+class GetSaldoMovimentacaoHorarioUseCase @Inject constructor(
     private val repository: MovimentacaoRepository
 ) {
-
-    operator fun invoke(horarioReferente: String, producaoId: String): Flow<List<MovimentacaoEntity>> {
+    suspend operator fun invoke(
+        producaoId: String,
+        horarioReferente: String
+    ): Flow<List<MovimentacaoEntity>> {
         return repository.getAllMovimentacoesDoHorario(
-            horarioReferente = horarioReferente,
-            producaoId = producaoId
+            producaoId = producaoId,
+            horarioReferente = horarioReferente
         )
     }
-
 }

@@ -153,7 +153,7 @@ class MovimentacaoRepositoryImpl @Inject constructor(
     }
 
     override fun getAllMovimentacoesDoHorario(
-        horarioReferente: Int,
+        horarioReferente: String,
         producaoId: String
     ): Flow<List<MovimentacaoEntity>> {
         return localDataSource.getAllMovimentacoesDoHorario(

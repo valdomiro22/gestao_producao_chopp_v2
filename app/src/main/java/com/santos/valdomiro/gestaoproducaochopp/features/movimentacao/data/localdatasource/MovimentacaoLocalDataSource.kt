@@ -16,5 +16,5 @@ interface MovimentacaoLocalDataSource {
     fun getOneById(movimentacaoId: String): Flow<MovimentacaoLocalModel?>
     fun getAllMovimentacoes(): Flow<List<MovimentacaoLocalModel>>
     fun getAllOfProducao(producaoId: String): Flow<List<MovimentacaoLocalModel>>
-    fun getAllMovimentacoesDoHorario(horarioReferente: Int, producaoId: String): Flow<List<MovimentacaoLocalModel>>
+    fun getAllMovimentacoesDoHorario(horarioReferente: String, producaoId: String): Flow<List<MovimentacaoLocalModel>>
 }

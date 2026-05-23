@@ -21,7 +21,7 @@ import com.santos.valdomiro.gestaoproducaochopp.features.produto.data.produtodao
         ProducaoLocalModel::class,
         MovimentacaoLocalModel::class
     ],
-    version = 2,
+    version = 3,
     exportSchema = true
 )
 abstract class ProducaoDatabase : RoomDatabase() {

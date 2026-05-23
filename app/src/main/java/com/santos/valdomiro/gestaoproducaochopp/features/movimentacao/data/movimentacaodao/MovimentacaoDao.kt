@@ -27,7 +27,7 @@ interface MovimentacaoDao {
     fun getAllOfProducao(producaoId: String): Flow<List<MovimentacaoLocalModel>>
 
     @Query("SELECT * FROM movimentacao WHERE horarioReferente = :horarioReferente AND producaoId = :producaoId ORDER BY criadoEm DESC")
-    fun getAllMovimentacoesOfHorario(horarioReferente: Int, producaoId: String): Flow<List<MovimentacaoLocalModel>>
+    fun getAllMovimentacoesOfHorario(horarioReferente: String, producaoId: String): Flow<List<MovimentacaoLocalModel>>
 
     @Query("SELECT * FROM movimentacao WHERE id = :movimentacaoId LIMIT 1")
     fun getOneById(movimentacaoId: String): Flow<MovimentacaoLocalModel?>

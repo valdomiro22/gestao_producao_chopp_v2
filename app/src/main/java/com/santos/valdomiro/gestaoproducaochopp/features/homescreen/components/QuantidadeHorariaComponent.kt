@@ -16,11 +16,9 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
-import com.santos.valdomiro.gestaoproducaochopp.common.helper.StringHelper
 import com.santos.valdomiro.gestaoproducaochopp.features.movimentacao.domain.entity.MovimentacaoEntity
-import com.santos.valdomiro.gestaoproducaochopp.features.movimentacaoproducao.presentation.components.AddQtHorariaDialog
+import com.santos.valdomiro.gestaoproducaochopp.features.movimentacao.presentation.components.AddQtHorariaDialog
 import com.santos.valdomiro.gestaoproducaochopp.features.producao.domain.entity.ProducaoEntity
-import kotlin.toString
 
 @Composable
 fun QuantidadeHorariaComponent(
@@ -66,22 +64,9 @@ fun QuantidadeHorariaComponent(
         AddQtHorariaDialog(
             producao = producao,
             horario = horarioSelecionado,
-
-            onConfirm = {
-
-                showInfoDialog = false
-
-                Toast.makeText(
-                    context,
-                    "Salvo para o horário: $horarioSelecionado",
-                    Toast.LENGTH_SHORT
-                ).show()
-            },
-
             onSuccess = {
                 onRefresh()
             },
-
             onDismiss = {
                 showInfoDialog = false
             }

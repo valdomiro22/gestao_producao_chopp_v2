@@ -55,7 +55,6 @@ import com.santos.valdomiro.gestaoproducaochopp.common.enums.Turno
 import com.santos.valdomiro.gestaoproducaochopp.common.state.UiState
 import com.santos.valdomiro.gestaoproducaochopp.features.homescreen.components.CardStatusProducaoComponent
 import com.santos.valdomiro.gestaoproducaochopp.features.homescreen.components.QuantidadeHorariaComponent
-import com.santos.valdomiro.gestaoproducaochopp.features.movimentacao.domain.entity.MovimentacaoEntity
 import com.santos.valdomiro.gestaoproducaochopp.features.movimentacao.presentation.screens.listamvproducao.MapMovimentacoesDaProducaoViewModel
 import com.santos.valdomiro.gestaoproducaochopp.features.producao.presentation.screens.buscarproducao.BuscarProducaoDetalhadaViewModel
 import com.santos.valdomiro.gestaoproducaochopp.navigation.LocalNavController
@@ -83,6 +82,7 @@ fun HomeScreen(
 
     LaunchedEffect(Unit) {
         buscarProducaoDetalhadaViewModel.buscarProducaoDatalhada(producaoId)
+        mapMovimentacoesViewModel.getMovimentacoesDaProducao(producaoId = producaoId)
     }
 
     ModalNavigationDrawer(
@@ -133,14 +133,14 @@ fun HomeScreen(
                                         text = { Text("Barris") },
                                         onClick = {
                                             menuExpandido = false
-//                                            navController.navigate(Route.ListaDeBarrisRoute.route)
+                                            navController.navigate(Route.ListaBarrisRoute.route)
                                         }
                                     )
                                     DropdownMenuItem(
                                         text = { Text("Produtos") },
                                         onClick = {
                                             menuExpandido = false
-//                                            navController.navigate(Route.ListaDeProdutosRoute.route)
+                                            navController.navigate(Route.ListaProdutosRoute.route)
                                         }
                                     )
                                     DropdownMenuItem(
@@ -236,7 +236,8 @@ fun HomeScreen(
                         }
                         Spacer(modifier = Modifier.height(8.dp))
 
-                        val mapaQuantidades = (movimentacaoState as? UiState.Success)?.data ?: emptyMap()
+                        val mapaQuantidades =
+                            (movimentacaoState as? UiState.Success)?.data ?: emptyMap()
 
                         // Seção de horários do turno selecionado
                         val listaDeHorarios = turnoAtual.horarios

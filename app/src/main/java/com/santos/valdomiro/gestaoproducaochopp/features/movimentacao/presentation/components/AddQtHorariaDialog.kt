@@ -1,7 +1,8 @@
-package com.santos.valdomiro.gestaoproducaochopp.features.movimentacaoproducao.presentation.components
+package com.santos.valdomiro.gestaoproducaochopp.features.movimentacao.presentation.components
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -9,28 +10,31 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.ElevatedButton
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
+import androidx.compose.ui.window.Dialog
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.santos.valdomiro.gestaoproducaochopp.common.components.ButtomFillMaxWidth
 import com.santos.valdomiro.gestaoproducaochopp.common.components.ErroComponent
-import com.santos.valdomiro.gestaoproducaochopp.features.movimentacao.presentation.components.ActionChipCustom
 import com.santos.valdomiro.gestaoproducaochopp.features.movimentacao.presentation.screens.adicionarmovimentacao.AdicionarMovimentacaoViewModel
 import com.santos.valdomiro.gestaoproducaochopp.features.producao.domain.entity.ProducaoEntity
-import com.santos.valdomiro.gestaoproducaochopp.navigation.LocalNavController
+import kotlin.math.abs
 
 @Composable
 fun AddQtHorariaDialog(
@@ -38,140 +42,160 @@ fun AddQtHorariaDialog(
     producao: ProducaoEntity,
     onDismiss: () -> Unit,
     onSuccess: () -> Unit,
-    onConfirm: () -> Unit,
     viewModel: AdicionarMovimentacaoViewModel = hiltViewModel()
 ) {
     val state by viewModel.uiState.collectAsState()
-    val navController = LocalNavController.current
-    val context = LocalContext.current
 
-    val adicionar = { valor: Int ->
+    LaunchedEffect(state.isSuccess) {
+        if (state.isSuccess) {
+            onSuccess()
+            onDismiss()
+            viewModel.resetState()
+        }
+    }
+
+    fun somarAoInput(valor: Int) {
         val qtAtual = state.quantidade.toIntOrNull() ?: 0
         val novaQuantidade = qtAtual + valor
         viewModel.onQuantidadeChanged(novaQuantidade.toString())
     }
 
-    val subtrair = { valor: Int ->
+    fun salvarMovimentacao(ehPositivo: Boolean) {
         val qtAtual = state.quantidade.toIntOrNull() ?: 0
-        val novaQuantidade = qtAtual - valor
-        viewModel.onQuantidadeChanged(novaQuantidade.toString())
-    }
 
-    // Fica de olho no estado de sucesso do ViewModel de inserção
-    LaunchedEffect(state.isSuccess) {
-        if (state.isSuccess) {
-            onSuccess() // Avisa a tela principal para recarregar
-            onDismiss() // Fecha o dialog
-            viewModel.resetState()
+        val quantidadeFinal = if (ehPositivo) {
+            abs(qtAtual)
+        } else {
+            abs(qtAtual) * -1
         }
+
+        viewModel.onQuantidadeChanged(quantidadeFinal.toString())
+
+        viewModel.inserirMovimentacao(
+            producaoId = producao.id,
+            horarioTurno = horario
+        )
     }
 
-    AlertDialog(
-        onDismissRequest = onDismiss,
-        title = {
-            Column {
-                Text(
-                    modifier = Modifier.fillMaxWidth(),
-                    text = "Barris produzidos",
-                    color = Color.Black,
-                    style = MaterialTheme.typography.titleLarge,
-                    fontWeight = FontWeight.SemiBold,
-                    textAlign = TextAlign.Center
-                )
-
-                Text(
-                    modifier = Modifier.fillMaxWidth(),
-                    text = "Horario: $horario",
-                    color = Color.Black,
-                    fontSize = 11.sp,
-                    style = MaterialTheme.typography.titleLarge,
-                    textAlign = TextAlign.Center
-                )
-            }
-        },
-        text = {
+    Dialog(
+        onDismissRequest = onDismiss
+    ) {
+        Card(
+            modifier = Modifier.fillMaxWidth(),
+            shape = MaterialTheme.shapes.extraLarge,
+            colors = CardDefaults.cardColors(
+                containerColor = MaterialTheme.colorScheme.surface
+            ),
+            elevation = CardDefaults.cardElevation(defaultElevation = 8.dp)
+        ) {
             Column(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(vertical = 8.dp),
-                verticalArrangement = Arrangement.spacedBy(8.dp)
+                    .padding(20.dp),
+                verticalArrangement = Arrangement.spacedBy(18.dp),
+                horizontalAlignment = Alignment.CenterHorizontally
             ) {
+                Column(
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
+                    Text(
+                        text = horario,
+                        style = MaterialTheme.typography.headlineLarge,
+                        fontWeight = FontWeight.Bold
+                    )
+
+                    Text(
+                        text = "Movimentação do horário",
+                        style = MaterialTheme.typography.bodyMedium,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                    )
+                }
+
                 OutlinedTextField(
                     value = state.quantidade,
                     onValueChange = viewModel::onQuantidadeChanged,
+                    modifier = Modifier.fillMaxWidth(),
+                    placeholder = {
+                        Text(
+                            text = "0",
+                            modifier = Modifier.fillMaxWidth(),
+                            textAlign = TextAlign.Center
+                        )
+                    },
+                    singleLine = true,
                     isError = state.erroQuantidade != null,
-                    placeholder = { Text("Ex: 50") },
-                    label = { Text("Quantidade") },
-                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+                    keyboardOptions = KeyboardOptions(
+                        keyboardType = KeyboardType.Number
+                    ),
+                    textStyle = MaterialTheme.typography.displaySmall.copy(
+                        textAlign = TextAlign.Center,
+                        fontWeight = FontWeight.Bold
+                    )
                 )
-                if (state.erroQuantidade != null) ErroComponent(state.erroQuantidade!!)
-                Spacer(modifier = Modifier.height(4.dp))
 
-                // Chips de incremento
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.SpaceBetween
-                ) {
-                    ActionChipCustom(
-                        valor = 1,
-                        isIncrement = true,
-                        onClick = { adicionar(1) }
-                    )
-                    ActionChipCustom(
-                        valor = 5,
-                        isIncrement = true,
-                        onClick = { adicionar(5) }
-                    )
-                    ActionChipCustom(
-                        valor = 10,
-                        isIncrement = true,
-                        onClick = { adicionar(10) }
-                    )
-                    ActionChipCustom(
-                        valor = 20,
-                        isIncrement = true,
-                        onClick = { adicionar(20) }
-                    )
+                if (state.erroQuantidade != null) {
+                    ErroComponent(state.erroQuantidade!!)
                 }
 
-                // Chips de decremento
                 Row(
                     modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.SpaceBetween
+                    horizontalArrangement = Arrangement.spacedBy(6.dp)
                 ) {
-                    ActionChipCustom(
-                        valor = 1,
-                        isIncrement = false,
-                        onClick = { subtrair(1) }
-                    )
-                    ActionChipCustom(
-                        valor = 5,
-                        isIncrement = false,
-                        onClick = { subtrair(5) }
-                    )
-                    ActionChipCustom(
-                        valor = 10,
-                        isIncrement = false,
-                        onClick = { subtrair(10) }
-                    )
-                    ActionChipCustom(
-                        valor = 20,
-                        isIncrement = false,
-                        onClick = { subtrair(20) }
-                    )
-                }
-
-                ButtomFillMaxWidth(
-                    text = "Adicionar",
-                    onClick = {
-//                        viewModel.setProducaoId(producao.id!!)
-//                        viewModel.setHorario(horario)
-                        viewModel.inserirMovimentacal(producaoId = producao.id, horarioTurno = horario)
+                    listOf(1, 5, 10, 20).forEach { valor ->
+                        OutlinedButton(
+                            modifier = Modifier
+                                .weight(1f)
+                                .height(40.dp),
+                            onClick = { somarAoInput(valor) },
+                            contentPadding = PaddingValues(horizontal = 4.dp, vertical = 0.dp)
+                        ) {
+                            Text(
+                                text = "+$valor",
+                                maxLines = 1,
+                                style = MaterialTheme.typography.labelMedium
+                            )
+                        }
                     }
-                )
+                }
+
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.spacedBy(12.dp)
+                ) {
+                    OutlinedButton(
+                        modifier = Modifier.weight(1f),
+                        onClick = { salvarMovimentacao(false) },
+                        colors = ButtonDefaults.outlinedButtonColors(
+                            contentColor = MaterialTheme.colorScheme.error
+                        )
+                    ) {
+                        Text(
+                            text = "Retirar",
+                            fontWeight = FontWeight.SemiBold
+                        )
+                    }
+
+                    ElevatedButton(
+                        modifier = Modifier.weight(1f),
+                        onClick = { salvarMovimentacao(true) },
+                        colors = ButtonDefaults.elevatedButtonColors(
+                            containerColor = MaterialTheme.colorScheme.primary,
+                            contentColor = MaterialTheme.colorScheme.onPrimary
+                        )
+                    ) {
+                        Text(
+                            text = "Adicionar",
+                            fontWeight = FontWeight.SemiBold
+                        )
+                    }
+                }
+
+                TextButton(
+                    onClick = onDismiss
+                ) {
+                    Text("Cancelar")
+                }
             }
-        },
-        confirmButton = {},
-        dismissButton = {}
-    )
+        }
+    }
 }
