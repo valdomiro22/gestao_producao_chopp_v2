@@ -4,7 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.santos.valdomiro.gestaoproducaochopp.common.state.UiState
 import com.santos.valdomiro.gestaoproducaochopp.features.movimentacao.domain.entity.MovimentacaoEntity
-import com.santos.valdomiro.gestaoproducaochopp.features.movimentacao.domain.usecase.DeleteMovProducaoUseCase
+import com.santos.valdomiro.gestaoproducaochopp.features.movimentacao.domain.usecase.DeleteMovimentacaoUseCase
 import com.santos.valdomiro.gestaoproducaochopp.features.movimentacao.domain.usecase.GetAllOfProducaoUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -17,7 +17,7 @@ import javax.inject.Inject
 @HiltViewModel
 class ListaMovimentacaoViewModel @Inject constructor(
     private val getAllOfProducaoUseCase: GetAllOfProducaoUseCase,
-    private val deleteMovProducaoUseCase: DeleteMovProducaoUseCase
+    private val deleteMovimentacaoUseCase: DeleteMovimentacaoUseCase
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow<UiState<List<MovimentacaoEntity>>>(UiState.Loading)
@@ -43,7 +43,7 @@ class ListaMovimentacaoViewModel @Inject constructor(
         viewModelScope.launch {
             _uiState.value = UiState.Loading
 
-            deleteMovProducaoUseCase(movProducao = producao)
+            deleteMovimentacaoUseCase(movProducao = producao)
                 .onSuccess { getAllOfProducao(producao.id) }
                 .onFailure { exception ->
                     _uiState.value = UiState.Error(

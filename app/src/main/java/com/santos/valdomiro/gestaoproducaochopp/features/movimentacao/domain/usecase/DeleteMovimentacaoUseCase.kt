@@ -4,7 +4,7 @@ import com.santos.valdomiro.gestaoproducaochopp.features.movimentacao.domain.ent
 import com.santos.valdomiro.gestaoproducaochopp.features.movimentacao.domain.repository.MovimentacaoRepository
 import javax.inject.Inject
 
-class DeleteMovProducaoUseCase @Inject constructor(
+class DeleteMovimentacaoUseCase @Inject constructor(
     private val repository: MovimentacaoRepository
 ) {
 

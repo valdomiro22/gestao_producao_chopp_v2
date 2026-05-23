@@ -7,7 +7,7 @@ import com.santos.valdomiro.gestaoproducaochopp.common.exceptions.ErroBancoDados
 import com.santos.valdomiro.gestaoproducaochopp.common.exceptions.RegistroDuplicadoException
 import com.santos.valdomiro.gestaoproducaochopp.common.exceptions.RegistroInvalidoException
 import com.santos.valdomiro.gestaoproducaochopp.features.movimentacao.data.model.MovimentacaoLocalModel
-import com.santos.valdomiro.gestaoproducaochopp.features.movimentacao.data.movimentacao.MovimentacaoDao
+import com.santos.valdomiro.gestaoproducaochopp.features.movimentacao.data.movimentacaodao.MovimentacaoDao
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
 import javax.inject.Inject
@@ -60,6 +60,19 @@ class MovimentacaoLocalDataSourceImpl @Inject constructor(
 
     override fun getAllOfProducao(producaoId: String): Flow<List<MovimentacaoLocalModel>> {
         return movimentacaoDao.getAllOfProducao(producaoId = producaoId)
+            .catch { e ->
+                throw mapearException(e)
+            }
+    }
+
+    override fun getAllMovimentacoesDoHorario(
+        horarioReferente: Int,
+        producaoId: String
+    ): Flow<List<MovimentacaoLocalModel>> {
+        return movimentacaoDao.getAllMovimentacoesOfHorario(
+            horarioReferente = horarioReferente,
+            producaoId = producaoId
+        )
             .catch { e ->
                 throw mapearException(e)
             }

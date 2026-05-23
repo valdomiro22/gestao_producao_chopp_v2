@@ -24,7 +24,7 @@ class AdicionarMovimentacaoViewModel @Inject constructor(
         _uiState.value = _uiState.value.copy(quantidade = filtered, erroQuantidade = null)
     }
 
-    fun inserirMovimentacal(producaoId: String) {
+    fun inserirMovimentacal(producaoId: String, horarioTurno: String) {
         val currentState = _uiState.value
 
         if (!validar(state = currentState)) return
@@ -52,7 +52,8 @@ class AdicionarMovimentacaoViewModel @Inject constructor(
 
             val params = InsertMovimentacaoParams(
                 producaoId = producaoId,
-                quantidade = quantidadeInt
+                quantidade = quantidadeInt,
+                horarioReferente = horarioTurno
             )
 
             insertMovimentacaoUseCase(params = params)

@@ -1,4 +1,4 @@
-package com.santos.valdomiro.gestaoproducaochopp.features.movimentacao.data.movimentacao
+package com.santos.valdomiro.gestaoproducaochopp.features.movimentacao.data.movimentacaodao
 
 import androidx.room.Dao
 import androidx.room.Delete
@@ -25,6 +25,9 @@ interface MovimentacaoDao {
 
     @Query("SELECT * FROM movimentacao WHERE producaoId = :producaoId ORDER BY criadoEm DESC")
     fun getAllOfProducao(producaoId: String): Flow<List<MovimentacaoLocalModel>>
+
+    @Query("SELECT * FROM movimentacao WHERE horarioReferente = :horarioReferente AND producaoId = :producaoId ORDER BY criadoEm DESC")
+    fun getAllMovimentacoesOfHorario(horarioReferente: Int, producaoId: String): Flow<List<MovimentacaoLocalModel>>
 
     @Query("SELECT * FROM movimentacao WHERE id = :movimentacaoId LIMIT 1")
     fun getOneById(movimentacaoId: String): Flow<MovimentacaoLocalModel?>

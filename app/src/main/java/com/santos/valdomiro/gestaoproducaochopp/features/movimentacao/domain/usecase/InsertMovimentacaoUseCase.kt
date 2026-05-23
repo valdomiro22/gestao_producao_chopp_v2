@@ -1,8 +1,6 @@
 package com.santos.valdomiro.gestaoproducaochopp.features.movimentacao.domain.usecase
 
 import com.santos.valdomiro.gestaoproducaochopp.common.enums.StatusSincronizacao
-import com.santos.valdomiro.gestaoproducaochopp.common.enums.Turno
-import com.santos.valdomiro.gestaoproducaochopp.common.helper.formatarHorario
 import com.santos.valdomiro.gestaoproducaochopp.features.movimentacao.domain.entity.MovimentacaoEntity
 import com.santos.valdomiro.gestaoproducaochopp.features.movimentacao.domain.entity.TipoMovimentacao
 import com.santos.valdomiro.gestaoproducaochopp.features.movimentacao.domain.repository.MovimentacaoRepository
@@ -12,7 +10,8 @@ import javax.inject.Inject
 
 data class InsertMovimentacaoParams(
     val producaoId: String,
-    val quantidade: Int
+    val quantidade: Int,
+    val horarioReferente: String
 )
 
 class InsertMovimentacaoUseCase @Inject constructor(
@@ -31,15 +30,13 @@ class InsertMovimentacaoUseCase @Inject constructor(
 
         val criadoEm = Instant.now()
         val idGerado = UUID.randomUUID().toString()
-        val horarioFormatado = Instant.now().formatarHorario().replace(":","").toIntOrNull()
-        val horarioReferente = horarioFormatado ?: -1
         val tipo = if (quantidade < 0) TipoMovimentacao.SUBTRACAO else TipoMovimentacao.SOMA
 
         val movimentacao = MovimentacaoEntity(
             id = idGerado,
             producaoId = producaoId,
             turnoId = turnoId,
-            horarioReferente = horarioReferente,
+            horarioReferente = params.horarioReferente,
             quantidade = quantidade,
             tipo = tipo,
             criadoEm = criadoEm,

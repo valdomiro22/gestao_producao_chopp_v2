@@ -5,7 +5,7 @@ import com.santos.valdomiro.gestaoproducaochopp.features.movimentacao.domain.rep
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
-class GetAllMovProducoes @Inject constructor(
+class GetAllMovimentacoesUseCase @Inject constructor(
     private val repository: MovimentacaoRepository
 ) {
 

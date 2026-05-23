@@ -16,9 +16,11 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
+import com.santos.valdomiro.gestaoproducaochopp.common.helper.StringHelper
 import com.santos.valdomiro.gestaoproducaochopp.features.movimentacao.domain.entity.MovimentacaoEntity
 import com.santos.valdomiro.gestaoproducaochopp.features.movimentacaoproducao.presentation.components.AddQtHorariaDialog
 import com.santos.valdomiro.gestaoproducaochopp.features.producao.domain.entity.ProducaoEntity
+import kotlin.toString
 
 @Composable
 fun QuantidadeHorariaComponent(
@@ -28,21 +30,21 @@ fun QuantidadeHorariaComponent(
     onRefresh: () -> Unit,
     modifier: Modifier = Modifier
 ) {
+
     val context = LocalContext.current
-    // Estados internos para controlar o Dialog e qual horário foi clicado
+
     var showInfoDialog by remember { mutableStateOf(false) }
     var horarioSelecionado by remember { mutableStateOf("") }
 
-
-
     LazyVerticalGrid(
         columns = GridCells.Fixed(4),
-        modifier = Modifier
+        modifier = modifier
             .fillMaxWidth()
             .heightIn(max = 230.dp),
         horizontalArrangement = Arrangement.spacedBy(8.dp),
         verticalArrangement = Arrangement.spacedBy(8.dp),
     ) {
+
         items(horarios) { horario ->
             val quantidadeObjeto = quantidades[horario]
             val valorExibido = quantidadeObjeto?.quantidade?.toString() ?: "0"
@@ -59,28 +61,30 @@ fun QuantidadeHorariaComponent(
         }
     }
 
- // O Dialog agora fica "escutando" o estado interno do componente
     if (showInfoDialog) {
+
         AddQtHorariaDialog(
             producao = producao,
-            // Aqui você passaria o horarioSelecionado para o seu Dialog
-            // Supondo que seu Dialog aceite um parâmetro 'horario'
             horario = horarioSelecionado,
+
             onConfirm = {
+
                 showInfoDialog = false
+
                 Toast.makeText(
                     context,
                     "Salvo para o horário: $horarioSelecionado",
                     Toast.LENGTH_SHORT
                 ).show()
             },
+
             onSuccess = {
                 onRefresh()
             },
+
             onDismiss = {
                 showInfoDialog = false
-            },
-
-            )
+            }
+        )
     }
 }

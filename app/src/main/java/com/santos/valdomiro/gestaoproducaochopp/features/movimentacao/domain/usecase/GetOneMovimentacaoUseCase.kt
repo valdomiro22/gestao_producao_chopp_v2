@@ -7,7 +7,7 @@ import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
-class GetOneMovProducaoUseCase @Inject constructor(
+class GetOneMovimentacaoUseCase @Inject constructor(
     private val repository: MovimentacaoRepository
 ) {
 

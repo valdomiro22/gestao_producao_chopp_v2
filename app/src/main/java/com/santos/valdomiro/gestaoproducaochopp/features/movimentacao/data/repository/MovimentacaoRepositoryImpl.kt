@@ -48,11 +48,14 @@ class MovimentacaoRepositoryImpl @Inject constructor(
             val movimentacaoPendente = movimentacao.copy(
                 statusSincronizacao = StatusSincronizacao.AGUARDANDO_ATUALIZACAO
             )
-            localDataSource.updateMovimentacao(movimentacaoPendente.toLocalModel())
+
+            localDataSource.updateMovimentacao(
+                movimentacaoPendente.toLocalModel()
+            )
 
             try {
                 remoteDataSource.updateMovimentacao(
-                    movimentacao = movimentacao.toRemoteModel(),
+                    movimentacao = movimentacaoPendente.toRemoteModel()
                 )
 
                 localDataSource.updateStatusSincronizacao(
@@ -60,6 +63,7 @@ class MovimentacaoRepositoryImpl @Inject constructor(
                     statusSincronizacao = StatusSincronizacao.SINCRONIZADO
                 )
             } catch (e: Exception) {
+                // mantém como AGUARDANDO_ATUALIZACAO
             }
 
             Result.success(Unit)
@@ -144,6 +148,25 @@ class MovimentacaoRepositoryImpl @Inject constructor(
                     }
                     .map { barrilLocal ->
                         barrilLocal.toEntity()
+                    }
+            }
+    }
+
+    override fun getAllMovimentacoesDoHorario(
+        horarioReferente: Int,
+        producaoId: String
+    ): Flow<List<MovimentacaoEntity>> {
+        return localDataSource.getAllMovimentacoesDoHorario(
+            horarioReferente = horarioReferente,
+            producaoId = producaoId
+        )
+            .map { lista ->
+                lista
+                    .filter { movimentacao ->
+                        movimentacao.statusSincronizacao != StatusSincronizacao.AGUARDANDO_EXCLUSAO
+                    }
+                    .map { movimentacao ->
+                        movimentacao.toEntity()
                     }
             }
     }

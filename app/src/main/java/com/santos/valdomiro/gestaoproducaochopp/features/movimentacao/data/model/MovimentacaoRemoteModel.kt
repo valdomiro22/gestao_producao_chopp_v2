@@ -8,7 +8,7 @@ data class MovimentacaoRemoteModel(
     val id: String,
     val producaoId: String,
     val turnoId: Int,
-    val horarioReferente: Int,
+    val horarioReferente: String,
     val quantidade: Int,
     val tipo: TipoMovimentacao,
     val criadoEm: Timestamp,

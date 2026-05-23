@@ -7,7 +7,7 @@ import com.santos.valdomiro.gestaoproducaochopp.features.barril.data.model.Barri
 import com.santos.valdomiro.gestaoproducaochopp.features.grade.data.gradedao.GradeDao
 import com.santos.valdomiro.gestaoproducaochopp.features.grade.data.model.GradeLocalModel
 import com.santos.valdomiro.gestaoproducaochopp.features.movimentacao.data.model.MovimentacaoLocalModel
-import com.santos.valdomiro.gestaoproducaochopp.features.movimentacao.data.movimentacao.MovimentacaoDao
+import com.santos.valdomiro.gestaoproducaochopp.features.movimentacao.data.movimentacaodao.MovimentacaoDao
 import com.santos.valdomiro.gestaoproducaochopp.features.producao.data.model.ProducaoLocalModel
 import com.santos.valdomiro.gestaoproducaochopp.features.producao.data.producaodao.ProducaoDao
 import com.santos.valdomiro.gestaoproducaochopp.features.produto.data.model.ProdutoLocalModel

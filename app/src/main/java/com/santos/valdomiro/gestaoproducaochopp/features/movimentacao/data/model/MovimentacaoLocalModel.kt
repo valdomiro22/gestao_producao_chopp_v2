@@ -12,7 +12,7 @@ data class MovimentacaoLocalModel(
 
     val producaoId: String,
     val turnoId: Int,
-    val horarioReferente: Int,
+    val horarioReferente: String,
     val quantidade: Int,
     val tipo: TipoMovimentacao,
     val criadoEm: Long,

@@ -81,6 +81,24 @@ class MovimentacaoRemoteDataSourceImpl @Inject constructor(
         }
     }
 
+    override suspend fun getAllMovimentacoesOfHorario(
+        horarioReferente: Int, producaoId: String
+    ): List<MovimentacaoRemoteModel> {
+        return mapearExecution {
+            val snapshot = firestore
+                .collection(movimentacaoCollection)
+                .whereEqualTo("horarioReferente", horarioReferente)
+                .whereEqualTo("producaoId", producaoId)
+                .orderBy("criadoEm", com.google.firebase.firestore.Query.Direction.DESCENDING)
+                .get()
+                .await()
+
+            snapshot.documents.mapNotNull {
+                it.toObject(MovimentacaoRemoteModel::class.java)
+            }
+        }
+    }
+
     /**
      * Função auxiliar para centralizar o tratamento de erros do Firebase.
      * Ela "traduz" exceções técnicas para exceções de domínio.

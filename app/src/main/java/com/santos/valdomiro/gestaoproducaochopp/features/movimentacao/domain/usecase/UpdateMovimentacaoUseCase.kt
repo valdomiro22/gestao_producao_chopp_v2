@@ -11,7 +11,7 @@ data class UpdateMovimentacaoParams(
     val id: String,
     val producaoId: String,
     val turnoId: Int,
-    val horarioReferente: Int,
+    val horarioReferente: String,
     val quantidade: Int,
     val tipo: TipoMovimentacao,
     val criadoEm: Instant,
@@ -33,7 +33,6 @@ class UpdateMovProducaoUseCase @Inject constructor(
         if (producaoId.isBlank()) return Result.failure(IllegalArgumentException("producaoId não pode ser vazio"))
         if (turnoId !in 1..3) return Result.failure(IllegalArgumentException("turnoId não corresponde a um turno válido"))
         if (quantidade == 0) return Result.failure(IllegalArgumentException("Quantidade programada deve ser diferente de zero"))
-        if (horarioReferente <= 0) return Result.failure(IllegalArgumentException("Horario referente inválido"))
 
         val editadaEm = Instant.now()
 

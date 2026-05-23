@@ -9,4 +9,5 @@ interface MovimentacaoRemoteDataSource {
     suspend fun deleteMovimentacao(movimentacaoId: String)
     suspend fun getAllMovimentacaos(): List<MovimentacaoRemoteModel>
     suspend fun getAllMovimentacoesDaProducao(movimentacaoId: String): List<MovimentacaoRemoteModel>
+    suspend fun getAllMovimentacoesOfHorario(horarioReferente: Int, producaoId: String): List<MovimentacaoRemoteModel>
 }

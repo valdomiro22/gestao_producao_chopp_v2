@@ -53,12 +53,12 @@ import com.santos.valdomiro.gestaoproducaochopp.common.AppDrawer
 import com.santos.valdomiro.gestaoproducaochopp.common.components.ErroComponent
 import com.santos.valdomiro.gestaoproducaochopp.common.enums.Turno
 import com.santos.valdomiro.gestaoproducaochopp.common.state.UiState
-import com.santos.valdomiro.gestaoproducaochopp.features.producao.presentation.screens.buscarproducao.BuscarProducaoDetalhadaViewModel
-import com.santos.valdomiro.gestaoproducaochopp.navigation.LocalNavController
 import com.santos.valdomiro.gestaoproducaochopp.features.homescreen.components.CardStatusProducaoComponent
 import com.santos.valdomiro.gestaoproducaochopp.features.homescreen.components.QuantidadeHorariaComponent
 import com.santos.valdomiro.gestaoproducaochopp.features.movimentacao.domain.entity.MovimentacaoEntity
-import com.santos.valdomiro.gestaoproducaochopp.features.movimentacao.presentation.screens.listamvproducao.ListaMovimentacaoViewModel
+import com.santos.valdomiro.gestaoproducaochopp.features.movimentacao.presentation.screens.listamvproducao.MapMovimentacoesDaProducaoViewModel
+import com.santos.valdomiro.gestaoproducaochopp.features.producao.presentation.screens.buscarproducao.BuscarProducaoDetalhadaViewModel
+import com.santos.valdomiro.gestaoproducaochopp.navigation.LocalNavController
 import com.santos.valdomiro.gestaoproducaochopp.navigation.Route
 import com.santos.valdomiro.gestaoproducaochopp.ui.theme.AppTopBarColors
 
@@ -69,21 +69,20 @@ fun HomeScreen(
     onOpenDrawer: () -> Unit,
     homeViewModel: HomeViewModel = hiltViewModel(),
     buscarProducaoDetalhadaViewModel: BuscarProducaoDetalhadaViewModel = hiltViewModel(),
-    listaMovimentacaoViewModel: ListaMovimentacaoViewModel = hiltViewModel()
+    mapMovimentacoesViewModel: MapMovimentacoesDaProducaoViewModel = hiltViewModel(),
 ) {
 
     val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
     val scope = rememberCoroutineScope()
     val navController = LocalNavController.current
     val state by buscarProducaoDetalhadaViewModel.uiState.collectAsState()
+    val movimentacaoState by mapMovimentacoesViewModel.uiState.collectAsState()
 
     var menuExpandido by remember { mutableStateOf(false) }  // Para o controle do DropdownMenu
     val turnoAtual by homeViewModel.turnoSelecionado.collectAsState()
-    val movHorariaState by listaMovimentacaoViewModel.uiState.collectAsState()
 
     LaunchedEffect(Unit) {
         buscarProducaoDetalhadaViewModel.buscarProducaoDatalhada(producaoId)
-//        listaQtViewModel.carregarDadosDaProducao(producaoId)
     }
 
     ModalNavigationDrawer(
@@ -148,7 +147,11 @@ fun HomeScreen(
                                         text = { Text("Histórico") },
                                         onClick = {
                                             menuExpandido = false
-                                            navController.navigate(Route.ListaMovimentacaoRoute.criarRota(producaoId = producaoId))
+                                            navController.navigate(
+                                                Route.ListaMovimentacaoRoute.criarRota(
+                                                    producaoId = producaoId
+                                                )
+                                            )
                                         }
                                     )
                                 }
@@ -233,13 +236,7 @@ fun HomeScreen(
                         }
                         Spacer(modifier = Modifier.height(8.dp))
 
-                        val listaMovimentacoes: List<MovimentacaoEntity> =
-                            (movHorariaState as? UiState.Success<List<MovimentacaoEntity>>)
-                                ?.data
-                                ?: emptyList()
-
-                        val mapaQuantidades: Map<String, MovimentacaoEntity> =
-                            listaMovimentacoes.associateBy { it.horarioReferente.toString() }
+                        val mapaQuantidades = (movimentacaoState as? UiState.Success)?.data ?: emptyMap()
 
                         // Seção de horários do turno selecionado
                         val listaDeHorarios = turnoAtual.horarios
@@ -248,7 +245,7 @@ fun HomeScreen(
                             producao = pdDetalhada.producao,
                             quantidades = mapaQuantidades,
                             onRefresh = {
-                                listaMovimentacaoViewModel.getAllOfProducao(producaoId)
+                                mapMovimentacoesViewModel.getMovimentacoesDaProducao(producaoId = producaoId)
                                 buscarProducaoDetalhadaViewModel.buscarProducaoDatalhada(producaoId)
                             }
                         )

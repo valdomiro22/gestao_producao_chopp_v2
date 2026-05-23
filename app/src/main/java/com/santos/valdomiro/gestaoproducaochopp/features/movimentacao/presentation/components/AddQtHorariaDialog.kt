@@ -166,7 +166,7 @@ fun AddQtHorariaDialog(
                     onClick = {
 //                        viewModel.setProducaoId(producao.id!!)
 //                        viewModel.setHorario(horario)
-                        viewModel.inserirMovimentacal(producaoId = producao.id)
+                        viewModel.inserirMovimentacal(producaoId = producao.id, horarioTurno = horario)
                     }
                 )
             }
