@@ -12,15 +12,20 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.LargeFloatingActionButton
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.ModalNavigationDrawer
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
+import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -33,6 +38,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.santos.valdomiro.gestaoproducaochopp.common.AppDrawer
 import com.santos.valdomiro.gestaoproducaochopp.common.components.EmptyListState
 import com.santos.valdomiro.gestaoproducaochopp.common.components.ErroComponent
 import com.santos.valdomiro.gestaoproducaochopp.common.state.UiState
@@ -46,9 +52,11 @@ import com.santos.valdomiro.gestaoproducaochopp.ui.theme.Dimens
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ListaProducaoScreen(
+    onOpenDrawer: () -> Unit,
     gradeId: String,
     viewModel: ListaProducaoViewModel = hiltViewModel()
 ) {
+    val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
     val context = LocalContext.current
     val navController = LocalNavController.current
     val state by viewModel.uiState.collectAsState()
@@ -57,93 +65,113 @@ fun ListaProducaoScreen(
         viewModel.getAll()
     }
 
-    Scaffold(
-        topBar = {
-            TopAppBar(
-                title = {
-                    Text(
-                        text = "Lista de Produções",
-                        modifier = Modifier.fillMaxWidth(),
-                        textAlign = TextAlign.Center
-                    )
-                },
-                windowInsets = WindowInsets(0),
-                colors = TopAppBarDefaults.topAppBarColors(
-                    containerColor = MaterialTheme.colorScheme.background,
-                    titleContentColor = AppTopBarColors.titleColor(),
-                )
+    ModalNavigationDrawer(
+        drawerState = drawerState,
+        drawerContent = {
+            AppDrawer(
+                selectedRoute = "",
+                onItemClick = {},
+                onLogoutClick = {}
             )
-        },
-        floatingActionButton = {
-            LargeFloatingActionButton(
-                onClick = {
-                    navController.navigate(
-                        Route.AdicionarProducaoRoute.criarRota(
-                            gradeId = gradeId
-                        )
-                    )
-                },
-                containerColor = MaterialTheme.colorScheme.secondary,
-                contentColor = Color.White
-            ) {
-                Icon(
-                    imageVector = Icons.Default.Add,
-                    contentDescription = "Adicionar Produção"
-                )
-            }
         }
-    ) { innerPadding ->
-        when {
-            state.isLoading -> {
-                Box(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .padding(innerPadding),
-                    contentAlignment = Alignment.Center
+    ) {
+        Scaffold(
+            topBar = {
+                TopAppBar(
+                    title = {
+                        Text(
+                            text = "Lista de Produções",
+                            modifier = Modifier.fillMaxWidth(),
+                            textAlign = TextAlign.Center
+                        )
+                    },
+                    navigationIcon = {
+                        IconButton(onClick = onOpenDrawer) {
+                            Icon(
+                                Icons.Default.Menu,
+                                contentDescription = "Abrir Menu"
+                            )
+                        }
+                    },
+                    windowInsets = WindowInsets(0),
+                    colors = TopAppBarDefaults.topAppBarColors(
+                        containerColor = MaterialTheme.colorScheme.background,
+                        titleContentColor = AppTopBarColors.titleColor(),
+                        actionIconContentColor = AppTopBarColors.titleColor()
+                    )
+                )
+            },
+            floatingActionButton = {
+                LargeFloatingActionButton(
+                    onClick = {
+                        navController.navigate(
+                            Route.AdicionarProducaoRoute.criarRota(
+                                gradeId = gradeId
+                            )
+                        )
+                    },
+                    containerColor = MaterialTheme.colorScheme.secondary,
+                    contentColor = Color.White
                 ) {
-                    CircularProgressIndicator()
+                    Icon(
+                        imageVector = Icons.Default.Add,
+                        contentDescription = "Adicionar Produção"
+                    )
                 }
             }
-
-            state.isError -> {
-                ErroComponent(
-                    mensagem = (state as? UiState.Error)?.message
-                        ?: "Erro desconhecido ao listar produções"
-                )
-            }
-
-            state.isSuccess -> {
-                val listaProducoes = (state as? UiState.Success<List<ProducaoDetalhada>>)?.data ?: emptyList()
-
-                if (listaProducoes.isEmpty()) {
-                    EmptyListState(mensagem = "Toque no botão + para adicionar uma produção.")
-                } else {
-                    LazyColumn(
+        ) { innerPadding ->
+            when {
+                state.isLoading -> {
+                    Box(
                         modifier = Modifier
                             .fillMaxSize()
-                            .padding(
-                                top = innerPadding.calculateTopPadding(),
-                                start = innerPadding.calculateStartPadding(LayoutDirection.Ltr),
-                                end = innerPadding.calculateEndPadding(LayoutDirection.Ltr),
-                                bottom = 0.dp
-                            )
-                            .padding(horizontal = Dimens.paddingHorizontal),
-                        verticalArrangement = Arrangement.spacedBy(10.dp)
+                            .padding(innerPadding),
+                        contentAlignment = Alignment.Center
                     ) {
-                        items(
-                            items = listaProducoes,
-                            key = { item -> item.producao.id }
-                        ) { item ->
-                            ItemListaProducao(
-                                producao = item.producao,
-                                barril = item.barril,
-                                produto = item.produto,
-                                onDeletarClick = {
-                                    viewModel.deletarProducao(item.producao)
-                                },
-                                onEditarClick = { navController.navigate(Route.EditarProducaoRoute.criarRota(item.producao.id)) },
-                                navController = navController,
-                            )
+                        CircularProgressIndicator()
+                    }
+                }
+
+                state.isError -> {
+                    ErroComponent(
+                        mensagem = (state as? UiState.Error)?.message
+                            ?: "Erro desconhecido ao listar produções"
+                    )
+                }
+
+                state.isSuccess -> {
+                    val listaProducoes = (state as? UiState.Success<List<ProducaoDetalhada>>)?.data ?: emptyList()
+
+                    if (listaProducoes.isEmpty()) {
+                        EmptyListState(mensagem = "Toque no botão + para adicionar uma produção.")
+                    } else {
+                        LazyColumn(
+                            modifier = Modifier
+                                .fillMaxSize()
+                                .padding(
+                                    top = innerPadding.calculateTopPadding(),
+                                    start = innerPadding.calculateStartPadding(LayoutDirection.Ltr),
+                                    end = innerPadding.calculateEndPadding(LayoutDirection.Ltr),
+                                    bottom = 0.dp
+                                )
+                                .padding(horizontal = Dimens.paddingHorizontal),
+                            verticalArrangement = Arrangement.spacedBy(10.dp)
+                        ) {
+                            items(
+                                items = listaProducoes,
+                                key = { item -> item.producao.id }
+                            ) { item ->
+                                ItemListaProducao(
+                                    producao = item.producao,
+                                    barril = item.barril,
+                                    produto = item.produto,
+                                    onDeletarClick = {
+                                        viewModel.deletarProducao(item.producao)
+                                    },
+                                    onEditarClick = { navController.navigate(Route.EditarProducaoRoute.criarRota(item.producao.id)) },
+                                    navController = navController,
+                                )
+                            }
                         }
                     }
                 }

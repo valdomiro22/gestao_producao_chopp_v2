@@ -35,7 +35,7 @@ fun CardStatusProducaoComponent(
     val corComOpacidade = backGround.copy(alpha = 0.4f)
 
     Column(
-        modifier = Modifier
+        modifier = modifier
             .width(largura)
             .height(altura)
 //            .shadow(4.dp, RoundedCornerShape(10.dp)) // Adiciona profundidade

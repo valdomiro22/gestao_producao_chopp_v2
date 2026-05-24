@@ -54,8 +54,15 @@ sealed class Route(
     // Simular fim de Produção
     data object SimularFimProducaoRoute :
         Route(route = "simular-fim-producao/{producaoId}", title = "Fim de produção") {
-        fun criarRota(id: String) =
-            "simular-fim-producao/$id"
+        fun criarRota(producaoId: String) =
+            "simular-fim-producao/$producaoId"
+    }
+
+    // Status da Produção
+    data object StatusDaProducaoRoute :
+        Route(route = "status-producao/{producaoId}", title = "Status da Produção") {
+        fun criarRota(producaoId: String) =
+            "status-producao/$producaoId"
     }
 
 }

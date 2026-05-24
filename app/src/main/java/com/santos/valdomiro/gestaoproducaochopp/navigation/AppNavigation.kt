@@ -15,15 +15,16 @@ import com.santos.valdomiro.gestaoproducaochopp.features.barril.presentation.scr
 import com.santos.valdomiro.gestaoproducaochopp.features.grade.presentation.screens.adicionargrade.AdicionarGradeScreen
 import com.santos.valdomiro.gestaoproducaochopp.features.grade.presentation.screens.editargrade.EditarGradeScreen
 import com.santos.valdomiro.gestaoproducaochopp.features.grade.presentation.screens.listagrades.ListaGradesScreen
+import com.santos.valdomiro.gestaoproducaochopp.features.homescreen.screen.HomeScreen
+import com.santos.valdomiro.gestaoproducaochopp.features.movimentacao.presentation.screens.listamvproducao.ListaMovimentacaoScreen
 import com.santos.valdomiro.gestaoproducaochopp.features.producao.presentation.screens.adicionarproducao.AdicionarProducaoScreen
 import com.santos.valdomiro.gestaoproducaochopp.features.producao.presentation.screens.editarproducao.EditarProducaoScreen
 import com.santos.valdomiro.gestaoproducaochopp.features.producao.presentation.screens.listaproducoes.ListaProducaoScreen
+import com.santos.valdomiro.gestaoproducaochopp.features.producao.presentation.screens.simularfimproducao.SimularFimProducaoScreen
+import com.santos.valdomiro.gestaoproducaochopp.features.producao.presentation.screens.statusproducao.StatusDaProducaoScreen
 import com.santos.valdomiro.gestaoproducaochopp.features.produto.presentation.screens.adicionarproduto.AdicionarProdutoScreen
 import com.santos.valdomiro.gestaoproducaochopp.features.produto.presentation.screens.editarproduto.EditarProdutoScreen
 import com.santos.valdomiro.gestaoproducaochopp.features.produto.presentation.screens.listaprodutos.ListaProdutosScreen
-import com.santos.valdomiro.gestaoproducaochopp.features.homescreen.screen.HomeScreen
-import com.santos.valdomiro.gestaoproducaochopp.features.movimentacao.presentation.screens.listamvproducao.ListaMovimentacaoScreen
-import com.santos.valdomiro.gestaoproducaochopp.features.producao.presentation.screens.simularfimproducao.SimularFimProducaoScreen
 
 @Composable
 fun AppNavigation(
@@ -43,7 +44,8 @@ fun AppNavigation(
                 route = "home/{producaoId}",
                 arguments = listOf(navArgument("producaoId") { type = NavType.StringType })
             ) { backStackEntry ->
-                val producaoId = backStackEntry.arguments?.getString("producaoId") ?: return@composable
+                val producaoId =
+                    backStackEntry.arguments?.getString("producaoId") ?: return@composable
                 HomeScreen(
                     producaoId = producaoId,
                     onOpenDrawer = onOpenDrawer,
@@ -76,13 +78,16 @@ fun AppNavigation(
                 route = "editar-produto/{produtoId}",
                 arguments = listOf(navArgument("produtoId") { type = NavType.StringType })
             ) { backStackEntry ->
-                val produtoId = backStackEntry.arguments?.getString("produtoId") ?: return@composable
+                val produtoId =
+                    backStackEntry.arguments?.getString("produtoId") ?: return@composable
                 EditarProdutoScreen(produtoId = produtoId)
             }
 
             // Grade
             composable(Route.ListaGradesRoute.route) {
-                ListaGradesScreen()
+                ListaGradesScreen(
+                    onOpenDrawer = onOpenDrawer
+                )
             }
             composable(Route.AdicionarGradeRoute.route) {
                 AdicionarGradeScreen()
@@ -101,7 +106,10 @@ fun AppNavigation(
                 arguments = listOf(navArgument("gradeId") { type = NavType.StringType })
             ) { backStackEntry ->
                 val gradeId = backStackEntry.arguments?.getString("gradeId") ?: return@composable
-                ListaProducaoScreen(gradeId = gradeId)
+                ListaProducaoScreen(
+                    gradeId = gradeId,
+                    onOpenDrawer = onOpenDrawer
+                )
             }
             composable(
                 route = "adicionar-producao/{gradeId}",
@@ -114,7 +122,8 @@ fun AppNavigation(
                 route = "editar-producao/{producaoId}",
                 arguments = listOf(navArgument("producaoId") { type = NavType.StringType })
             ) { backStackEntry ->
-                val producaoId = backStackEntry.arguments?.getString("producaoId") ?: return@composable
+                val producaoId =
+                    backStackEntry.arguments?.getString("producaoId") ?: return@composable
                 EditarProducaoScreen(producaoId = producaoId)
             }
 
@@ -123,7 +132,8 @@ fun AppNavigation(
                 route = "lista-movimentacao/{producaoId}",
                 arguments = listOf(navArgument("producaoId") { type = NavType.StringType })
             ) { backStackEntry ->
-                val producaoId = backStackEntry.arguments?.getString("producaoId") ?: return@composable
+                val producaoId =
+                    backStackEntry.arguments?.getString("producaoId") ?: return@composable
                 ListaMovimentacaoScreen(producaoId = producaoId)
             }
 
@@ -139,9 +149,21 @@ fun AppNavigation(
                 route = "simular-fim-producao/{producaoId}",
                 arguments = listOf(navArgument("producaoId") { type = NavType.StringType })
             ) { backStackEntry ->
-                val producaoId = backStackEntry.arguments?.getString("producaoId") ?: return@composable
+                val producaoId =
+                    backStackEntry.arguments?.getString("producaoId") ?: return@composable
                 SimularFimProducaoScreen(producaoId = producaoId)
             }
+
+            // Status da Produção
+            composable(
+                route = "status-producao/{producaoId}",
+                arguments = listOf(navArgument("producaoId") { type = NavType.StringType })
+            ) { backStackEntry ->
+                val producaoId =
+                    backStackEntry.arguments?.getString("producaoId") ?: return@composable
+                StatusDaProducaoScreen(producaoId = producaoId)
+            }
+
         }
     }
 

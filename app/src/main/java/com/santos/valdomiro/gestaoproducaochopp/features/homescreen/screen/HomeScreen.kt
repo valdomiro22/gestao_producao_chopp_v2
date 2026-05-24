@@ -57,6 +57,7 @@ import com.santos.valdomiro.gestaoproducaochopp.features.homescreen.components.C
 import com.santos.valdomiro.gestaoproducaochopp.features.homescreen.components.QuantidadeHorariaComponent
 import com.santos.valdomiro.gestaoproducaochopp.features.movimentacao.presentation.screens.listamvproducao.MapMovimentacoesDaProducaoViewModel
 import com.santos.valdomiro.gestaoproducaochopp.features.producao.presentation.components.ControleDoBuffer
+import com.santos.valdomiro.gestaoproducaochopp.features.producao.presentation.components.ProducaoNaoEncontradaComponent
 import com.santos.valdomiro.gestaoproducaochopp.features.producao.presentation.screens.buscarproducao.BuscarProducaoDetalhadaViewModel
 import com.santos.valdomiro.gestaoproducaochopp.navigation.LocalNavController
 import com.santos.valdomiro.gestaoproducaochopp.navigation.Route
@@ -100,11 +101,18 @@ fun HomeScreen(
         when {
             state.isSuccess -> {
                 val pdDetalhada = (state as? UiState.Success)?.data ?: run {
-                    ErroComponent("Produção não encontrada")
+                    ProducaoNaoEncontradaComponent(
+                        mensagem = "Essa produção pode ter sido excluída. Selecione uma Produção na lista de Produções",
+                        onTentarNovamente = {
+                            buscarProducaoDetalhadaViewModel.buscarProducaoDatalhada(producaoId)
+                        },
+                        onVoltar = {
+                            navController.popBackStack()
+                        }
+                    )
                     return@ModalNavigationDrawer
                 }
 
-//                val pendente = pdDetalhada.producao.quantidadeProgramada - pdDetalhada.producao.quantidadeProduzida
                 val msgTopBarr = "${pdDetalhada.produto.nome} ${pdDetalhada.barril.nome}"
 
 
@@ -196,6 +204,9 @@ fun HomeScreen(
                                 backGround = Color(0xFF1E5FDB),
                             )
                             CardStatusProducaoComponent(
+                                modifier = Modifier.clickable {
+                                    navController.navigate(Route.StatusDaProducaoRoute.criarRota(producaoId = producaoId))
+                                },
                                 titulo = "Produzido",
                                 quantidade = pdDetalhada.producao.quantidadeProduzida.toString(),
                                 backGround = Color(0xFF15AD1C),
@@ -258,20 +269,17 @@ fun HomeScreen(
                         ControleDoBuffer(
                             onClick = {
                                 navController.navigate(
-                                    Route.SimularFimProducaoRoute.criarRota(id = producaoId)
+                                    Route.SimularFimProducaoRoute.criarRota(producaoId = producaoId)
                                 )
                             },
                             quantidadePendente = pdDetalhada.quantidadePendente,
                             pdDetalhada = pdDetalhada,
                             barril = pdDetalhada.barril
                         )
-                        Spacer(modifier = Modifier.height(8.dp)) 
+                        Spacer(modifier = Modifier.height(16.dp))
 
                     }
-
-
                 }
-
             }
 
             state.isLoading -> {
@@ -280,14 +288,23 @@ fun HomeScreen(
                         .fillMaxSize()
                         .padding(top = 16.dp), contentAlignment = Alignment.Center
                 ) {
-                    CircularProgressIndicator()
+                    CircularProgressIndicator(color = MaterialTheme.colorScheme.primary)
                 }
             }
 
             state.isError -> {
-                ErroComponent(
-                    mensagem = (state as? UiState.Error)?.message
-                        ?: "Erro desconhecido ao buscar produção"
+//                ErroComponent(
+//                    mensagem = (state as? UiState.Error)?.message
+//                        ?: "Erro desconhecido ao buscar produção"
+//                )
+                ProducaoNaoEncontradaComponent(
+                    mensagem = "Essa produção pode ter sido excluída. Selecione uma Produção na lista de Produções",
+                    onTentarNovamente = {
+                        buscarProducaoDetalhadaViewModel.buscarProducaoDatalhada(producaoId)
+                    },
+                    onVoltar = {
+                        navController.popBackStack()
+                    }
                 )
             }
         }
