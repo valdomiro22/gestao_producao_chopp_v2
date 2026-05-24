@@ -26,7 +26,7 @@ fun CardHorarioNovo(
         if (temQuantidade) {
             MaterialTheme.colorScheme.primaryContainer
         } else {
-            MaterialTheme.colorScheme.surfaceVariant
+            MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.6f)
         }
 
     val contentColor =

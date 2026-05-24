@@ -11,68 +11,74 @@ import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.platform.LocalContext
 
-private val LightColorSchemeSoft = lightColorScheme(
-    primary = PrimaryLightSoft,
-    onPrimary = OnPrimaryLightSoft,
+private val LightColorSchemeChopp = lightColorScheme(
+    primary = PrimaryLightChopp,
+    onPrimary = OnPrimaryLightChopp,
 
-    primaryContainer = PrimaryContainerLightSoft,
-    onPrimaryContainer = OnPrimaryContainerLightSoft,
+    primaryContainer = PrimaryContainerLightChopp,
+    onPrimaryContainer = OnPrimaryContainerLightChopp,
 
-    secondary = SecondaryLightSoft,
-    onSecondary = OnSecondaryLightSoft,
+    secondary = SecondaryLightChopp,
+    onSecondary = OnSecondaryLightChopp,
 
-    secondaryContainer = SecondaryContainerLightSoft,
-    onSecondaryContainer = OnSecondaryContainerLightSoft,
+    secondaryContainer = SecondaryContainerLightChopp,
+    onSecondaryContainer = OnSecondaryContainerLightChopp,
 
-    tertiary = TertiaryLightSoft,
-    onTertiary = OnTertiaryLightSoft,
+    tertiary = TertiaryLightChopp,
+    onTertiary = OnTertiaryLightChopp,
 
-    background = BackgroundLightSoft,
-    onBackground = OnBackgroundLightSoft,
+    tertiaryContainer = TertiaryContainerLightChopp,
+    onTertiaryContainer = OnTertiaryContainerLightChopp,
 
-    surface = SurfaceLightSoft,
-    onSurface = OnSurfaceLightSoft,
+    background = BackgroundLightChopp,
+    onBackground = OnBackgroundLightChopp,
 
-    surfaceVariant = SurfaceVariantLightSoft,
-    onSurfaceVariant = OnSurfaceVariantLightSoft,
+    surface = SurfaceLightChopp,
+    onSurface = OnSurfaceLightChopp,
 
-    outline = OutlineLightSoft,
-    outlineVariant = OutlineVariantLightSoft,
+    surfaceVariant = SurfaceVariantLightChopp,
+    onSurfaceVariant = OnSurfaceVariantLightChopp,
 
-    error = ErrorLightSoft,
-    onError = OnErrorLightSoft
+    outline = OutlineLightChopp,
+    outlineVariant = OutlineVariantLightChopp,
+
+    error = ErrorLightChopp,
+    onError = OnErrorLightChopp
 )
 
-private val DarkColorSchemeSoft = darkColorScheme(
-    primary = PrimaryDarkSoft,
-    onPrimary = OnPrimaryDarkSoft,
+private val DarkColorSchemeChopp = darkColorScheme(
+    primary = PrimaryDarkChopp,
+    onPrimary = OnPrimaryDarkChopp,
 
-    primaryContainer = PrimaryContainerDarkSoft,
-    onPrimaryContainer = OnPrimaryContainerDarkSoft,
+    primaryContainer = PrimaryContainerDarkChopp,
+    onPrimaryContainer = OnPrimaryContainerDarkChopp,
 
-    secondary = SecondaryDarkSoft,
-    onSecondary = OnSecondaryDarkSoft,
+    secondary = SecondaryDarkChopp,
+    onSecondary = OnSecondaryDarkChopp,
 
-    secondaryContainer = SecondaryContainerDarkSoft,
-    onSecondaryContainer = OnSecondaryContainerDarkSoft,
+    secondaryContainer = SecondaryContainerDarkChopp,
+    onSecondaryContainer = OnSecondaryContainerDarkChopp,
 
-    tertiary = TertiaryDarkSoft,
-    onTertiary = OnTertiaryDarkSoft,
+    tertiary = TertiaryDarkChopp,
+    onTertiary = OnTertiaryDarkChopp,
 
-    background = BackgroundDarkSoft,
-    onBackground = OnBackgroundDarkSoft,
+    tertiaryContainer = TertiaryContainerDarkChopp,
+    onTertiaryContainer = OnTertiaryContainerDarkChopp,
 
-    surface = SurfaceDarkSoft,
-    onSurface = OnSurfaceDarkSoft,
+    background = BackgroundDarkChopp,
+    onBackground = OnBackgroundDarkChopp,
 
-    surfaceVariant = SurfaceVariantDarkSoft,
-    onSurfaceVariant = OnSurfaceVariantDarkSoft,
+    surface = SurfaceDarkChopp,
+    onSurface = OnSurfaceDarkChopp,
 
-    outline = OutlineDarkSoft,
-    outlineVariant = OutlineVariantDarkSoft,
+    surfaceVariant = SurfaceVariantDarkChopp,
+    onSurfaceVariant = OnSurfaceVariantDarkChopp,
 
-    error = ErrorDarkSoft,
-    onError = OnErrorDarkSoft
+    outline = OutlineDarkChopp,
+    outlineVariant = OutlineVariantDarkChopp,
+
+    error = ErrorDarkChopp,
+    onError = OnErrorDarkChopp
 )
 
 @Composable
@@ -92,8 +98,8 @@ fun GestaoProducaoChoppTheme(
             }
         }
 
-        darkTheme -> DarkColorSchemeSoft
-        else -> LightColorSchemeSoft
+        darkTheme -> DarkColorSchemeChopp
+        else -> LightColorSchemeChopp
     }
 
     MaterialTheme(

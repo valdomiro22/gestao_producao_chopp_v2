@@ -2,6 +2,7 @@ package com.santos.valdomiro.gestaoproducaochopp.features.homescreen.screen
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -63,6 +64,18 @@ import com.santos.valdomiro.gestaoproducaochopp.navigation.LocalNavController
 import com.santos.valdomiro.gestaoproducaochopp.navigation.Route
 import com.santos.valdomiro.gestaoproducaochopp.ui.theme.AppTopBarColors
 import com.santos.valdomiro.gestaoproducaochopp.ui.theme.Dimens
+import com.santos.valdomiro.gestaoproducaochopp.ui.theme.OnStatusPendente
+import com.santos.valdomiro.gestaoproducaochopp.ui.theme.OnStatusProduzido
+import com.santos.valdomiro.gestaoproducaochopp.ui.theme.OnStatusProgramado
+import com.santos.valdomiro.gestaoproducaochopp.ui.theme.OnTurnoNaoSelecionadoDark
+import com.santos.valdomiro.gestaoproducaochopp.ui.theme.OnTurnoNaoSelecionadoLight
+import com.santos.valdomiro.gestaoproducaochopp.ui.theme.OnTurnoSelecionado
+import com.santos.valdomiro.gestaoproducaochopp.ui.theme.StatusPendente
+import com.santos.valdomiro.gestaoproducaochopp.ui.theme.StatusProduzido
+import com.santos.valdomiro.gestaoproducaochopp.ui.theme.StatusProgramado
+import com.santos.valdomiro.gestaoproducaochopp.ui.theme.TurnoNaoSelecionadoDark
+import com.santos.valdomiro.gestaoproducaochopp.ui.theme.TurnoNaoSelecionadoLight
+import com.santos.valdomiro.gestaoproducaochopp.ui.theme.TurnoSelecionado
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -74,6 +87,7 @@ fun HomeScreen(
     mapMovimentacoesViewModel: MapMovimentacoesDaProducaoViewModel = hiltViewModel(),
 ) {
 
+    val darkTheme = isSystemInDarkTheme()
     val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
     val scope = rememberCoroutineScope()
     val navController = LocalNavController.current
@@ -102,7 +116,7 @@ fun HomeScreen(
             state.isSuccess -> {
                 val pdDetalhada = (state as? UiState.Success)?.data ?: run {
                     ProducaoNaoEncontradaComponent(
-                        mensagem = "Essa produção pode ter sido excluída. Selecione uma Produção na lista de Produções",
+                        mensagem = "Selecione uma Produção na tela da lista de Produções",
                         onTentarNovamente = {
                             buscarProducaoDetalhadaViewModel.buscarProducaoDatalhada(producaoId)
                         },
@@ -201,20 +215,27 @@ fun HomeScreen(
                             CardStatusProducaoComponent(
                                 titulo = "Programado",
                                 quantidade = pdDetalhada.producao.quantidadeProgramada.toString(),
-                                backGround = Color(0xFF1E5FDB),
+                                backGround = StatusProgramado,
+                                contentColor = OnStatusProgramado
                             )
+
                             CardStatusProducaoComponent(
                                 modifier = Modifier.clickable {
-                                    navController.navigate(Route.StatusDaProducaoRoute.criarRota(producaoId = producaoId))
+                                    navController.navigate(
+                                        Route.StatusDaProducaoRoute.criarRota(producaoId = producaoId)
+                                    )
                                 },
                                 titulo = "Produzido",
                                 quantidade = pdDetalhada.producao.quantidadeProduzida.toString(),
-                                backGround = Color(0xFF15AD1C),
+                                backGround = StatusProduzido,
+                                contentColor = OnStatusProduzido
                             )
+
                             CardStatusProducaoComponent(
                                 titulo = "Pendente",
                                 quantidade = pdDetalhada.producao.quantidadePendente.toString(),
-                                backGround = Color(0xFFE52828),
+                                backGround = StatusPendente,
+                                contentColor = OnStatusPendente
                             )
                         }
                         Spacer(modifier = Modifier.height(16.dp))
@@ -227,7 +248,18 @@ fun HomeScreen(
                             Turno.entries.forEach { turno ->
                                 val selecionado = turno == turnoAtual
                                 val corBase =
-                                    if (selecionado) Color(0xFF2563EB) else Color(0xFFF0F0F0)
+                                    if (selecionado) {
+                                        TurnoSelecionado
+                                    } else {
+                                        if (darkTheme) TurnoNaoSelecionadoDark else TurnoNaoSelecionadoLight
+                                    }
+
+                                val corTexto =
+                                    if (selecionado) {
+                                        OnTurnoSelecionado
+                                    } else {
+                                        if (darkTheme) OnTurnoNaoSelecionadoDark else OnTurnoNaoSelecionadoLight
+                                    }
 
                                 Box(
                                     modifier = Modifier
@@ -240,7 +272,7 @@ fun HomeScreen(
                                 ) {
                                     Text(
                                         text = turno.label,
-                                        color = if (selecionado) Color.White else Color.DarkGray,
+                                        color = corTexto,
                                         fontWeight = if (selecionado) FontWeight.Bold else FontWeight.Normal,
                                         fontSize = 14.sp
                                     )
@@ -298,7 +330,7 @@ fun HomeScreen(
 //                        ?: "Erro desconhecido ao buscar produção"
 //                )
                 ProducaoNaoEncontradaComponent(
-                    mensagem = "Essa produção pode ter sido excluída. Selecione uma Produção na lista de Produções",
+                    mensagem = "Selecione uma Produção na tela da lista de Produções",
                     onTentarNovamente = {
                         buscarProducaoDetalhadaViewModel.buscarProducaoDatalhada(producaoId)
                     },

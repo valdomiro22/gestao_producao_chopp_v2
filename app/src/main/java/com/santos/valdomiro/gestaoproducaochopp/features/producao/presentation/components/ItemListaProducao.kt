@@ -1,6 +1,5 @@
 package com.santos.valdomiro.gestaoproducaochopp.features.producao.presentation.components
 
-import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -47,11 +46,30 @@ fun ItemListaProducao(
     navController: NavHostController,
     modifier: Modifier = Modifier
 ) {
-    // Cálculo do progresso usando os dados vindos direto da entidade ProducaoEntity
     val progresso = if (producao.quantidadeProgramada > 0) {
         producao.quantidadeProduzida.toFloat() / producao.quantidadeProgramada.toFloat()
     } else {
         0f
+    }.coerceIn(0f, 1f)
+
+    val producaoConcluida = progresso >= 1f
+
+    val corStatusLateral = if (producaoConcluida) {
+        MaterialTheme.colorScheme.primary
+    } else {
+        MaterialTheme.colorScheme.secondary
+    }
+
+    val corFundoBadge = if (producaoConcluida) {
+        MaterialTheme.colorScheme.primary.copy(alpha = 0.12f)
+    } else {
+        MaterialTheme.colorScheme.secondary.copy(alpha = 0.12f)
+    }
+
+    val corTextoBadge = if (producaoConcluida) {
+        MaterialTheme.colorScheme.primary
+    } else {
+        MaterialTheme.colorScheme.secondary
     }
 
     Card(
@@ -72,13 +90,6 @@ fun ItemListaProducao(
             verticalAlignment = Alignment.CenterVertically
         ) {
 
-            // Faixa Lateral de Status Visual baseada no progresso
-            val corStatusLateral = if (progresso >= 1f) {
-                MaterialTheme.colorScheme.primary
-            } else {
-                MaterialTheme.colorScheme.tertiary
-            }
-
             Box(
                 modifier = Modifier
                     .fillMaxHeight()
@@ -86,13 +97,11 @@ fun ItemListaProducao(
                     .background(corStatusLateral)
             )
 
-            // Conteúdo Interno do Card
             Column(
                 modifier = Modifier
                     .weight(1f)
                     .padding(16.dp)
             ) {
-                // Nome do Produto e Tipo de Barril
                 Row(
                     modifier = Modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.SpaceBetween,
@@ -105,6 +114,7 @@ fun ItemListaProducao(
                             fontWeight = FontWeight.ExtraBold,
                             color = MaterialTheme.colorScheme.onSurface
                         )
+
                         Text(
                             text = "Barril de ${barril.nome}",
                             style = MaterialTheme.typography.bodyMedium,
@@ -112,9 +122,8 @@ fun ItemListaProducao(
                         )
                     }
 
-                    // Indicador em porcentagem da produção concluída
                     Surface(
-                        color = corStatusLateral.copy(alpha = 0.15f),
+                        color = corFundoBadge,
                         shape = RoundedCornerShape(8.dp)
                     ) {
                         Text(
@@ -122,14 +131,13 @@ fun ItemListaProducao(
                             modifier = Modifier.padding(horizontal = 8.dp, vertical = 4.dp),
                             style = MaterialTheme.typography.labelSmall,
                             fontWeight = FontWeight.Bold,
-                            color = corStatusLateral
+                            color = corTextoBadge
                         )
                     }
                 }
 
                 Spacer(modifier = Modifier.height(16.dp))
 
-                // Painel Comparativo Numérico (Produzido vs Programado)
                 Row(
                     modifier = Modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.spacedBy(24.dp)
@@ -140,6 +148,7 @@ fun ItemListaProducao(
                             style = MaterialTheme.typography.labelSmall,
                             color = MaterialTheme.colorScheme.onSurfaceVariant
                         )
+
                         Text(
                             text = "${producao.quantidadeProduzida} un",
                             style = MaterialTheme.typography.titleMedium,
@@ -154,6 +163,7 @@ fun ItemListaProducao(
                             style = MaterialTheme.typography.labelSmall,
                             color = MaterialTheme.colorScheme.onSurfaceVariant
                         )
+
                         Text(
                             text = "${producao.quantidadeProgramada} un",
                             style = MaterialTheme.typography.titleMedium,
@@ -165,9 +175,8 @@ fun ItemListaProducao(
 
                 Spacer(modifier = Modifier.height(12.dp))
 
-                // Barra de Progresso Gráfica
                 LinearProgressIndicator(
-                    progress = { progresso.coerceAtMost(1f) },
+                    progress = { progresso },
                     modifier = Modifier
                         .fillMaxWidth()
                         .height(8.dp),
@@ -177,7 +186,6 @@ fun ItemListaProducao(
                 )
             }
 
-            // Painel Lateral de Ações (Editar / Deletar)
             Column(
                 modifier = Modifier
                     .padding(end = 8.dp)
@@ -191,6 +199,7 @@ fun ItemListaProducao(
                         tint = MaterialTheme.colorScheme.outline
                     )
                 }
+
                 IconButton(onClick = onDeletarClick) {
                     Icon(
                         imageVector = Icons.Default.Delete,

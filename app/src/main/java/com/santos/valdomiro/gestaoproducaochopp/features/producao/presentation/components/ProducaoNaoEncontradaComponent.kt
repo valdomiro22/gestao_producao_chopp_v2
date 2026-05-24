@@ -105,6 +105,6 @@ fun ProducaoNaoEncontradaComponent(
 @Composable
 fun PreviewProducaoNaoEncontradaComponent() {
     ProducaoNaoEncontradaComponent(
-        mensagem = "Essa produção pode ter sido excluída ou ainda não foi sincronizada."
+        mensagem = "Selecione uma Produção na tela da lista de Produções",
     )
 }

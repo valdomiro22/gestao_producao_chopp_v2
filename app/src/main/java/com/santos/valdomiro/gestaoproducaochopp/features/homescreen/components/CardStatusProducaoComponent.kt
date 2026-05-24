@@ -2,12 +2,14 @@ package com.santos.valdomiro.gestaoproducaochopp.features.homescreen.components
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -20,30 +22,42 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.santos.valdomiro.gestaoproducaochopp.ui.theme.OnStatusPendente
+import com.santos.valdomiro.gestaoproducaochopp.ui.theme.OnStatusProgramado
+import com.santos.valdomiro.gestaoproducaochopp.ui.theme.OnStatusProduzido
+import com.santos.valdomiro.gestaoproducaochopp.ui.theme.StatusPendente
+import com.santos.valdomiro.gestaoproducaochopp.ui.theme.StatusProgramado
+import com.santos.valdomiro.gestaoproducaochopp.ui.theme.StatusProduzido
 
 @Composable
 fun CardStatusProducaoComponent(
     modifier: Modifier = Modifier,
     backGround: Color,
+    contentColor: Color = Color.White,
     titulo: String,
     quantidade: String,
     largura: Dp = 110.dp,
     altura: Dp = 120.dp,
     conteudoTextSize: TextUnit = 22.sp
 ) {
-
-    val corComOpacidade = backGround.copy(alpha = 0.4f)
+    val shape = RoundedCornerShape(12.dp)
+    val cardBackground = MaterialTheme.colorScheme.surface
+    val quantidadeBackground = backGround.copy(
+        alpha = if (isSystemInDarkTheme()) 0.22f else 0.12f
+    )
 
     Column(
         modifier = modifier
             .width(largura)
             .height(altura)
-//            .shadow(4.dp, RoundedCornerShape(10.dp)) // Adiciona profundidade
-            .clip(RoundedCornerShape(10.dp))
-            .border(2.dp, backGround, RoundedCornerShape(10.dp))
-            .background(Color.White), // Fundo base para a sombra aparecer bem
+            .clip(shape)
+            .border(
+                width = 1.5.dp,
+                color = backGround.copy(alpha = 0.85f),
+                shape = shape
+            )
+            .background(cardBackground)
     ) {
-        // TÍTULO (Topo)
         Box(
             modifier = Modifier
                 .fillMaxWidth()
@@ -53,26 +67,24 @@ fun CardStatusProducaoComponent(
         ) {
             Text(
                 text = titulo,
-                color = Color.White,
-                fontWeight = FontWeight.Bold, // Destaque no título
-//                fontSize = 18.sp
+                color = contentColor,
+                fontWeight = FontWeight.Bold,
+                fontSize = 13.sp
             )
         }
 
-        // QUANTIDADE (Base)
         Box(
             modifier = Modifier
                 .fillMaxWidth()
                 .weight(0.6f)
-                .background(corComOpacidade),
+                .background(quantidadeBackground),
             contentAlignment = Alignment.Center
         ) {
             Text(
                 text = quantidade,
-                color = Color.Black,
+                color = backGround,
                 fontSize = conteudoTextSize,
-                fontWeight = FontWeight.ExtraBold,
-//                color = backGround // Cor forte no texto para contraste
+                fontWeight = FontWeight.ExtraBold
             )
         }
     }
@@ -80,10 +92,13 @@ fun CardStatusProducaoComponent(
 
 @Preview(showBackground = true)
 @Composable
-fun GreetingPreview2() {
-    CardStatusProducaoComponent(
-        backGround = Color(0xFF001FE8),
-        titulo = "Produção",
-        quantidade = "120L"
-    )
+fun CardStatusProducaoPreview() {
+    MaterialTheme {
+        CardStatusProducaoComponent(
+            backGround = StatusPendente,
+            contentColor = OnStatusPendente,
+            titulo = "Pendente",
+            quantidade = "120"
+        )
+    }
 }
