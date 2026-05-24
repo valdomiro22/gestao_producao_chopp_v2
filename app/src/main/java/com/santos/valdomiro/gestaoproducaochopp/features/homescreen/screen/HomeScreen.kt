@@ -194,6 +194,7 @@ fun HomeScreen(
                             colors = TopAppBarDefaults.topAppBarColors(
                                 containerColor = MaterialTheme.colorScheme.background,
                                 titleContentColor = AppTopBarColors.titleColor(),
+                                navigationIconContentColor = AppTopBarColors.titleColor(),
                                 actionIconContentColor = AppTopBarColors.titleColor()
                             )
                         )
@@ -325,10 +326,6 @@ fun HomeScreen(
             }
 
             state.isError -> {
-//                ErroComponent(
-//                    mensagem = (state as? UiState.Error)?.message
-//                        ?: "Erro desconhecido ao buscar produção"
-//                )
                 ProducaoNaoEncontradaComponent(
                     mensagem = "Selecione uma Produção na tela da lista de Produções",
                     onTentarNovamente = {

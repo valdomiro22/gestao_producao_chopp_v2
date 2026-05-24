@@ -171,7 +171,7 @@ fun AdicionarProducaoScreen(
                 isErro = producaoState.erroQuantidadeProgramada != null,
                 inputType = KeyboardType.Text,
                 placeholder = "Ex: 740",
-                label = "Quantidade Produzida",
+                label = "Quantidade Programada",
             )
             if (producaoState.erroQuantidadeProgramada != null) ErroComponent(producaoState.erroQuantidadeProgramada!!)
             Spacer(modifier = Modifier.height(8.dp))

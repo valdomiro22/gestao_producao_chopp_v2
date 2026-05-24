@@ -92,6 +92,7 @@ fun CalcularTempoParadaScreen(
                     colors = TopAppBarDefaults.topAppBarColors(
                         containerColor = MaterialTheme.colorScheme.background,
                         titleContentColor = AppTopBarColors.titleColor(),
+                        navigationIconContentColor = AppTopBarColors.titleColor(),
                         actionIconContentColor = AppTopBarColors.titleColor()
                     )
                 )
@@ -101,20 +102,9 @@ fun CalcularTempoParadaScreen(
                 modifier = Modifier
                     .fillMaxSize()
                     .padding(paddingValues)
-                    .padding(horizontal = Dimens.paddingHorizontal),
+                    .padding(horizontal = Dimens.SpaceM),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-
-                Text(
-                    text = "Selecione o período de parada",
-                    style = MaterialTheme.typography.titleMedium,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(bottom = 16.dp),
-                    textAlign = TextAlign.Center
-                )
-
                 // Cards de seleção de horário lado a lado
                 Row(
                     modifier = Modifier.fillMaxWidth(),

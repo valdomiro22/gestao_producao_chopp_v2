@@ -44,7 +44,6 @@ fun QuantidadeHorariaComponent(
     Column(
             modifier = Modifier
                 .fillMaxWidth(),
-//                .padding(12.dp),
             verticalArrangement = Arrangement.spacedBy(12.dp)
         ) {
 

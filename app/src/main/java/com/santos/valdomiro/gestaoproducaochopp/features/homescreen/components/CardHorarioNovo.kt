@@ -12,6 +12,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 
 @Composable
@@ -26,7 +27,7 @@ fun CardHorarioNovo(
         if (temQuantidade) {
             MaterialTheme.colorScheme.primaryContainer
         } else {
-            MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.6f)
+            MaterialTheme.colorScheme.surfaceVariant
         }
 
     val contentColor =
@@ -67,4 +68,10 @@ fun CardHorarioNovo(
             )
         }
     }
+}
+
+@Preview(showBackground = true)
+@Composable
+fun GreetingPreview() {
+    CardHorarioNovo(horario = "08:00", quantidade = 375)
 }
