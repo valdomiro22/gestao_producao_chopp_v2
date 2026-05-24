@@ -17,10 +17,11 @@ import javax.inject.Inject
 @HiltViewModel
 class MapMovimentacoesDaProducaoViewModel @Inject constructor(
     private val getMovimentacoesDoHorarioUseCase: GetMovimentacoesPorHorarioUseCase,
-    private val getAllOfProducaoUseCase: GetAllOfProducaoUseCase
+    private val getAllOfProducaoUseCase: GetAllOfProducaoUseCase,
 ) : ViewModel() {
 
-    private val _uiState = MutableStateFlow<UiState<Map<String, MovimentacaoEntity>>>(UiState.Loading)
+    private val _uiState =
+        MutableStateFlow<UiState<Map<String, MovimentacaoEntity>>>(UiState.Loading)
     val uiState = _uiState.asStateFlow()
 
     fun getMovimentacoesDaProducao(producaoId: String) {
@@ -37,7 +38,8 @@ class MapMovimentacoesDaProducaoViewModel @Inject constructor(
 
                 }
                 .collect { listaMovimentacoes ->
-                    val mapaAgrupadoPrHorarioReferente = listaMovimentacoes.groupBy { it.horarioReferente }
+                    val mapaAgrupadoPrHorarioReferente =
+                        listaMovimentacoes.groupBy { it.horarioReferente }
                     val mapaSomatorio = mapaAgrupadoPrHorarioReferente.mapValues { itemDoMapa ->
                         val listaHorarios = itemDoMapa.value
                         listaHorarios.first().copy(
@@ -45,7 +47,8 @@ class MapMovimentacoesDaProducaoViewModel @Inject constructor(
                         )
                     }
 
-                    _uiState.value = UiState.Success(mapaSomatorio)  // Map<String, MovimentacaoEntity>
+                    _uiState.value =
+                        UiState.Success(mapaSomatorio)  // Map<String, MovimentacaoEntity>
                 }
         }
     }

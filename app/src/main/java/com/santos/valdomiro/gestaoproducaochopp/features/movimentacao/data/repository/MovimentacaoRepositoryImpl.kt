@@ -35,7 +35,9 @@ class MovimentacaoRepositoryImpl @Inject constructor(
         }
     }
 
-    override suspend fun updateMovimentacao(movimentacao: MovimentacaoEntity): Result<Unit> {
+    override suspend fun updateMovimentacao(
+        movimentacao: MovimentacaoEntity
+    ): Result<Unit> {
         return try {
             val movimentacaoPendente = movimentacao.copy(
                 statusSincronizacao = StatusSincronizacao.AGUARDANDO_ATUALIZACAO
@@ -44,19 +46,6 @@ class MovimentacaoRepositoryImpl @Inject constructor(
             localDataSource.updateMovimentacao(
                 movimentacaoPendente.toLocalModel()
             )
-
-            try {
-                remoteDataSource.updateMovimentacao(
-                    movimentacao = movimentacaoPendente.toRemoteModel()
-                )
-
-                localDataSource.updateStatusSincronizacao(
-                    movimentacaoId = movimentacaoPendente.id,
-                    statusSincronizacao = StatusSincronizacao.SINCRONIZADO
-                )
-            } catch (e: Exception) {
-                // mantém como AGUARDANDO_ATUALIZACAO
-            }
 
             Result.success(Unit)
         } catch (e: Exception) {
@@ -80,24 +69,17 @@ class MovimentacaoRepositoryImpl @Inject constructor(
         }
     }
 
-    override suspend fun deleteMovimentacao(movimentacao: MovimentacaoEntity): Result<Unit> {
+    override suspend fun deleteMovimentacao(
+        movimentacao: MovimentacaoEntity
+    ): Result<Unit> {
         return try {
             val movimentacaoParaExcluir = movimentacao.copy(
                 statusSincronizacao = StatusSincronizacao.AGUARDANDO_EXCLUSAO
             )
 
-            localDataSource.updateMovimentacao(movimentacaoParaExcluir.toLocalModel())
-
-            try {
-                remoteDataSource.deleteMovimentacao(
-                    movimentacaoId = movimentacaoParaExcluir.id  // TODO - Enviar o movimentacao inteiro, como no locaDataSource()
-                )
-
-                localDataSource.deleteMovimentacao(
-                    movimentacao = movimentacaoParaExcluir.toLocalModel(),
-                )
-            } catch (e: Exception) {
-            }
+            localDataSource.updateMovimentacao(
+                movimentacaoParaExcluir.toLocalModel()
+            )
 
             Result.success(Unit)
         } catch (e: Exception) {
@@ -146,23 +128,61 @@ class MovimentacaoRepositoryImpl @Inject constructor(
 
     override suspend fun sincronizarMovimentacoesPendentes(): Result<Unit> {
         return try {
-            val pendentes = localDataSource.getMovimentacoesAguardandoEnvio()
+            val aguardandoEnvio = localDataSource.getMovimentacoesAguardandoEnvio()
 
-            pendentes.forEach { movimentacaoLocal ->
+            aguardandoEnvio.forEach { movimentacaoLocal ->
                 try {
-                    val movimentacaoEntity = movimentacaoLocal.toEntity()
+                    val entity = movimentacaoLocal.toEntity()
 
                     remoteDataSource.insertMovimentacao(
-                        movimentacaoEntity.toRemoteModel()
+                        entity.toRemoteModel()
                     )
 
                     localDataSource.updateStatusSincronizacao(
-                        movimentacaoId = movimentacaoEntity.id,
+                        movimentacaoId = entity.id,
                         statusSincronizacao = StatusSincronizacao.SINCRONIZADO
                     )
                 } catch (e: Exception) {
-                    // Se falhar uma movimentação, mantém AGUARDANDO_ENVIO
-                    // e continua tentando as próximas.
+                    // mantém AGUARDANDO_ENVIO
+                }
+            }
+
+            val aguardandoAtualizacao =
+                localDataSource.getMovimentacoesAguardandoAtualizacao()
+
+            aguardandoAtualizacao.forEach { movimentacaoLocal ->
+                try {
+                    val entity = movimentacaoLocal.toEntity()
+
+                    remoteDataSource.updateMovimentacao(
+                        movimentacao = entity.toRemoteModel()
+                    )
+
+                    localDataSource.updateStatusSincronizacao(
+                        movimentacaoId = entity.id,
+                        statusSincronizacao = StatusSincronizacao.SINCRONIZADO
+                    )
+                } catch (e: Exception) {
+                    // mantém AGUARDANDO_ATUALIZACAO
+                }
+            }
+
+            val aguardandoExclusao =
+                localDataSource.getMovimentacoesAguardandoExclusao()
+
+            aguardandoExclusao.forEach { movimentacaoLocal ->
+                try {
+                    val entity = movimentacaoLocal.toEntity()
+
+                    remoteDataSource.deleteMovimentacao(
+                        movimentacaoId = entity.id
+                    )
+
+                    localDataSource.deleteMovimentacao(
+                        movimentacao = movimentacaoLocal
+                    )
+                } catch (e: Exception) {
+                    // mantém AGUARDANDO_EXCLUSAO
                 }
             }
 

@@ -31,8 +31,6 @@ class AdicionarMovimentacaoViewModel @Inject constructor(
         val filtered = value.filterIndexed { index, char ->
             char.isDigit() || (index == 0 && char == '-')
         }
-
-        Log.d(TAG, "onQuantidadeChanged: Qt Digitada: $value | Filtrada: $filtered")
         _uiState.update { it.copy(quantidade = filtered, erroQuantidade = null) }
     }
 
@@ -98,10 +96,8 @@ class AdicionarMovimentacaoViewModel @Inject constructor(
                                     isSuccess = true
                                 )
                             }
-
-                            viewModelScope.launch {
-                                sincronizarMovimentacoesPendentesUseCase()
-                            }
+                            Log.d(TAG, "inserirMovimentacao: Chegou na viewModel")
+                            sincronizarPendentes()
                         }
                         .onFailure { error ->
                             _uiState.update {
@@ -112,6 +108,12 @@ class AdicionarMovimentacaoViewModel @Inject constructor(
                             }
                         }
                 }
+        }
+    }
+
+    private fun sincronizarPendentes() {
+        viewModelScope.launch {
+            sincronizarMovimentacoesPendentesUseCase()
         }
     }
 

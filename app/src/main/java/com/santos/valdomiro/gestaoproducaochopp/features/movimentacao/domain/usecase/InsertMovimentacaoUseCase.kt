@@ -4,6 +4,9 @@ import com.santos.valdomiro.gestaoproducaochopp.common.enums.StatusSincronizacao
 import com.santos.valdomiro.gestaoproducaochopp.features.movimentacao.domain.entity.MovimentacaoEntity
 import com.santos.valdomiro.gestaoproducaochopp.features.movimentacao.domain.entity.TipoMovimentacao
 import com.santos.valdomiro.gestaoproducaochopp.features.movimentacao.domain.repository.MovimentacaoRepository
+import com.santos.valdomiro.gestaoproducaochopp.features.producao.domain.entity.StatusProducao
+import com.santos.valdomiro.gestaoproducaochopp.features.producao.domain.repository.ProducaoRepository
+import kotlinx.coroutines.flow.first
 import java.time.Instant
 import java.util.UUID
 import javax.inject.Inject
@@ -15,18 +18,26 @@ data class InsertMovimentacaoParams(
 )
 
 class InsertMovimentacaoUseCase @Inject constructor(
-    private val repository: MovimentacaoRepository
+    private val movimentacaoRepository: MovimentacaoRepository,
+    private val producaoRepository: ProducaoRepository,
 ) {
 
     suspend operator fun invoke(params: InsertMovimentacaoParams): Result<Unit> {
         val producaoId = params.producaoId
-//        val turnoId = params.turno.id
         val turnoId = 1
         val quantidade = params.quantidade
 
         if (producaoId.isBlank()) return Result.failure(IllegalArgumentException("producaoId não pode ser vazio"))
-        if (turnoId !in 1..3) return Result.failure(IllegalArgumentException("turnoId não corresponde a um turno válido"))
         if (quantidade == 0) return Result.failure(IllegalArgumentException("Quantidade programada deve ser diferente de zero"))
+
+        val producao = producaoRepository.getOneById(producaoId)
+            .first()
+            ?: return Result.failure(IllegalArgumentException("Produção não encontrada"))
+
+        val novaQuantidadeProduzida = producao.quantidadeProduzida + quantidade
+        if (novaQuantidadeProduzida < 0) return Result.failure(
+            IllegalArgumentException("Quantidade produzida não pode ficar negativa")
+        )
 
         val criadoEm = Instant.now()
         val idGerado = UUID.randomUUID().toString()
@@ -43,10 +54,23 @@ class InsertMovimentacaoUseCase @Inject constructor(
             statusSincronizacao = StatusSincronizacao.AGUARDANDO_ENVIO,
         )
 
-        repository.insertMovimentacao(movimentacao = movimentacao)
+        movimentacaoRepository.insertMovimentacao(movimentacao = movimentacao)
             .getOrElse {
                 return Result.failure(it)
             }
+
+        val novoStatus = if (producao.quantidadeProgramada == novaQuantidadeProduzida)
+            StatusProducao.CONCLUIDA else StatusProducao.EM_PRODUCAO
+
+        val producaoAtualizada = producao.copy(
+            quantidadeProduzida = novaQuantidadeProduzida,
+            status = novoStatus,
+            editadaEm = Instant.now(),
+            statusSincronizacao = StatusSincronizacao.AGUARDANDO_ATUALIZACAO
+        )
+        producaoRepository.updateProducao(producao = producaoAtualizada)
+            .getOrElse { return Result.failure(it) }
+
         return Result.success(Unit)
     }
 

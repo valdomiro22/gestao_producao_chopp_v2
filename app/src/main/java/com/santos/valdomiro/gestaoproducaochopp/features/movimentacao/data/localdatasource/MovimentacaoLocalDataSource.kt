@@ -16,6 +16,12 @@ interface MovimentacaoLocalDataSource {
     fun getOneById(movimentacaoId: String): Flow<MovimentacaoLocalModel?>
     fun getAllMovimentacoes(): Flow<List<MovimentacaoLocalModel>>
     fun getAllOfProducao(producaoId: String): Flow<List<MovimentacaoLocalModel>>
+    fun getAllMovimentacoesDoHorario(
+        horarioReferente: String,
+        producaoId: String
+    ): Flow<List<MovimentacaoLocalModel>>
+
     suspend fun getMovimentacoesAguardandoEnvio(): List<MovimentacaoLocalModel>
-    fun getAllMovimentacoesDoHorario(horarioReferente: String, producaoId: String): Flow<List<MovimentacaoLocalModel>>
+    suspend fun getMovimentacoesAguardandoAtualizacao(): List<MovimentacaoLocalModel>
+    suspend fun getMovimentacoesAguardandoExclusao(): List<MovimentacaoLocalModel>
 }

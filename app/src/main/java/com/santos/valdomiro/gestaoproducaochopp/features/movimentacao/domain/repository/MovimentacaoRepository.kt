@@ -1,7 +1,6 @@
 package com.santos.valdomiro.gestaoproducaochopp.features.movimentacao.domain.repository
 
 import com.santos.valdomiro.gestaoproducaochopp.common.enums.StatusSincronizacao
-import com.santos.valdomiro.gestaoproducaochopp.features.movimentacao.data.model.MovimentacaoLocalModel
 import com.santos.valdomiro.gestaoproducaochopp.features.movimentacao.domain.entity.MovimentacaoEntity
 import kotlinx.coroutines.flow.Flow
 
@@ -18,5 +17,8 @@ interface MovimentacaoRepository {
     fun getAllMovimentacoes(): Flow<List<MovimentacaoEntity>>
     fun getAllOfProducao(producaoId: String): Flow<List<MovimentacaoEntity>>
     suspend fun sincronizarMovimentacoesPendentes(): Result<Unit>
-    fun getAllMovimentacoesDoHorario(horarioReferente: String, producaoId: String): Flow<List<MovimentacaoEntity>>
+    fun getAllMovimentacoesDoHorario(
+        horarioReferente: String,
+        producaoId: String
+    ): Flow<List<MovimentacaoEntity>>
 }

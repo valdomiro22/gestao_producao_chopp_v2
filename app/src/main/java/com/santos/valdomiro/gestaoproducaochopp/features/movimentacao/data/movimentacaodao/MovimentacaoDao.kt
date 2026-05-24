@@ -56,4 +56,28 @@ interface MovimentacaoDao {
         movimentacaoId: String,
         statusSincronizacao: String
     ): Int
+
+    @Query(
+        """
+            SELECT * FROM movimentacao
+            WHERE statusSincronizacao = 'AGUARDANDO_ENVIO'
+        """
+    )
+    suspend fun getMovimentacoesAguardandoEnvio(): List<MovimentacaoLocalModel>
+
+    @Query(
+        """
+            SELECT * FROM movimentacao
+            WHERE statusSincronizacao = 'AGUARDANDO_ATUALIZACAO'
+        """
+    )
+    suspend fun getMovimentacoesAguardandoAtualizacao(): List<MovimentacaoLocalModel>
+
+    @Query(
+        """
+            SELECT * FROM movimentacao
+            WHERE statusSincronizacao = 'AGUARDANDO_EXCLUSAO'
+        """
+    )
+    suspend fun getMovimentacoesAguardandoExclusao(): List<MovimentacaoLocalModel>
 }
