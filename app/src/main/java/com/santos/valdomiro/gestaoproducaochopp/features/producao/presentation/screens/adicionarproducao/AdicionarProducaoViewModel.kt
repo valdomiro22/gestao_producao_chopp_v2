@@ -3,8 +3,12 @@ package com.santos.valdomiro.gestaoproducaochopp.features.producao.presentation.
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.santos.valdomiro.gestaoproducaochopp.common.enums.StatusSincronizacao
+import com.santos.valdomiro.gestaoproducaochopp.common.helper.ProducaoHelper
 import com.santos.valdomiro.gestaoproducaochopp.features.barril.domain.entity.BarrilEntity
 import com.santos.valdomiro.gestaoproducaochopp.features.barril.domain.usecases.GetOneBarrilUseCase
+import com.santos.valdomiro.gestaoproducaochopp.features.grade.domain.usecase.GetOneGradeUseCase
+import com.santos.valdomiro.gestaoproducaochopp.features.grade.domain.usecase.InserirQuantidadeEVolumeNaGradeUseCase
 import com.santos.valdomiro.gestaoproducaochopp.features.producao.domain.usecase.InsertProducaoParams
 import com.santos.valdomiro.gestaoproducaochopp.features.producao.domain.usecase.InsertProducaoUseCase
 import com.santos.valdomiro.gestaoproducaochopp.features.produto.domain.entity.ProdutoEntity
@@ -15,12 +19,15 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import java.time.Instant
 import javax.inject.Inject
 
 @HiltViewModel
 class AdicionarProducaoViewModel @Inject constructor(
     private val insertProducaoUseCase: InsertProducaoUseCase,
-    private val getOneBarrilUseCase: GetOneBarrilUseCase
+    private val getOneBarrilUseCase: GetOneBarrilUseCase,
+    private val getOneGradeUseCase: GetOneGradeUseCase,
+    private val atualizarGrade: InserirQuantidadeEVolumeNaGradeUseCase
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(AdicionarProducaoState())
@@ -62,12 +69,9 @@ class AdicionarProducaoViewModel @Inject constructor(
     }
 
     fun inserirProducao(gradeId: String) {
-        Log.d(TAG, "inserirProducao: Iniciando inserção de produção para gradeId: $gradeId")
         val currentState = _uiState.value
 
-        Log.d(TAG, "inserirProducao: Antes da validação - State: $currentState")
         if (!validar(currentState)) return
-        Log.d(TAG, "inserirProducao: depois da validação - State: ${_uiState.value}")
 
         viewModelScope.launch {
             _uiState.update { it.copy(isLoading = true, erroGeral = null) }
@@ -138,11 +142,48 @@ class AdicionarProducaoViewModel @Inject constructor(
 
             insertProducaoUseCase(params = params)
                 .onSuccess {
-                    Log.d(TAG, "inserirProducao: Adicionado com sucesso")
-                    _uiState.update { it.copy(isLoading = false, isSuccess = true) }
+                    _uiState.update {
+                        it.copy(
+                            isLoading = false,
+                            isSuccess = true
+                        )
+                    }
+
+                    val gradeResult = getOneGradeUseCase(gradeId = gradeId).first()
+
+                    gradeResult.fold(
+                        onSuccess = { grade ->
+                            val novaQuantidade = qtProgramadaInt + grade.quantidadeBarris
+
+                            val volumeNecessario = ProducaoHelper.calcularVolumeNecessarioParaGrade(
+                                quantidadeProgramada = novaQuantidade,
+                                volumeBarril = barril.volume
+                            )
+
+                            val gradeAtualizada = grade.copy(
+                                quantidadeBarris = novaQuantidade,
+                                volumeHlNecessario = volumeNecessario,
+                                editadoEm = Instant.now(),
+                                statusSincronizacao = StatusSincronizacao.AGUARDANDO_ATUALIZACAO
+                            )
+
+                            atualizarGrade(grade = gradeAtualizada)
+                                .onFailure { erro ->
+                                    Log.d(
+                                        TAG,
+                                        "Erro ao atualizar grade após inserir produção: ${erro.message}"
+                                    )
+                                }
+                        },
+                        onFailure = { erro ->
+                            Log.d(
+                                TAG,
+                                "Erro ao buscar grade após inserir produção: ${erro.message}"
+                            )
+                        }
+                    )
                 }
                 .onFailure { erro ->
-                    Log.d(TAG, "inserirProducao: Erro ao adicionar produção: ${erro.message}")
                     _uiState.update { it.copy(isLoading = false, erroGeral = erro.message) }
                 }
 

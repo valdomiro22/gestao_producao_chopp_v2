@@ -9,4 +9,11 @@ object ProducaoHelper {
         val quantidadePendente = quantidadeProgramada - quantidadeProduzida
         return (quantidadePendente * volumeBarril) / 100.0
     }
+
+    fun calcularVolumeNecessarioParaGrade(
+        quantidadeProgramada: Int,
+        volumeBarril: Int
+    ): Double {
+        return (quantidadeProgramada * volumeBarril) / 100.0
+    }
 }

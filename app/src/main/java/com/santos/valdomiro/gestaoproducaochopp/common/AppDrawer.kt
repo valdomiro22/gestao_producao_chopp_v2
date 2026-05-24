@@ -48,6 +48,7 @@ fun AppDrawer(
         val drawerItems = listOf(
             Route.HomeRoute,
             Route.CalcularTempoDeParadaRoute,
+            Route.ListaGradesRoute
         )
 
         Column(

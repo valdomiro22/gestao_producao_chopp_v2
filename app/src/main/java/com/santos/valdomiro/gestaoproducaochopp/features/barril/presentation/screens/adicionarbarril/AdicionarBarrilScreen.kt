@@ -110,7 +110,7 @@ fun AdicionarBarrilScreen(
                 onValueChange = viewModel::onVolumeChanged,
                 isErro = state.erroVolume != null,
                 label = "Volume",
-                inputType = KeyboardType.Text
+                inputType = KeyboardType.Number
             )
             if (state.erroVolume != null) ErroComponent(state.erroVolume!!)
             Spacer(modifier = Modifier.height(8.dp))
