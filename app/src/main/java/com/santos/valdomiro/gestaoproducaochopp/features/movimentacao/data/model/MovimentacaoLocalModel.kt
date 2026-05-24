@@ -1,11 +1,27 @@
 package com.santos.valdomiro.gestaoproducaochopp.features.movimentacao.data.model
 
 import androidx.room.Entity
+import androidx.room.ForeignKey
+import androidx.room.Index
 import androidx.room.PrimaryKey
 import com.santos.valdomiro.gestaoproducaochopp.common.enums.StatusSincronizacao
 import com.santos.valdomiro.gestaoproducaochopp.features.movimentacao.domain.entity.TipoMovimentacao
+import com.santos.valdomiro.gestaoproducaochopp.features.producao.data.model.ProducaoLocalModel
 
-@Entity(tableName = "movimentacao")
+@Entity(
+    tableName = "movimentacao",
+    foreignKeys = [
+        ForeignKey(
+            entity = ProducaoLocalModel::class,
+            parentColumns = ["id"],
+            childColumns = ["producaoId"],
+            onDelete = ForeignKey.CASCADE
+        )
+    ],
+    indices = [
+        Index(value = ["producaoId"])
+    ]
+)
 data class MovimentacaoLocalModel(
     @PrimaryKey
     val id: String,

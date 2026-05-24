@@ -93,17 +93,28 @@ class ProducaoRepositoryImpl @Inject constructor(
 
     override suspend fun deleteProducao(producao: ProducaoEntity): Result<Unit> {
         return try {
-            val producaoParaExcluir =
-                producao.copy(statusSincronizacao = StatusSincronizacao.AGUARDANDO_EXCLUSAO)
+            val producaoParaExcluir = producao.copy(
+                statusSincronizacao = StatusSincronizacao.AGUARDANDO_EXCLUSAO
+            )
 
-            localDataSource.deleteProducao(producao = producaoParaExcluir.toLocalModel())
+            // 1. Marca como aguardando exclusão no Room
+            localDataSource.updateProducao(
+                producao = producaoParaExcluir.toLocalModel()
+            )
 
             try {
+                // 2. Apaga no Firestore
                 remoteDataSource.deleteProducao(id = producao.id)
+
+                // 3. Só depois que apagou no Firestore, apaga definitivamente no Room
+                localDataSource.deleteProducao(
+                    producao = producaoParaExcluir.toLocalModel()
+                )
+
             } catch (e: Exception) {
                 Log.d(
                     TAG,
-                    "deleteProducao: Erro ao deletar producao no servidor. Grade deletada localmente. Detalhes do erro: ${e.message}"
+                    "deleteProducao: Erro ao deletar produção no servidor. Produção marcada como AGUARDANDO_EXCLUSAO. Detalhes: ${e.message}"
                 )
             }
 

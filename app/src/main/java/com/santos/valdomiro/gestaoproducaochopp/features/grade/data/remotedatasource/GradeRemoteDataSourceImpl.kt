@@ -16,6 +16,7 @@ class GradeRemoteDataSourceImpl @Inject constructor(
 ) : GradeRemoteDataSource {
 
     private val gradeCollection = "grade"
+    private val producaoCollection = "producao"
 
     override suspend fun insertGrade(grade: GradeRemoteModel) {
         mapearExecution {
@@ -52,10 +53,25 @@ class GradeRemoteDataSourceImpl @Inject constructor(
 
     override suspend fun deleteGrade(id: String) {
         mapearExecution {
-            firestore.collection(gradeCollection)
-                .document(id)
-                .delete()
+            val batch = firestore.batch()
+
+            val producoesSnapshot = firestore
+                .collection(producaoCollection)
+                .whereEqualTo("gradeId", id)
+                .get()
                 .await()
+
+            producoesSnapshot.documents.forEach { document ->
+                batch.delete(document.reference)
+            }
+
+            val gradeRef = firestore
+                .collection(gradeCollection)
+                .document(id)
+
+            batch.delete(gradeRef)
+
+            batch.commit().await()
         }
     }
 

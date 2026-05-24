@@ -15,7 +15,8 @@ class ProducaoRemoteDatasourceImpl @Inject constructor(
     private val firestore: FirebaseFirestore
 ) : ProducaoRemoteDatasource {
 
-    val producaoCollection = "producao"
+    private val producaoCollection = "producao"
+    private val movimentacaoCollection = "movimentacao"
 
     override suspend fun insertProducao(producao: ProducaoRemoteModel) {
         mapearExecution {
@@ -55,10 +56,25 @@ class ProducaoRemoteDatasourceImpl @Inject constructor(
 
     override suspend fun deleteProducao(id: String) {
         mapearExecution {
-            firestore.collection(producaoCollection)
-                .document(id)
-                .delete()
+            val batch = firestore.batch()
+
+            val movimentacoesSnapshot = firestore
+                .collection(movimentacaoCollection)
+                .whereEqualTo("producaoId", id)
+                .get()
                 .await()
+
+            movimentacoesSnapshot.documents.forEach { document ->
+                batch.delete(document.reference)
+            }
+
+            val producaoRef = firestore
+                .collection(producaoCollection)
+                .document(id)
+
+            batch.delete(producaoRef)
+
+            batch.commit().await()
         }
     }
 
@@ -81,6 +97,24 @@ class ProducaoRemoteDatasourceImpl @Inject constructor(
                 .await()
 
             snapshot.documents.mapNotNull { it.toObject(ProducaoRemoteModel::class.java) }
+        }
+    }
+
+    override suspend fun deleteProducoesDaGrade(gradeId: String) {
+        mapearExecution {
+            val snapshot = firestore
+                .collection(producaoCollection)
+                .whereEqualTo("gradeId", gradeId)
+                .get()
+                .await()
+
+            val batch = firestore.batch()
+
+            snapshot.documents.forEach { document ->
+                batch.delete(document.reference)
+            }
+
+            batch.commit().await()
         }
     }
 

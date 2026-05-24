@@ -59,6 +59,24 @@ class MovimentacaoRemoteDataSourceImpl @Inject constructor(
         }
     }
 
+    override suspend fun deleteMovimentacoesDaProducao(producaoId: String) {
+        mapearExecution {
+            val snapshot = firestore
+                .collection(movimentacaoCollection)
+                .whereEqualTo("producaoId", producaoId)
+                .get()
+                .await()
+
+            val batch = firestore.batch()
+
+            snapshot.documents.forEach { document ->
+                batch.delete(document.reference)
+            }
+
+            batch.commit().await()
+        }
+    }
+
     override suspend fun getAllMovimentacaos(): List<MovimentacaoRemoteModel> {
         return mapearExecution {
             val snapshot = firestore.collection(movimentacaoCollection)
@@ -69,15 +87,19 @@ class MovimentacaoRemoteDataSourceImpl @Inject constructor(
         }
     }
 
-    override suspend fun getAllMovimentacoesDaProducao(movimentacaoId: String): List<MovimentacaoRemoteModel> {
+    override suspend fun getAllMovimentacoesDaProducao(
+        producaoId: String
+    ): List<MovimentacaoRemoteModel> {
         return mapearExecution {
             val snapshot = firestore
                 .collection(movimentacaoCollection)
-                .whereEqualTo("producaoId", movimentacaoId)
+                .whereEqualTo("producaoId", producaoId)
                 .get()
                 .await()
 
-            snapshot.documents.mapNotNull { it.toObject(MovimentacaoRemoteModel::class.java) }
+            snapshot.documents.mapNotNull {
+                it.toObject(MovimentacaoRemoteModel::class.java)
+            }
         }
     }
 
