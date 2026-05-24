@@ -96,7 +96,6 @@ class AdicionarMovimentacaoViewModel @Inject constructor(
                                     isSuccess = true
                                 )
                             }
-                            Log.d(TAG, "inserirMovimentacao: Chegou na viewModel")
                             sincronizarPendentes()
                         }
                         .onFailure { error ->

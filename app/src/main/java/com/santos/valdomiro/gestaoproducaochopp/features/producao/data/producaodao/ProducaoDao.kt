@@ -27,6 +27,9 @@ interface ProducaoDao {
     @Query("SELECT * FROM producao WHERE id = :producaoId LIMIT 1")
     fun getOneById(producaoId: String): Flow<ProducaoLocalModel?>
 
+    @Query("SELECT * FROM producao WHERE gradeId = :gradeId ORDER BY criadoEm DESC")
+    fun getAllDaGrade(gradeId: String): Flow<List<ProducaoLocalModel>>
+
     @Query(
         """
             UPDATE producao

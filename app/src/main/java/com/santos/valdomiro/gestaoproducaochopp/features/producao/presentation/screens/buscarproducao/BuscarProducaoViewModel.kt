@@ -21,11 +21,11 @@ class BuscarProducaoViewModel @Inject constructor(
     private val _uiState = MutableStateFlow<UiState<List<ProducaoDetalhada>>>(UiState.Idle)
     val uiState = _uiState.asStateFlow()
 
-    fun buscarProducao(producaoId: String) {
+    fun buscarProducao(gradeId: String) {
         viewModelScope.launch {
             _uiState.value = UiState.Loading
 
-            getProducoesDetalhadasUseCase().collect { result ->
+            getProducoesDetalhadasUseCase(gradeId = gradeId).collect { result ->
                 result.fold(
                     onSuccess = { lista ->
                         _uiState.value = UiState.Success(lista)

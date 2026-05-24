@@ -1,5 +1,6 @@
 package com.santos.valdomiro.gestaoproducaochopp.features.producao.presentation.screens.listaproducoes
 
+import android.util.Log
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.WindowInsets
@@ -48,6 +49,7 @@ import com.santos.valdomiro.gestaoproducaochopp.navigation.LocalNavController
 import com.santos.valdomiro.gestaoproducaochopp.navigation.Route
 import com.santos.valdomiro.gestaoproducaochopp.ui.theme.AppTopBarColors
 import com.santos.valdomiro.gestaoproducaochopp.ui.theme.Dimens
+import com.santos.valdomiro.gestaoproducaochopp.util.TAG
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -61,8 +63,8 @@ fun ListaProducaoScreen(
     val navController = LocalNavController.current
     val state by viewModel.uiState.collectAsState()
 
-    LaunchedEffect(Unit) {
-        viewModel.getAll()
+    LaunchedEffect(gradeId) {
+        viewModel.getAllDaGrade(gradeId = gradeId)
     }
 
     ModalNavigationDrawer(

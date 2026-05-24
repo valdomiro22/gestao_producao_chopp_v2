@@ -1,5 +1,6 @@
 package com.santos.valdomiro.gestaoproducaochopp.features.grade.presentation.components
 
+import android.util.Log
 import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -33,6 +34,7 @@ import androidx.navigation.NavHostController
 import com.santos.valdomiro.gestaoproducaochopp.common.enums.StatusSincronizacao
 import com.santos.valdomiro.gestaoproducaochopp.features.grade.domain.entity.GradeEntity
 import com.santos.valdomiro.gestaoproducaochopp.navigation.Route
+import com.santos.valdomiro.gestaoproducaochopp.util.TAG
 import java.time.Instant
 import java.time.LocalDate
 import java.time.ZoneId
@@ -64,7 +66,8 @@ fun ItemListaGrade(
             containerColor = MaterialTheme.colorScheme.surface
         ),
         shape = RoundedCornerShape(12.dp),
-        onClick = { navController.navigate(Route.ListaProducoesRoute.criarRota(grade.id)) }
+        onClick = { navController.navigate(Route.ListaProducoesRoute.criarRota(grade.id))
+        }
     ) {
         Row(
             modifier = Modifier

@@ -15,4 +15,5 @@ interface ProducaoRepository {
     suspend fun deleteProducao(producao: ProducaoEntity): Result<Unit>
     fun getOneById(producaoId: String): Flow<ProducaoEntity?>
     fun getAllProducoes(): Flow<List<ProducaoEntity>>
+    fun getAllProducoesDaGrade(gradeId: String): Flow<List<ProducaoEntity>>
 }

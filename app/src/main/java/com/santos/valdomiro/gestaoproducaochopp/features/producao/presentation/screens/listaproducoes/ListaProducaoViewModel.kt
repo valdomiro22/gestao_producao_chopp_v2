@@ -20,14 +20,13 @@ class ListaProducaoViewModel @Inject constructor(
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow<UiState<List<ProducaoDetalhada>>>(UiState.Idle)
-
     val uiState = _uiState.asStateFlow()
 
-    fun getAll() {
+    fun getAllDaGrade(gradeId: String) {
         viewModelScope.launch {
             _uiState.value = UiState.Loading
 
-            getProducoesDetalhadasUseCase().collect { result ->
+            getProducoesDetalhadasUseCase(gradeId = gradeId).collect { result ->
                 result.fold(
                     onSuccess = { lista ->
                         _uiState.value = UiState.Success(lista)
@@ -47,7 +46,7 @@ class ListaProducaoViewModel @Inject constructor(
             _uiState.value = UiState.Loading
 
             deleteProducaoUseCase(producao = producao)
-                .onSuccess { getAll() }
+                .onSuccess { getAllDaGrade(gradeId = producao.gradeId) }
                 .onFailure { exception ->
                     _uiState.value = UiState.Error(
                         exception.message ?: "Erro al deletar produção"

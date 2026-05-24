@@ -15,4 +15,5 @@ interface ProducaoLocalDataSource {
     suspend fun deleteProducao(producao: ProducaoLocalModel)
     fun getOneById(producaoId: String): Flow<ProducaoLocalModel?>
     fun getAllProducoes(): Flow<List<ProducaoLocalModel>>
+    fun getAllProducoesDaGrade(gradeId: String): Flow<List<ProducaoLocalModel>>
 }

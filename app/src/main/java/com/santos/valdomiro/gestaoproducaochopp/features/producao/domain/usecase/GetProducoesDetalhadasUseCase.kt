@@ -15,9 +15,9 @@ class GetProducoesDetalhadasUseCase @Inject constructor(
     private val produtoRepository: ProdutoRepository
 ) {
 
-    operator fun invoke(): Flow<Result<List<ProducaoDetalhada>>> {
+    operator fun invoke(gradeId: String): Flow<Result<List<ProducaoDetalhada>>> {
         return combine(
-            producaoRepository.getAllProducoes(),
+            producaoRepository.getAllProducoesDaGrade(gradeId = gradeId),
             barrilRepository.getAllBarris(),
             produtoRepository.getAllProdutos()
         ) { producoes, barris, produtos ->

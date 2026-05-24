@@ -60,6 +60,13 @@ class ProducaoLocalDataSourceImpl @Inject constructor(
             }
     }
 
+    override fun getAllProducoesDaGrade(gradeId: String): Flow<List<ProducaoLocalModel>> {
+        return producaoDao.getAllDaGrade(gradeId = gradeId)
+            .catch { e ->
+                throw mapearException(e)
+            }
+    }
+
     private suspend fun <T> mapearExceptions(action: suspend () -> T): T {
         return try {
             action()

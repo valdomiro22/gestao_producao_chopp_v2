@@ -136,4 +136,15 @@ class ProducaoRepositoryImpl @Inject constructor(
                 }
             }
     }
+
+    override fun getAllProducoesDaGrade(gradeId: String): Flow<List<ProducaoEntity>> {
+        return localDataSource.getAllProducoesDaGrade(gradeId = gradeId)
+            .map { listaProducoes ->
+                listaProducoes.filter { producao ->
+                    producao.statusSincronizacao != StatusSincronizacao.AGUARDANDO_EXCLUSAO
+                }.map { producao ->
+                    producao.toEntity()
+                }
+            }
+    }
 }
