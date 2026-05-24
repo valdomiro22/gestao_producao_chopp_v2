@@ -65,6 +65,12 @@ class MovimentacaoLocalDataSourceImpl @Inject constructor(
             }
     }
 
+    override suspend fun getMovimentacoesAguardandoEnvio(): List<MovimentacaoLocalModel> {
+        return movimentacaoDao.getMovimentacoesPorStatus(
+            StatusSincronizacao.AGUARDANDO_ENVIO.name
+        )
+    }
+
     override fun getAllMovimentacoesDoHorario(
         horarioReferente: String,
         producaoId: String

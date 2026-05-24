@@ -17,25 +17,17 @@ class MovimentacaoRepositoryImpl @Inject constructor(
     private val remoteDataSource: MovimentacaoRemoteDataSource
 ) : MovimentacaoRepository {
 
-    override suspend fun insertMovimentacao(movimentacao: MovimentacaoEntity): Result<Unit> {
+    override suspend fun insertMovimentacao(
+        movimentacao: MovimentacaoEntity
+    ): Result<Unit> {
         return try {
             val movimentacaoPendente = movimentacao.copy(
                 statusSincronizacao = StatusSincronizacao.AGUARDANDO_ENVIO
             )
 
-            localDataSource.insertMovimentacao(movimentacaoPendente.toLocalModel())
-
-            try {
-                remoteDataSource.insertMovimentacao(
-                    movimentacaoPendente.toRemoteModel()
-                )
-
-                localDataSource.updateStatusSincronizacao(
-                    movimentacaoId = movimentacaoPendente.id,
-                    statusSincronizacao = StatusSincronizacao.SINCRONIZADO
-                )
-            } catch (e: Exception) {
-            }
+            localDataSource.insertMovimentacao(
+                movimentacaoPendente.toLocalModel()
+            )
 
             Result.success(Unit)
         } catch (e: Exception) {
@@ -150,6 +142,34 @@ class MovimentacaoRepositoryImpl @Inject constructor(
                         barrilLocal.toEntity()
                     }
             }
+    }
+
+    override suspend fun sincronizarMovimentacoesPendentes(): Result<Unit> {
+        return try {
+            val pendentes = localDataSource.getMovimentacoesAguardandoEnvio()
+
+            pendentes.forEach { movimentacaoLocal ->
+                try {
+                    val movimentacaoEntity = movimentacaoLocal.toEntity()
+
+                    remoteDataSource.insertMovimentacao(
+                        movimentacaoEntity.toRemoteModel()
+                    )
+
+                    localDataSource.updateStatusSincronizacao(
+                        movimentacaoId = movimentacaoEntity.id,
+                        statusSincronizacao = StatusSincronizacao.SINCRONIZADO
+                    )
+                } catch (e: Exception) {
+                    // Se falhar uma movimentação, mantém AGUARDANDO_ENVIO
+                    // e continua tentando as próximas.
+                }
+            }
+
+            Result.success(Unit)
+        } catch (e: Exception) {
+            Result.failure(e)
+        }
     }
 
     override fun getAllMovimentacoesDoHorario(

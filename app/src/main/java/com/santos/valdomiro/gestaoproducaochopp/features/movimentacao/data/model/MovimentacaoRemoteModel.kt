@@ -12,7 +12,6 @@ data class MovimentacaoRemoteModel(
     val quantidade: Int,
     val tipo: TipoMovimentacao,
     val criadoEm: Timestamp,
-    val statusSincronizacao: StatusSincronizacao
 ) {
     fun toMap(): Map<String, Any?> {
         return mapOf(
@@ -21,9 +20,8 @@ data class MovimentacaoRemoteModel(
             "turnoId" to turnoId,
             "horarioReferente" to horarioReferente,
             "quantidade" to quantidade,
-            "tipo" to tipo,
+            "tipo" to tipo.name,
             "criadoEm" to criadoEm,
-            "statusSincronizacao" to statusSincronizacao
         )
     }
 }

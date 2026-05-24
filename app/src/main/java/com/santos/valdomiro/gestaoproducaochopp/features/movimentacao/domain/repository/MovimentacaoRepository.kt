@@ -17,5 +17,6 @@ interface MovimentacaoRepository {
     fun getOneById(movimentacaoId: String): Flow<MovimentacaoEntity?>
     fun getAllMovimentacoes(): Flow<List<MovimentacaoEntity>>
     fun getAllOfProducao(producaoId: String): Flow<List<MovimentacaoEntity>>
+    suspend fun sincronizarMovimentacoesPendentes(): Result<Unit>
     fun getAllMovimentacoesDoHorario(horarioReferente: String, producaoId: String): Flow<List<MovimentacaoEntity>>
 }

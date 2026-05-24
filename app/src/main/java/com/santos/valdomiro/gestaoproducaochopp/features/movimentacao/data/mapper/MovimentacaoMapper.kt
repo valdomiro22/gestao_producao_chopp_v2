@@ -28,7 +28,6 @@ fun MovimentacaoEntity.toRemoteModel() = MovimentacaoRemoteModel(
     quantidade = this.quantidade,
     tipo = this.tipo,
     criadoEm = this.criadoEm.toTimestamp(),
-    statusSincronizacao = this.statusSincronizacao
 )
 
 /** Converte LocalModel para Entity */

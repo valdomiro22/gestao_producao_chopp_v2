@@ -6,6 +6,7 @@ import androidx.lifecycle.viewModelScope
 import com.santos.valdomiro.gestaoproducaochopp.features.movimentacao.domain.usecase.GetSaldoMovimentacaoHorarioUseCase
 import com.santos.valdomiro.gestaoproducaochopp.features.movimentacao.domain.usecase.InsertMovimentacaoParams
 import com.santos.valdomiro.gestaoproducaochopp.features.movimentacao.domain.usecase.InsertMovimentacaoUseCase
+import com.santos.valdomiro.gestaoproducaochopp.features.movimentacao.domain.usecase.SincronizarMovimentacoesPendentesUseCase
 import com.santos.valdomiro.gestaoproducaochopp.util.TAG
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -19,7 +20,7 @@ import javax.inject.Inject
 class AdicionarMovimentacaoViewModel @Inject constructor(
     private val insertMovimentacaoUseCase: InsertMovimentacaoUseCase,
     private val getSaldoMovimentacaoHorarioUseCase: GetSaldoMovimentacaoHorarioUseCase,
-
+    private val sincronizarMovimentacoesPendentesUseCase: SincronizarMovimentacoesPendentesUseCase
     ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(AdicionarMovimentacaoState())
@@ -96,6 +97,10 @@ class AdicionarMovimentacaoViewModel @Inject constructor(
                                     isLoading = false,
                                     isSuccess = true
                                 )
+                            }
+
+                            viewModelScope.launch {
+                                sincronizarMovimentacoesPendentesUseCase()
                             }
                         }
                         .onFailure { error ->
