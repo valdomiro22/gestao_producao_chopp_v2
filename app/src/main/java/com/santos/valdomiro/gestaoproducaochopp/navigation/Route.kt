@@ -51,4 +51,11 @@ sealed class Route(
     // Calcular tempo de parada
     data object CalcularTempoDeParadaRoute: Route(route = "calcular-tempo-parada", title = "Tempo de Parada")
 
+    // Simular fim de Produção
+    data object SimularFimProducaoRoute :
+        Route(route = "simular-fim-producao/{producaoId}", title = "Fim de produção") {
+        fun criarRota(id: String) =
+            "simular-fim-producao/$id"
+    }
+
 }

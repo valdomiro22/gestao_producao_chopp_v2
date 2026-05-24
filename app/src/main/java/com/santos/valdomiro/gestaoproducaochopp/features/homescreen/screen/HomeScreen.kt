@@ -56,6 +56,7 @@ import com.santos.valdomiro.gestaoproducaochopp.common.state.UiState
 import com.santos.valdomiro.gestaoproducaochopp.features.homescreen.components.CardStatusProducaoComponent
 import com.santos.valdomiro.gestaoproducaochopp.features.homescreen.components.QuantidadeHorariaComponent
 import com.santos.valdomiro.gestaoproducaochopp.features.movimentacao.presentation.screens.listamvproducao.MapMovimentacoesDaProducaoViewModel
+import com.santos.valdomiro.gestaoproducaochopp.features.producao.presentation.components.ControleDoBuffer
 import com.santos.valdomiro.gestaoproducaochopp.features.producao.presentation.screens.buscarproducao.BuscarProducaoDetalhadaViewModel
 import com.santos.valdomiro.gestaoproducaochopp.navigation.LocalNavController
 import com.santos.valdomiro.gestaoproducaochopp.navigation.Route
@@ -179,7 +180,7 @@ fun HomeScreen(
                     Column(
                         modifier = Modifier
                             .fillMaxSize()
-                            .padding(innerPadding)
+                            .padding(top = innerPadding.calculateTopPadding())
                             .verticalScroll(rememberScrollState())
                             .padding(horizontal = Dimens.paddingHorizontal),
                         horizontalAlignment = Alignment.CenterHorizontally
@@ -251,19 +252,20 @@ fun HomeScreen(
                                 buscarProducaoDetalhadaViewModel.buscarProducaoDatalhada(producaoId)
                             }
                         )
-                        Spacer(modifier = Modifier.height(8.dp))
+                        Spacer(modifier = Modifier.height(16.dp))
 
                         // Informações para o final de produção
-//                        ControleDoBuffer(
-//                            onClick = {
-//                                navController.navigate(
-//                                    Route.SimularFimProducaoRoute.criarRota(id = producaoId)
-//                                )
-//                            },
-//                            quantidadePendente = pendente,
-//                            tipoBarril = producao.barrilNome,
-//                            barrilId = producao.barrilId
-//                        )
+                        ControleDoBuffer(
+                            onClick = {
+                                navController.navigate(
+                                    Route.SimularFimProducaoRoute.criarRota(id = producaoId)
+                                )
+                            },
+                            quantidadePendente = pdDetalhada.quantidadePendente,
+                            pdDetalhada = pdDetalhada,
+                            barril = pdDetalhada.barril
+                        )
+                        Spacer(modifier = Modifier.height(8.dp)) 
 
                     }
 

@@ -23,6 +23,7 @@ import com.santos.valdomiro.gestaoproducaochopp.features.produto.presentation.sc
 import com.santos.valdomiro.gestaoproducaochopp.features.produto.presentation.screens.listaprodutos.ListaProdutosScreen
 import com.santos.valdomiro.gestaoproducaochopp.features.homescreen.screen.HomeScreen
 import com.santos.valdomiro.gestaoproducaochopp.features.movimentacao.presentation.screens.listamvproducao.ListaMovimentacaoScreen
+import com.santos.valdomiro.gestaoproducaochopp.features.producao.presentation.screens.simularfimproducao.SimularFimProducaoScreen
 
 @Composable
 fun AppNavigation(
@@ -131,6 +132,15 @@ fun AppNavigation(
                 CalcularTempoParadaScreen(
                     onOpenDrawer = onOpenDrawer,
                 )
+            }
+
+            // Simular fim de Produção
+            composable(
+                route = "simular-fim-producao/{producaoId}",
+                arguments = listOf(navArgument("producaoId") { type = NavType.StringType })
+            ) { backStackEntry ->
+                val producaoId = backStackEntry.arguments?.getString("producaoId") ?: return@composable
+                SimularFimProducaoScreen(producaoId = producaoId)
             }
         }
     }

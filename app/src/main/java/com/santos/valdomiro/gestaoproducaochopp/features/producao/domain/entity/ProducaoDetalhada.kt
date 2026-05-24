@@ -11,12 +11,18 @@ data class ProducaoDetalhada(
     val quantidadePendente: Int
         get() = producao.quantidadeProgramada - producao.quantidadeProduzida
 
-    val volumeNecessario: Int
-        get() = producao.quantidadeProgramada * barril.volume
+    val volumeNecessario: Double
+        get() {
+            return (producao.quantidadeProgramada * barril.volume) / 100.0
+        }
 
-    val volumeConsumido: Int
-        get() = producao.quantidadeProduzida * barril.volume
+    val volumeConsumido: Double
+        get() {
+            return (producao.quantidadeProduzida * barril.volume) / 100.0
+        }
 
-    val volumePendente: Int
-        get() = quantidadePendente * barril.volume
+    val volumePendente: Double
+        get() {
+            return (quantidadePendente * barril.volume) / 100.0
+        }
 }
