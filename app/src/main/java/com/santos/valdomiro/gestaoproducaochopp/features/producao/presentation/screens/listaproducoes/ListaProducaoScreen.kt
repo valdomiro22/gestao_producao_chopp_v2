@@ -1,6 +1,7 @@
 package com.santos.valdomiro.gestaoproducaochopp.features.producao.presentation.screens.listaproducoes
 
 import android.util.Log
+import android.widget.Toast
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.WindowInsets
@@ -13,6 +14,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.DrawerValue
@@ -31,6 +33,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -40,6 +45,7 @@ import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.santos.valdomiro.gestaoproducaochopp.common.AppDrawer
+import com.santos.valdomiro.gestaoproducaochopp.common.components.AlertaDialogDeletar
 import com.santos.valdomiro.gestaoproducaochopp.common.components.EmptyListState
 import com.santos.valdomiro.gestaoproducaochopp.common.components.ErroComponent
 import com.santos.valdomiro.gestaoproducaochopp.common.state.UiState
@@ -62,6 +68,7 @@ fun ListaProducaoScreen(
     val context = LocalContext.current
     val navController = LocalNavController.current
     val state by viewModel.uiState.collectAsState()
+    var dialogDeletar by remember { mutableStateOf(false) }
 
     LaunchedEffect(gradeId) {
         viewModel.getAllDaGrade(gradeId = gradeId)
@@ -167,12 +174,26 @@ fun ListaProducaoScreen(
                                     producao = item.producao,
                                     barril = item.barril,
                                     produto = item.produto,
-                                    onDeletarClick = {
-                                        viewModel.deletarProducao(item.producao)
-                                    },
+                                    onDeletarClick = { dialogDeletar = true },
                                     onEditarClick = { navController.navigate(Route.EditarProducaoRoute.criarRota(item.producao.id)) },
                                     navController = navController,
                                 )
+
+                                if (dialogDeletar) {
+                                    AlertaDialogDeletar(
+                                        onDismiss = { dialogDeletar = false },
+                                        onConfirm = {
+                                            viewModel.deletarProducao(producao = item.producao)
+                                            Toast.makeText(
+                                                context,
+                                                "Grade deletada",
+                                                Toast.LENGTH_SHORT
+                                            ).show()
+                                        },
+                                        mensagem = "Está ação não poderá ser desfeita, você realmente deseja deletar está produção?",
+                                        icone = Icons.Default.Delete
+                                    )
+                                }
                             }
                         }
                     }

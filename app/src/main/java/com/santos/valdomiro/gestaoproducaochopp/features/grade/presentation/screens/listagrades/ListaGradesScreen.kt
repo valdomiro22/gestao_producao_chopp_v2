@@ -1,6 +1,6 @@
 package com.santos.valdomiro.gestaoproducaochopp.features.grade.presentation.screens.listagrades
 
-import android.util.Log
+import android.widget.Toast
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.WindowInsets
@@ -12,8 +12,8 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.DrawerValue
@@ -32,6 +32,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -41,6 +44,7 @@ import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.santos.valdomiro.gestaoproducaochopp.common.AppDrawer
+import com.santos.valdomiro.gestaoproducaochopp.common.components.AlertaDialogDeletar
 import com.santos.valdomiro.gestaoproducaochopp.common.components.EmptyListState
 import com.santos.valdomiro.gestaoproducaochopp.common.components.ErroComponent
 import com.santos.valdomiro.gestaoproducaochopp.common.state.UiState
@@ -50,7 +54,6 @@ import com.santos.valdomiro.gestaoproducaochopp.navigation.LocalNavController
 import com.santos.valdomiro.gestaoproducaochopp.navigation.Route
 import com.santos.valdomiro.gestaoproducaochopp.ui.theme.AppTopBarColors
 import com.santos.valdomiro.gestaoproducaochopp.ui.theme.Dimens
-import com.santos.valdomiro.gestaoproducaochopp.util.TAG
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -63,6 +66,7 @@ fun ListaGradesScreen(
     val context = LocalContext.current
     val navController = LocalNavController.current
     val state by viewModel.uiState.collectAsState()
+    var dialogDeletar by remember { mutableStateOf(false) }
 
     LaunchedEffect(Unit) {
         viewModel.getAll()
@@ -168,9 +172,25 @@ fun ListaGradesScreen(
                                             )
                                         )
                                     },
-                                    onDeletarClick = { viewModel.deletarGrade(grade = grade) },
+                                    onDeletarClick = { dialogDeletar = true },
                                     navController = navController,
                                 )
+
+                                if (dialogDeletar) {
+                                    AlertaDialogDeletar(
+                                        onDismiss = { dialogDeletar = false },
+                                        onConfirm = {
+                                            viewModel.deletarGrade(grade = grade)
+                                            Toast.makeText(
+                                                context,
+                                                "Grade deletada",
+                                                Toast.LENGTH_SHORT
+                                            ).show()
+                                        },
+                                        mensagem = "Está ação não poderá ser desfeita, você realmente deseja deletar está grade?",
+                                        icone = Icons.Default.Delete
+                                    )
+                                }
                             }
                         }
                     }
