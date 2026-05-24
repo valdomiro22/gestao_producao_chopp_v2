@@ -38,6 +38,7 @@ import com.santos.valdomiro.gestaoproducaochopp.features.movimentacao.presentati
 import com.santos.valdomiro.gestaoproducaochopp.features.movimentacao.presentation.components.ItemMovimentacao
 import com.santos.valdomiro.gestaoproducaochopp.navigation.LocalNavController
 import com.santos.valdomiro.gestaoproducaochopp.ui.theme.AppTopBarColors
+import com.santos.valdomiro.gestaoproducaochopp.ui.theme.Dimens
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -118,7 +119,7 @@ fun ListaMovimentacaoScreen(
                                 end = innerPadding.calculateEndPadding(LayoutDirection.Ltr),
                                 bottom = 0.dp
                             )
-                            .padding(start = 4.dp, top = 8.dp, end = 4.dp),
+                            .padding(horizontal = Dimens.paddingHorizontal),
                     ) {
                         items(
                             items = listaMovimentacoes,

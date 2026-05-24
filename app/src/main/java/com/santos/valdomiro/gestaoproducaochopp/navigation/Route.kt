@@ -48,4 +48,7 @@ sealed class Route(
         fun criarRota(producaoId: String) = "lista-movimentacao/$producaoId"
     }
 
+    // Calcular tempo de parada
+    data object CalcularTempoDeParadaRoute: Route(route = "calcular-tempo-parada", title = "Tempo de Parada")
+
 }

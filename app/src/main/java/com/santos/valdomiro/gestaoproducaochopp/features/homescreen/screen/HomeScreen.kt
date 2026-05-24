@@ -60,6 +60,7 @@ import com.santos.valdomiro.gestaoproducaochopp.features.producao.presentation.s
 import com.santos.valdomiro.gestaoproducaochopp.navigation.LocalNavController
 import com.santos.valdomiro.gestaoproducaochopp.navigation.Route
 import com.santos.valdomiro.gestaoproducaochopp.ui.theme.AppTopBarColors
+import com.santos.valdomiro.gestaoproducaochopp.ui.theme.Dimens
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -180,7 +181,7 @@ fun HomeScreen(
                             .fillMaxSize()
                             .padding(innerPadding)
                             .verticalScroll(rememberScrollState())
-                            .padding(10.dp),
+                            .padding(horizontal = Dimens.paddingHorizontal),
                         horizontalAlignment = Alignment.CenterHorizontally
                     ) {
 

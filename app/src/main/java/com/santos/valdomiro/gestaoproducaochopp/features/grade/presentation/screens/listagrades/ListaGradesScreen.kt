@@ -43,6 +43,7 @@ import com.santos.valdomiro.gestaoproducaochopp.features.grade.presentation.comp
 import com.santos.valdomiro.gestaoproducaochopp.navigation.LocalNavController
 import com.santos.valdomiro.gestaoproducaochopp.navigation.Route
 import com.santos.valdomiro.gestaoproducaochopp.ui.theme.AppTopBarColors
+import com.santos.valdomiro.gestaoproducaochopp.ui.theme.Dimens
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -123,7 +124,7 @@ fun ListaGradesScreen(
                                 end = innerPadding.calculateEndPadding(LayoutDirection.Ltr),
                                 bottom = 0.dp
                             )
-                            .padding(start = 10.dp, top = 4.dp, end = 10.dp),
+                            .padding(horizontal = Dimens.paddingHorizontal),
                         verticalArrangement = Arrangement.spacedBy(10.dp)
                     ) {
                         items(

@@ -13,7 +13,7 @@ import java.time.LocalTime
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun TimePickerDialog(
+fun TimePickerDialogComponent(
     onDismiss: () -> Unit,
     onConfirm: (LocalTime) -> Unit,
     initialTime: LocalTime

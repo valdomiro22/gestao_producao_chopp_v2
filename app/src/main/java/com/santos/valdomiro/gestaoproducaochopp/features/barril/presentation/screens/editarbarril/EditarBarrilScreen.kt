@@ -37,6 +37,7 @@ import com.santos.valdomiro.gestaoproducaochopp.common.components.CustomOutlined
 import com.santos.valdomiro.gestaoproducaochopp.common.components.ErroComponent
 import com.santos.valdomiro.gestaoproducaochopp.navigation.LocalNavController
 import com.santos.valdomiro.gestaoproducaochopp.ui.theme.AppTopBarColors
+import com.santos.valdomiro.gestaoproducaochopp.ui.theme.Dimens
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -89,7 +90,7 @@ fun EditarBarrilScreen(
             modifier = modifier
                 .fillMaxSize()
                 .padding(innerPadding)
-                .padding(horizontal = 10.dp),
+                .padding(horizontal = Dimens.paddingHorizontal),
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
             Spacer(modifier = Modifier.height(8.dp))

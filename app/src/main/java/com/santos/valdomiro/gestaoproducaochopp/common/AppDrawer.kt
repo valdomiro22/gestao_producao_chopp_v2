@@ -47,6 +47,7 @@ fun AppDrawer(
         // Itens Principais
         val drawerItems = listOf(
             Route.HomeRoute,
+            Route.CalcularTempoDeParadaRoute,
         )
 
         Column(

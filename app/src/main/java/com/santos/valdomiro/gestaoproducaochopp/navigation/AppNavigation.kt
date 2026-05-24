@@ -8,6 +8,7 @@ import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
+import com.santos.valdomiro.gestaoproducaochopp.common.screens.CalcularTempoParadaScreen
 import com.santos.valdomiro.gestaoproducaochopp.features.barril.presentation.screens.adicionarbarril.AdicionarBarrilScreen
 import com.santos.valdomiro.gestaoproducaochopp.features.barril.presentation.screens.editarbarril.EditarBarrilScreen
 import com.santos.valdomiro.gestaoproducaochopp.features.barril.presentation.screens.listabarris.ListaBarrisScreen
@@ -125,6 +126,12 @@ fun AppNavigation(
                 ListaMovimentacaoScreen(producaoId = producaoId)
             }
 
+            // Calcular tempo de parada
+            composable(Route.CalcularTempoDeParadaRoute.route) {
+                CalcularTempoParadaScreen(
+                    onOpenDrawer = onOpenDrawer,
+                )
+            }
         }
     }
 

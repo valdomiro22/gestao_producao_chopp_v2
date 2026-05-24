@@ -40,6 +40,7 @@ import com.santos.valdomiro.gestaoproducaochopp.features.producao.presentation.c
 import com.santos.valdomiro.gestaoproducaochopp.features.producao.presentation.components.DropdownProduto
 import com.santos.valdomiro.gestaoproducaochopp.features.produto.presentation.screens.listaprodutos.ListaProdutosViewModel
 import com.santos.valdomiro.gestaoproducaochopp.navigation.LocalNavController
+import com.santos.valdomiro.gestaoproducaochopp.ui.theme.Dimens
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -90,7 +91,7 @@ fun AdicionarProducaoScreen(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(innerPadding)
-                .padding(horizontal = 16.dp),
+                .padding(horizontal = Dimens.paddingHorizontal),
             verticalArrangement = Arrangement.Top,
         ) {
             Spacer(modifier = Modifier.height(16.dp))
