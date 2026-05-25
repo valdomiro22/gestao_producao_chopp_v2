@@ -77,6 +77,8 @@ fun AdicionarProdutoScreen(
                 colors = TopAppBarDefaults.topAppBarColors(
                     containerColor = MaterialTheme.colorScheme.background,
                     titleContentColor = AppTopBarColors.titleColor(),
+                    navigationIconContentColor = AppTopBarColors.titleColor(),
+                    actionIconContentColor = AppTopBarColors.titleColor()
                 )
             )
         },

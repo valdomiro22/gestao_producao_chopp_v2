@@ -15,6 +15,7 @@ import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
@@ -40,6 +41,7 @@ import com.santos.valdomiro.gestaoproducaochopp.features.producao.presentation.c
 import com.santos.valdomiro.gestaoproducaochopp.features.producao.presentation.components.DropdownProduto
 import com.santos.valdomiro.gestaoproducaochopp.features.produto.presentation.screens.listaprodutos.ListaProdutosViewModel
 import com.santos.valdomiro.gestaoproducaochopp.navigation.LocalNavController
+import com.santos.valdomiro.gestaoproducaochopp.ui.theme.AppTopBarColors
 import com.santos.valdomiro.gestaoproducaochopp.ui.theme.Dimens
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -80,9 +82,10 @@ fun AdicionarProducaoScreen(
                 },
                 windowInsets = WindowInsets(0),
                 colors = TopAppBarDefaults.topAppBarColors(
-                    containerColor = Color(0xFF6450A1),
-                    titleContentColor = Color.White,
-                    navigationIconContentColor = Color.White
+                    containerColor = MaterialTheme.colorScheme.background,
+                    titleContentColor = AppTopBarColors.titleColor(),
+                    navigationIconContentColor = AppTopBarColors.titleColor(),
+                    actionIconContentColor = AppTopBarColors.titleColor()
                 )
             )
         }

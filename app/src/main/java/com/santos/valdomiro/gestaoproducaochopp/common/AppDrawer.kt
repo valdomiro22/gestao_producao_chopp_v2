@@ -8,10 +8,14 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ExitToApp
+import androidx.compose.material.icons.filled.Person
+import androidx.compose.material.icons.filled.Person2
 import androidx.compose.material.icons.filled.PrecisionManufacturing
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
@@ -58,6 +62,7 @@ fun AppDrawer(
             modifier = Modifier
                 .weight(1f) // Faz a lista ocupar o espaço central
                 .padding(horizontal = 12.dp)
+                .verticalScroll(rememberScrollState())
         ) {
             drawerItems.forEach { item ->
                 NavigationDrawerItem(
@@ -132,7 +137,7 @@ private fun DrawerHeader() {
                 color = MaterialTheme.colorScheme.onPrimary.copy(alpha = 0.2f)
             ) {
                 Icon(
-                    imageVector = Icons.Default.PrecisionManufacturing, // Exemplo de ícone de produção
+                    imageVector = Icons.Default.Person, // Exemplo de ícone de produção
                     contentDescription = null,
                     modifier = Modifier.padding(8.dp),
                     tint = MaterialTheme.colorScheme.onPrimary
@@ -142,15 +147,9 @@ private fun DrawerHeader() {
             Spacer(modifier = Modifier.height(16.dp))
 
             Text(
-                text = "Gestão de Produção",
+                text = "Produção de Chopp",
                 style = MaterialTheme.typography.titleLarge.copy(fontWeight = FontWeight.Bold),
                 color = MaterialTheme.colorScheme.onPrimary
-            )
-
-            Text(
-                text = "Unidade: Chopp Industrial",
-                style = MaterialTheme.typography.bodyMedium,
-                color = MaterialTheme.colorScheme.onPrimary.copy(alpha = 0.8f)
             )
         }
     }

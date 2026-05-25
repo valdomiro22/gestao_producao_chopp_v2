@@ -1,5 +1,6 @@
 package com.santos.valdomiro.gestaoproducaochopp.features.homescreen.screen
 
+import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.isSystemInDarkTheme
@@ -45,6 +46,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -93,6 +95,7 @@ fun HomeScreen(
     val navController = LocalNavController.current
     val state by buscarProducaoDetalhadaViewModel.uiState.collectAsState()
     val movimentacaoState by mapMovimentacoesViewModel.uiState.collectAsState()
+    val context = LocalContext.current
 
     var menuExpandido by remember { mutableStateOf(false) }  // Para o controle do DropdownMenu
     val turnoAtual by homeViewModel.turnoSelecionado.collectAsState()
@@ -154,20 +157,6 @@ fun HomeScreen(
                                     onDismissRequest = { menuExpandido = false }
                                 ) {
                                     DropdownMenuItem(
-                                        text = { Text("Barris") },
-                                        onClick = {
-                                            menuExpandido = false
-                                            navController.navigate(Route.ListaBarrisRoute.route)
-                                        }
-                                    )
-                                    DropdownMenuItem(
-                                        text = { Text("Produtos") },
-                                        onClick = {
-                                            menuExpandido = false
-                                            navController.navigate(Route.ListaProdutosRoute.route)
-                                        }
-                                    )
-                                    DropdownMenuItem(
                                         text = { Text("Histórico") },
                                         onClick = {
                                             menuExpandido = false
@@ -176,6 +165,14 @@ fun HomeScreen(
                                                     producaoId = producaoId
                                                 )
                                             )
+                                        }
+                                    )
+                                    DropdownMenuItem(
+                                        text = { Text("Opções") },
+                                        onClick = {
+//                                            menuExpandido = false
+//                                            navController.navigate(Route.ListaProdutosRoute.route)
+                                            Toast.makeText(context, "Opções", Toast.LENGTH_SHORT).show()
                                         }
                                     )
                                 }
