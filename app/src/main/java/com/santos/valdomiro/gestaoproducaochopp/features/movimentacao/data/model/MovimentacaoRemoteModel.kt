@@ -5,13 +5,13 @@ import com.santos.valdomiro.gestaoproducaochopp.common.enums.StatusSincronizacao
 import com.santos.valdomiro.gestaoproducaochopp.features.movimentacao.domain.entity.TipoMovimentacao
 
 data class MovimentacaoRemoteModel(
-    val id: String,
-    val producaoId: String,
-    val turnoId: Int,
-    val horarioReferente: String,
-    val quantidade: Int,
-    val tipo: TipoMovimentacao,
-    val criadoEm: Timestamp,
+    val id: String = "",
+    val producaoId: String = "",
+    val turnoId: Int = 0,
+    val horarioReferente: String = "",
+    val quantidade: Int = 0,
+    val tipo: TipoMovimentacao = TipoMovimentacao.SOMA,
+    val criadoEm: Timestamp? = null,
 ) {
     fun toMap(): Map<String, Any?> {
         return mapOf(

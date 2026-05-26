@@ -46,3 +46,9 @@ fun ProdutoEntity.toLocalModel() = ProdutoLocalModel(
     editadoEm = this.editadoEm?.toEpochMilli(),
     prazoValidade = this.prazoValidade,
 )
+
+/** Converte RemoteModel para LocalModel */
+fun ProdutoRemoteModel.toLocalModel() = this
+    .toEntity()
+    .copy(statusSincronizacao = StatusSincronizacao.SINCRONIZADO)
+    .toLocalModel()

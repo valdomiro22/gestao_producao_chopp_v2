@@ -15,4 +15,5 @@ interface ProdutoRepository {
     suspend fun deleteProduto(produto: ProdutoEntity): Result<Unit>
     fun getOneById(produtoId: String): Flow<ProdutoEntity?>
     fun getAllProdutos(): Flow<List<ProdutoEntity>>
+    suspend fun sincronizarProdutosDoRemoto(): Result<Unit>
 }

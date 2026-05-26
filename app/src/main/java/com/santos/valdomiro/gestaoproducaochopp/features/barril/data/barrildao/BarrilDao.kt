@@ -15,6 +15,9 @@ interface BarrilDao {
     @Insert(onConflict = OnConflictStrategy.ABORT)
     suspend fun insert(barril: BarrilLocalModel)
 
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun insertAllBarris(barris: List<BarrilLocalModel>)
+
     @Update
     suspend fun update(barril: BarrilLocalModel)
 

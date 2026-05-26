@@ -1,5 +1,6 @@
 package com.santos.valdomiro.gestaoproducaochopp.features.movimentacao.data.repository
 
+import android.util.Log
 import com.santos.valdomiro.gestaoproducaochopp.common.enums.StatusSincronizacao
 import com.santos.valdomiro.gestaoproducaochopp.features.movimentacao.data.localdatasource.MovimentacaoLocalDataSource
 import com.santos.valdomiro.gestaoproducaochopp.features.movimentacao.data.mapper.toEntity
@@ -8,6 +9,7 @@ import com.santos.valdomiro.gestaoproducaochopp.features.movimentacao.data.mappe
 import com.santos.valdomiro.gestaoproducaochopp.features.movimentacao.data.remotedatasource.MovimentacaoRemoteDataSource
 import com.santos.valdomiro.gestaoproducaochopp.features.movimentacao.domain.entity.MovimentacaoEntity
 import com.santos.valdomiro.gestaoproducaochopp.features.movimentacao.domain.repository.MovimentacaoRepository
+import com.santos.valdomiro.gestaoproducaochopp.util.TAG
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import javax.inject.Inject
@@ -209,5 +211,26 @@ class MovimentacaoRepositoryImpl @Inject constructor(
                         movimentacao.toEntity()
                     }
             }
+    }
+
+    override suspend fun sincronizarMovimentacoesDoRemoto(): Result<Unit> {
+        Log.d(TAG, "sincronizarMovimentacoesDoRemoto: Entrou no metodo")
+        return try {
+            val movimentacoesRemotas = remoteDataSource.getAllMovimentacoes()
+        Log.d(TAG, "sincronizarMovimentacoesDoRemoto: Buscou no remote")
+
+            val movimentacoesLocais = movimentacoesRemotas.map { gradeRemote ->
+                gradeRemote.toLocalModel()
+            }
+        Log.d(TAG, "sincronizarMovimentacoesDoRemoto: Converteu")
+
+            localDataSource.insertAllMovimentacoes(movimentacoesLocais)
+        Log.d(TAG, "sincronizarMovimentacoesDoRemoto: Sincronizou")
+
+            Result.success(Unit)
+        } catch (e: Exception) {
+        Log.d(TAG, "sincronizarMovimentacoesDoRemoto: Deu erro: $e")
+            Result.failure(e)
+        }
     }
 }

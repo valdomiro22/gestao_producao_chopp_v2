@@ -133,4 +133,20 @@ class BarrilRepositoryImpl @Inject constructor(
                     }
             }
     }
+
+    override suspend fun sincronizarBarrisDoRemoto(): Result<Unit> {
+        return try {
+            val barrisRemotas = remoteDataSource.getAllBarris()
+
+            val barrisLocais = barrisRemotas.map { barrilRemote ->
+                barrilRemote.toLocalModel()
+            }
+
+            localDataSource.insertAllBarris(barrisLocais)
+
+            Result.success(Unit)
+        } catch (e: Exception) {
+            Result.failure(e)
+        }
+    }
 }

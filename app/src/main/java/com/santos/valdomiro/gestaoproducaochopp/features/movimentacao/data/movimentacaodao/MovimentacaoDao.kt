@@ -14,6 +14,9 @@ interface MovimentacaoDao {
     @Insert(onConflict = OnConflictStrategy.ABORT)
     suspend fun insert(movimentacao: MovimentacaoLocalModel)
 
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun insertAllMovimentacoes(movimentacoes: List<MovimentacaoLocalModel>)
+
     @Update
     suspend fun update(movimentacao: MovimentacaoLocalModel)
 

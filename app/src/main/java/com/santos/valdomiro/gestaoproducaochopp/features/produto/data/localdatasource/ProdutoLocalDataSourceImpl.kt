@@ -2,12 +2,14 @@ package com.santos.valdomiro.gestaoproducaochopp.features.produto.data.localdata
 
 import android.database.sqlite.SQLiteConstraintException
 import android.database.sqlite.SQLiteException
+import android.util.Log
 import com.santos.valdomiro.gestaoproducaochopp.common.enums.StatusSincronizacao
 import com.santos.valdomiro.gestaoproducaochopp.common.exceptions.ErroBancoDadosDesconhecidoException
 import com.santos.valdomiro.gestaoproducaochopp.common.exceptions.RegistroDuplicadoException
 import com.santos.valdomiro.gestaoproducaochopp.common.exceptions.RegistroInvalidoException
 import com.santos.valdomiro.gestaoproducaochopp.features.produto.data.model.ProdutoLocalModel
 import com.santos.valdomiro.gestaoproducaochopp.features.produto.data.produtodao.ProdutoDao
+import com.santos.valdomiro.gestaoproducaochopp.util.TAG
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
 import javax.inject.Inject
@@ -58,6 +60,10 @@ class ProdutoLocalDataSourceImpl @Inject constructor(
             .catch { e ->
                 throw mapearException(e)
             }
+    }
+
+    override suspend fun insertAllProdutos(produtos: List<ProdutoLocalModel>) {
+        produtoDao.insertAllProdutos(produtos)
     }
 
     private suspend fun <T> mapearExceptions(action: suspend () -> T): T {

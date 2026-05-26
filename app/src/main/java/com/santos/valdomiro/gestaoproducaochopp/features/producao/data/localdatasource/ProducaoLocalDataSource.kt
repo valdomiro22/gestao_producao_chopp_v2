@@ -16,4 +16,5 @@ interface ProducaoLocalDataSource {
     fun getOneById(producaoId: String): Flow<ProducaoLocalModel?>
     fun getAllProducoes(): Flow<List<ProducaoLocalModel>>
     fun getAllProducoesDaGrade(gradeId: String): Flow<List<ProducaoLocalModel>>
+    suspend fun insertAllProducoes(producoes: List<ProducaoLocalModel>)
 }

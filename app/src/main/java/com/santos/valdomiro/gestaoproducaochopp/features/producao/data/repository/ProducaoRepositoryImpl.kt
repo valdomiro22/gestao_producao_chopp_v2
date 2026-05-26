@@ -158,4 +158,20 @@ class ProducaoRepositoryImpl @Inject constructor(
                 }
             }
     }
+
+    override suspend fun sincronizarProducoesDoRemoto(): Result<Unit> {
+        return try {
+            val producoesRemotas = remoteDataSource.getAllProducoes()
+
+            val producoesLocais = producoesRemotas.map { producaoRemote ->
+                producaoRemote.toLocalModel()
+            }
+
+            localDataSource.insertAllProducoes(producoesLocais)
+
+            Result.success(Unit)
+        } catch (e: Exception) {
+            Result.failure(e)
+        }
+    }
 }

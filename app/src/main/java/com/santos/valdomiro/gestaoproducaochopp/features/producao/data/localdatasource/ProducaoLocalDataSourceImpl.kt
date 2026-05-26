@@ -67,6 +67,10 @@ class ProducaoLocalDataSourceImpl @Inject constructor(
             }
     }
 
+    override suspend fun insertAllProducoes(producoes: List<ProducaoLocalModel>) {
+        producaoDao.insertAllProducoes(producoes = producoes)
+    }
+
     private suspend fun <T> mapearExceptions(action: suspend () -> T): T {
         return try {
             action()

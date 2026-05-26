@@ -92,6 +92,10 @@ class MovimentacaoLocalDataSourceImpl @Inject constructor(
         return movimentacaoDao.getMovimentacoesAguardandoExclusao()
     }
 
+    override suspend fun insertAllMovimentacoes(movimentacoes: List<MovimentacaoLocalModel>) {
+        movimentacaoDao.insertAllMovimentacoes(movimentacoes = movimentacoes)
+    }
+
     private suspend fun <T> mapearExceptions(action: suspend () -> T): T {
         return try {
             action()

@@ -15,7 +15,7 @@ fun MovimentacaoRemoteModel.toEntity() = MovimentacaoEntity(
     horarioReferente = this.horarioReferente,
     quantidade = this.quantidade,
     tipo = this.tipo,
-    criadoEm = this.criadoEm.toInstant(),
+    criadoEm = this.criadoEm?.toInstant() ?: Instant.now(),
     statusSincronizacao = StatusSincronizacao.SINCRONIZADO
 )
 
@@ -53,3 +53,8 @@ fun MovimentacaoEntity.toLocalModel() = MovimentacaoLocalModel(
     criadoEm = this.criadoEm.toEpochMilli(),
     statusSincronizacao = this.statusSincronizacao
 )
+
+fun MovimentacaoRemoteModel.toLocalModel() = this
+    .toEntity()
+    .copy(statusSincronizacao = StatusSincronizacao.SINCRONIZADO)
+    .toLocalModel()

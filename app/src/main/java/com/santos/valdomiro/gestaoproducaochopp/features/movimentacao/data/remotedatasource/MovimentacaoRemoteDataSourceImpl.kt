@@ -77,7 +77,7 @@ class MovimentacaoRemoteDataSourceImpl @Inject constructor(
         }
     }
 
-    override suspend fun getAllMovimentacaos(): List<MovimentacaoRemoteModel> {
+    override suspend fun getAllMovimentacoes(): List<MovimentacaoRemoteModel> {
         return mapearExecution {
             val snapshot = firestore.collection(movimentacaoCollection)
                 .get()

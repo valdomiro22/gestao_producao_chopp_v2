@@ -10,7 +10,7 @@ data class ProdutoRemoteModel(
     val prazoValidade: Int = 0,
     val criadoEm: Timestamp? = null,
     val editadoEm: Timestamp? = null,
-    val statusSincronizacao: StatusSincronizacao
+    val statusSincronizacao: StatusSincronizacao = StatusSincronizacao.SINCRONIZADO
 ) {
     fun toMap(): Map<String, Any?> {
         return mapOf(
@@ -19,7 +19,7 @@ data class ProdutoRemoteModel(
             "prazoValidade"  to prazoValidade,
             "criadoEm"  to criadoEm,
             "editadoEm"  to editadoEm,
-            "statusSincronizacao"  to statusSincronizacao
+            "statusSincronizacao"  to statusSincronizacao.name
         )
     }
 }

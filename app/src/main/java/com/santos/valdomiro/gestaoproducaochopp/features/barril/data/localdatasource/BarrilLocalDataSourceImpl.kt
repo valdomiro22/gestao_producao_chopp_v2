@@ -60,6 +60,10 @@ class BarrilLocalDataSourceImpl @Inject constructor(
             }
     }
 
+    override suspend fun insertAllBarris(barris: List<BarrilLocalModel>) {
+        barrilDao.insertAllBarris(barris)
+    }
+
     private suspend fun <T> mapearExceptions(action: suspend () -> T): T {
         return try {
             action()

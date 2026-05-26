@@ -1,5 +1,6 @@
 package com.santos.valdomiro.gestaoproducaochopp.features.produto.data.repository
 
+import android.util.Log
 import com.santos.valdomiro.gestaoproducaochopp.common.enums.StatusSincronizacao
 import com.santos.valdomiro.gestaoproducaochopp.features.produto.data.localdatasource.ProdutoLocalDataSource
 import com.santos.valdomiro.gestaoproducaochopp.features.produto.data.mapper.toEntity
@@ -8,6 +9,7 @@ import com.santos.valdomiro.gestaoproducaochopp.features.produto.data.mapper.toR
 import com.santos.valdomiro.gestaoproducaochopp.features.produto.data.remotedatasource.ProdutoRemoteDataSource
 import com.santos.valdomiro.gestaoproducaochopp.features.produto.domain.entity.ProdutoEntity
 import com.santos.valdomiro.gestaoproducaochopp.features.produto.domain.repository.ProdutoRepository
+import com.santos.valdomiro.gestaoproducaochopp.util.TAG
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import javax.inject.Inject
@@ -133,5 +135,23 @@ class ProdutoRepositoryImpl @Inject constructor(
                         produtoLocal.toEntity()
                     }
             }
+    }
+
+    override suspend fun sincronizarProdutosDoRemoto(): Result<Unit> {
+
+        return try {
+            val produtosRemotos = remoteDataSource.getAllProdutos()
+
+            val produtosLocais = produtosRemotos.map { produtoRemote ->
+                produtoRemote.toLocalModel()
+            }
+
+            localDataSource.insertAllProdutos(produtosLocais)
+
+            Result.success(Unit)
+        } catch (e: Exception) {
+            Log.e(TAG, "Erro ao sincronizar produtos do remoto", e)
+            Result.failure(e)
+        }
     }
 }

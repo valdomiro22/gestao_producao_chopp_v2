@@ -16,4 +16,5 @@ interface ProducaoRepository {
     fun getOneById(producaoId: String): Flow<ProducaoEntity?>
     fun getAllProducoes(): Flow<List<ProducaoEntity>>
     fun getAllProducoesDaGrade(gradeId: String): Flow<List<ProducaoEntity>>
+    suspend fun sincronizarProducoesDoRemoto(): Result<Unit>
 }

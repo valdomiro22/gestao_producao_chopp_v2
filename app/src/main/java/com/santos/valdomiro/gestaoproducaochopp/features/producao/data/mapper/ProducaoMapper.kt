@@ -16,7 +16,7 @@ fun ProducaoRemoteModel.toEntity() = ProducaoEntity(
     quantidadeProgramada = this.quantidadeProgramada,
     quantidadeProduzida = this.quantidadeProduzida,
     status = this.status,
-    criadoEm = this.criadoEm.toInstant(),
+    criadoEm = this.criadoEm?.toInstant() ?: Instant.now(),
     editadaEm = this.editadoEm?.toInstant(),
     dataFimDeProducao = this.dataFimDeProducao?.toInstant(),
     statusSincronizacao = StatusSincronizacao.SINCRONIZADO,
@@ -70,3 +70,9 @@ fun ProducaoEntity.toLocalModel() = ProducaoLocalModel(
     statusSincronizacao = this.statusSincronizacao,
     volumeNecessario = this.volumeNecessario
 )
+
+/** Converte RemoteModel para LocalModel */
+fun ProducaoRemoteModel.toLocalModel() = this
+    .toEntity()
+    .copy(statusSincronizacao = StatusSincronizacao.SINCRONIZADO)
+    .toLocalModel()

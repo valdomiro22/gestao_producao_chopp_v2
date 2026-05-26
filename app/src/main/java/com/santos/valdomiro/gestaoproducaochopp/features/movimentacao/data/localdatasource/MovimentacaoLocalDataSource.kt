@@ -24,4 +24,5 @@ interface MovimentacaoLocalDataSource {
     suspend fun getMovimentacoesAguardandoEnvio(): List<MovimentacaoLocalModel>
     suspend fun getMovimentacoesAguardandoAtualizacao(): List<MovimentacaoLocalModel>
     suspend fun getMovimentacoesAguardandoExclusao(): List<MovimentacaoLocalModel>
+    suspend fun insertAllMovimentacoes(movimentacoes: List<MovimentacaoLocalModel>)
 }

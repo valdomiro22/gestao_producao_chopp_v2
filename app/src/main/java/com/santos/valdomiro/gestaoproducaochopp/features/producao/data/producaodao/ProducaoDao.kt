@@ -15,6 +15,9 @@ interface ProducaoDao {
     @Insert(onConflict = OnConflictStrategy.ABORT)
     suspend fun insert(producao: ProducaoLocalModel)
 
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun insertAllProducoes(producoes: List<ProducaoLocalModel>)
+
     @Update
     suspend fun update(producao: ProducaoLocalModel)
 

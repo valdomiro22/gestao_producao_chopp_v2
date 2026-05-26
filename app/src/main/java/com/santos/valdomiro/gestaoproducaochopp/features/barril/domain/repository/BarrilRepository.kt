@@ -12,4 +12,5 @@ interface BarrilRepository {
     suspend fun deleteBarril(barril: BarrilEntity): Result<Unit>
     fun getOneById(barrilId: String): Flow<BarrilEntity?>
     fun getAllBarris(): Flow<List<BarrilEntity>>
+    suspend fun sincronizarBarrisDoRemoto(): Result<Unit>
 }

@@ -15,4 +15,5 @@ interface ProdutoLocalDataSource {
     suspend fun deleteProduto(produto: ProdutoLocalModel)
     fun getOneById(produtoId: String): Flow<ProdutoLocalModel?>
     fun getAllProdutos(): Flow<List<ProdutoLocalModel>>
+    suspend fun insertAllProdutos(produtos: List<ProdutoLocalModel>)
 }

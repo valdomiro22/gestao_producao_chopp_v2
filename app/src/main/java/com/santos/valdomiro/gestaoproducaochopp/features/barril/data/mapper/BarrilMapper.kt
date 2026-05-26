@@ -49,3 +49,9 @@ fun BarrilEntity.toLocalModel() = BarrilLocalModel(
     editadoEm = this.editadoEm?.toEpochMilli(),
     descartavel = this.descartavel
 )
+
+/** Converte RemoteModel para LocalModel */
+fun BarrilRemoteModel.toLocalModel() = this
+    .toEntity()
+    .copy(statusSincronizacao = StatusSincronizacao.SINCRONIZADO)
+    .toLocalModel()

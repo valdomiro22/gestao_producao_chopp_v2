@@ -21,4 +21,5 @@ interface MovimentacaoRepository {
         horarioReferente: String,
         producaoId: String
     ): Flow<List<MovimentacaoEntity>>
+    suspend fun sincronizarMovimentacoesDoRemoto(): Result<Unit>
 }
