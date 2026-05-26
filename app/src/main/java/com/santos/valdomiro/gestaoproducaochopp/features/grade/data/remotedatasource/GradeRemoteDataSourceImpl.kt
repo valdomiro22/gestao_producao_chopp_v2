@@ -1,5 +1,6 @@
 package com.santos.valdomiro.gestaoproducaochopp.features.grade.data.remotedatasource
 
+import android.util.Log
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.FirebaseFirestoreException
 import com.google.firebase.firestore.SetOptions
@@ -8,6 +9,7 @@ import com.santos.valdomiro.gestaoproducaochopp.common.exceptions.ErroBancoDados
 import com.santos.valdomiro.gestaoproducaochopp.common.exceptions.NaoEncontradoException
 import com.santos.valdomiro.gestaoproducaochopp.common.exceptions.ServicoIndisponivelException
 import com.santos.valdomiro.gestaoproducaochopp.features.grade.data.model.GradeRemoteModel
+import com.santos.valdomiro.gestaoproducaochopp.util.TAG
 import kotlinx.coroutines.tasks.await
 import javax.inject.Inject
 
@@ -19,15 +21,23 @@ class GradeRemoteDataSourceImpl @Inject constructor(
     private val producaoCollection = "producao"
 
     override suspend fun insertGrade(grade: GradeRemoteModel) {
-        mapearExecution {
+        try {
             if (grade.id.isEmpty()) {
                 throw IllegalArgumentException("Erro: Tentativa de salvar Grade sem ID")
             }
 
+            Log.d(TAG, "insertGrade: tentando salvar grade ${grade.id}")
+
             firestore.collection(gradeCollection)
                 .document(grade.id)
-                .set(grade)
+                .set(grade.toMap()) // prefira toMap()
                 .await()
+
+            Log.d(TAG, "insertGrade: grade salva com sucesso ${grade.id}")
+
+        } catch (e: Exception) {
+            Log.e(TAG, "insertGrade: erro ao salvar grade no Firestore", e)
+            throw e
         }
     }
 
