@@ -136,4 +136,20 @@ class GradeRepositoryImpl @Inject constructor(
             }
 
     }
+
+    override suspend fun sincronizarGradesDoRemoto(): Result<Unit> {
+        return try {
+            val gradesRemotas = remoteDataSource.getAllGrades()
+
+            val gradesLocais = gradesRemotas.map { gradeRemote ->
+                gradeRemote.toLocalModel()
+            }
+
+            localDataSource.insertAllGrades(gradesLocais)
+
+            Result.success(Unit)
+        } catch (e: Exception) {
+            Result.failure(e)
+        }
+    }
 }

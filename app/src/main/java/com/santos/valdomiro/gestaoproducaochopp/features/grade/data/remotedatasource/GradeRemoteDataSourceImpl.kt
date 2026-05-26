@@ -21,23 +21,15 @@ class GradeRemoteDataSourceImpl @Inject constructor(
     private val producaoCollection = "producao"
 
     override suspend fun insertGrade(grade: GradeRemoteModel) {
-        try {
+        mapearExecution {
             if (grade.id.isEmpty()) {
                 throw IllegalArgumentException("Erro: Tentativa de salvar Grade sem ID")
             }
 
-            Log.d(TAG, "insertGrade: tentando salvar grade ${grade.id}")
-
             firestore.collection(gradeCollection)
                 .document(grade.id)
-                .set(grade.toMap()) // prefira toMap()
+                .set(grade)
                 .await()
-
-            Log.d(TAG, "insertGrade: grade salva com sucesso ${grade.id}")
-
-        } catch (e: Exception) {
-            Log.e(TAG, "insertGrade: erro ao salvar grade no Firestore", e)
-            throw e
         }
     }
 

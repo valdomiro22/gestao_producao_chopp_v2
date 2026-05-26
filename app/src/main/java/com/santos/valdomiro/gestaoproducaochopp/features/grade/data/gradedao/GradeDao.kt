@@ -14,6 +14,9 @@ interface GradeDao {
     @Insert(onConflict = OnConflictStrategy.ABORT)
     suspend fun insert(grade: GradeLocalModel)
 
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun insertAllGrades(grades: List<GradeLocalModel>)
+
     @Update
     suspend fun update(grade: GradeLocalModel)
 

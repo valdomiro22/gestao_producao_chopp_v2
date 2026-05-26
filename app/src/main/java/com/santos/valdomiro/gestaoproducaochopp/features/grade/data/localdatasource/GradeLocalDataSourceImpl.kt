@@ -75,4 +75,8 @@ class GradeLocalDataSourceImpl @Inject constructor(
             else -> ErroBancoDadosDesconhecidoException(e)
         }
     }
+
+    override suspend fun insertAllGrades(grades: List<GradeLocalModel>) {
+        gradeDao.insertAllGrades(grades)
+    }
 }

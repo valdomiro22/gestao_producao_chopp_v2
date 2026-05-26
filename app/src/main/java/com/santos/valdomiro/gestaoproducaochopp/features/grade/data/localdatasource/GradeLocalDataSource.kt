@@ -11,4 +11,5 @@ interface GradeLocalDataSource {
     suspend fun deleteGrade(grade: GradeLocalModel)
     fun getOneById(gradeId: String): Flow<GradeLocalModel?>
     fun getAllGrades(): Flow<List<GradeLocalModel>>
+    suspend fun insertAllGrades(grades: List<GradeLocalModel>)
 }

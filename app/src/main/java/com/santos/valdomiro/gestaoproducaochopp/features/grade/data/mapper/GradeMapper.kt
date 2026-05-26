@@ -67,3 +67,9 @@ fun GradeEntity.toLocalModel() = GradeLocalModel(
     editadoEm = this.editadoEm?.toEpochMilli(),
     statusSincronizacao = this.statusSincronizacao,
 )
+
+/** Converte RemoteModel para LocalModel */
+fun GradeRemoteModel.toLocalModel() = this
+    .toEntity()
+    .copy(statusSincronizacao = StatusSincronizacao.SINCRONIZADO)
+    .toLocalModel()

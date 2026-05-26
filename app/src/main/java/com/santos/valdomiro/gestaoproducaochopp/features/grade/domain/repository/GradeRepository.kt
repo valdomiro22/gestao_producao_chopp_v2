@@ -15,4 +15,5 @@ interface GradeRepository {
     suspend fun deleteGrade(grade: GradeEntity): Result<Unit>
     fun getOneById(gradeId: String): Flow<GradeEntity?>
     fun getAllGrades(): Flow<List<GradeEntity>>
+    suspend fun sincronizarGradesDoRemoto(): Result<Unit>
 }

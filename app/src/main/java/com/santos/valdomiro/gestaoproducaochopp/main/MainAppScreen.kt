@@ -7,12 +7,15 @@ import androidx.compose.material3.ModalNavigationDrawer
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.santos.valdomiro.gestaoproducaochopp.common.AppDrawer
+import com.santos.valdomiro.gestaoproducaochopp.common.usecase.SincronizacaoInicialViewModel
 import com.santos.valdomiro.gestaoproducaochopp.navigation.AppNavigation
 import com.santos.valdomiro.gestaoproducaochopp.navigation.Route
 import kotlinx.coroutines.launch
@@ -20,7 +23,8 @@ import kotlinx.coroutines.launch
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MainAppScreen (
-    startDestination: String
+    startDestination: String,
+    viewModel: SincronizacaoInicialViewModel = hiltViewModel()
 ) {
     val navController = rememberNavController()
 
@@ -32,6 +36,10 @@ fun MainAppScreen (
 
     val currentBackStackEntry by navController.currentBackStackEntryAsState()
     val selectedRoute = currentBackStackEntry?.destination?.route ?: startDestination
+
+    LaunchedEffect(Unit) {
+        viewModel.sincronizarAoAbrirApp()
+    }
 
     ModalNavigationDrawer(
         drawerState = drawerState,
