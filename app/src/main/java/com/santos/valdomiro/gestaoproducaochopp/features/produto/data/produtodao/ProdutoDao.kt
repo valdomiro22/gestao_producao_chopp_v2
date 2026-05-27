@@ -23,6 +23,9 @@ interface ProdutoDao {
     @Delete
     suspend fun delete(produto: ProdutoLocalModel)
 
+    @Query("DELETE FROM produto WHERE id IN (:ids)")
+    suspend fun deleteVariosProdutos(ids: List<String>)
+
     @Query("SELECT * FROM produto ORDER BY criadoEm DESC")
     fun getAll(): Flow<List<ProdutoLocalModel>>
 

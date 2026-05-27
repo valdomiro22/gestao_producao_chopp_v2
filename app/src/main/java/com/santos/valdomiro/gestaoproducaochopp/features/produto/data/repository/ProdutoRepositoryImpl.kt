@@ -11,6 +11,7 @@ import com.santos.valdomiro.gestaoproducaochopp.features.produto.domain.entity.P
 import com.santos.valdomiro.gestaoproducaochopp.features.produto.domain.repository.ProdutoRepository
 import com.santos.valdomiro.gestaoproducaochopp.util.TAG
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
@@ -55,7 +56,6 @@ class ProdutoRepositoryImpl @Inject constructor(
 
             try {
                 remoteDataSource.updateProduto(
-                    produtoId = produtoPendente.id,
                     produto = produtoPendente.toRemoteModel()
                 )
 
@@ -138,15 +138,41 @@ class ProdutoRepositoryImpl @Inject constructor(
     }
 
     override suspend fun sincronizarProdutosDoRemoto(): Result<Unit> {
-
         return try {
             val produtosRemotos = remoteDataSource.getAllProdutos()
 
-            val produtosLocais = produtosRemotos.map { produtoRemote ->
-                produtoRemote.toLocalModel()
+            val produtosLocais = localDataSource
+                .getAllProdutos()
+                .first()
+
+            val idsRemotos = produtosRemotos
+                .map { it.id }
+                .toSet()
+
+            val idsLocais = produtosLocais
+                .map { it.id }
+                .toSet()
+
+            val produtosParaSalvar = produtosRemotos
+                .filter { produtoRemote ->
+                    produtoRemote.id !in idsLocais
+                }
+                .map { it.toLocalModel() }
+
+            if (produtosParaSalvar.isNotEmpty()) {
+                localDataSource.insertAllProdutos(produtosParaSalvar)
             }
 
-            localDataSource.insertAllProdutos(produtosLocais)
+            val idsProdutosParaExcluirDoLocal = produtosLocais
+                .filter { produtoLocal ->
+                    produtoLocal.id !in idsRemotos &&
+                            produtoLocal.statusSincronizacao == StatusSincronizacao.SINCRONIZADO
+                }
+                .map { it.id }
+
+            if (idsProdutosParaExcluirDoLocal.isNotEmpty()) {
+                localDataSource.deleteVariosProdutos(idsProdutosParaExcluirDoLocal)
+            }
 
             Result.success(Unit)
         } catch (e: Exception) {

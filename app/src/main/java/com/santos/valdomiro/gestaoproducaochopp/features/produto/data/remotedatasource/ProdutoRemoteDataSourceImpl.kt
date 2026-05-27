@@ -30,12 +30,11 @@ class ProdutoRemoteDataSourceImpl @Inject constructor(
     }
 
     override suspend fun updateProduto(
-        produtoId: String,
         produto: ProdutoRemoteModel
     ) {
         mapearExecution {
             firestore.collection(produtoCollection)
-                .document(produtoId)
+                .document(produto.id)
                 .update(produto.toMap())
                 .await()
         }

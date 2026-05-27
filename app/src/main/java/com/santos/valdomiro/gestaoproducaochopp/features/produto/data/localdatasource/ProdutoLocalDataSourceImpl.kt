@@ -66,6 +66,10 @@ class ProdutoLocalDataSourceImpl @Inject constructor(
         produtoDao.insertAllProdutos(produtos)
     }
 
+    override suspend fun deleteVariosProdutos(ids: List<String>) {
+        produtoDao.deleteVariosProdutos(ids = ids)
+    }
+
     private suspend fun <T> mapearExceptions(action: suspend () -> T): T {
         return try {
             action()
