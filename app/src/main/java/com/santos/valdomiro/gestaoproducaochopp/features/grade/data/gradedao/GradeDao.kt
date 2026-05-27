@@ -23,6 +23,9 @@ interface GradeDao {
     @Delete
     suspend fun delete(grade: GradeLocalModel)
 
+    @Query("DELETE FROM grade WHERE id IN (:ids)")
+    suspend fun deleteVariasGrades(ids: List<String>)
+
     @Query("SELECT * FROM grade ORDER BY criadoEm DESC")
     fun getAll(): Flow<List<GradeLocalModel>>
 

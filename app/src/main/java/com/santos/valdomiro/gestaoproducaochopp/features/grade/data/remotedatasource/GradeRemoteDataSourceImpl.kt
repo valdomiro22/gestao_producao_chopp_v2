@@ -1,6 +1,5 @@
 package com.santos.valdomiro.gestaoproducaochopp.features.grade.data.remotedatasource
 
-import android.util.Log
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.FirebaseFirestoreException
 import com.google.firebase.firestore.SetOptions
@@ -9,7 +8,6 @@ import com.santos.valdomiro.gestaoproducaochopp.common.exceptions.ErroBancoDados
 import com.santos.valdomiro.gestaoproducaochopp.common.exceptions.NaoEncontradoException
 import com.santos.valdomiro.gestaoproducaochopp.common.exceptions.ServicoIndisponivelException
 import com.santos.valdomiro.gestaoproducaochopp.features.grade.data.model.GradeRemoteModel
-import com.santos.valdomiro.gestaoproducaochopp.util.TAG
 import kotlinx.coroutines.tasks.await
 import javax.inject.Inject
 
@@ -33,19 +31,19 @@ class GradeRemoteDataSourceImpl @Inject constructor(
         }
     }
 
-    override suspend fun updateGrade(id: String, grade: GradeRemoteModel) {
+    override suspend fun updateGrade(grade: GradeRemoteModel) {
         mapearExecution {
             firestore.collection(gradeCollection)
-                .document(id)
+                .document(grade.id)
                 .set(grade, SetOptions.merge())
                 .await()
         }
     }
 
-    override suspend fun getGrade(id: String): GradeRemoteModel? {
+    override suspend fun getGrade(gradeId: String): GradeRemoteModel? {
         return mapearExecution {
             val snapshot = firestore.collection(gradeCollection)
-                .document(id)
+                .document(gradeId)
                 .get()
                 .await()
 
@@ -53,13 +51,13 @@ class GradeRemoteDataSourceImpl @Inject constructor(
         }
     }
 
-    override suspend fun deleteGrade(id: String) {
+    override suspend fun deleteGrade(gradeId: String) {
         mapearExecution {
             val batch = firestore.batch()
 
             val producoesSnapshot = firestore
                 .collection(producaoCollection)
-                .whereEqualTo("gradeId", id)
+                .whereEqualTo("gradeId", gradeId)
                 .get()
                 .await()
 
@@ -69,7 +67,7 @@ class GradeRemoteDataSourceImpl @Inject constructor(
 
             val gradeRef = firestore
                 .collection(gradeCollection)
-                .document(id)
+                .document(gradeId)
 
             batch.delete(gradeRef)
 

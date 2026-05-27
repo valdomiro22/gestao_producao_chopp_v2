@@ -11,8 +11,12 @@ import com.santos.valdomiro.gestaoproducaochopp.features.grade.domain.entity.Gra
 import com.santos.valdomiro.gestaoproducaochopp.features.grade.domain.repository.GradeRepository
 import com.santos.valdomiro.gestaoproducaochopp.util.TAG
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
 import javax.inject.Inject
+import kotlin.collections.isNotEmpty
+import kotlin.collections.map
+import kotlin.collections.toSet
 
 class GradeRepositoryImpl @Inject constructor(
     private val localDataSource: GradeLocalDataSource,
@@ -54,7 +58,6 @@ class GradeRepositoryImpl @Inject constructor(
 
             try {
                 remoteDataSource.updateGrade(
-                    id = gradePendente.id,
                     grade = gradePendente.toRemoteModel()
                 )
 
@@ -98,7 +101,7 @@ class GradeRepositoryImpl @Inject constructor(
             localDataSource.deleteGrade(grade = gradeParaExcluir.toLocalModel())
 
             try {
-                remoteDataSource.deleteGrade(id = grade.id)
+                remoteDataSource.deleteGrade(gradeId = grade.id)
             } catch (e: Exception) {
                 Log.d(
                     TAG,
@@ -139,13 +142,42 @@ class GradeRepositoryImpl @Inject constructor(
 
     override suspend fun sincronizarGradesDoRemoto(): Result<Unit> {
         return try {
-            val gradesRemotas = remoteDataSource.getAllGrades()
+            val gradesRemotos = remoteDataSource.getAllGrades()
 
-            val gradesLocais = gradesRemotas.map { gradeRemote ->
-                gradeRemote.toLocalModel()
+            val gradesLocais = localDataSource
+                .getAllGrades()
+                .first()
+
+            val idsRemotos = gradesRemotos
+                .map { it.id }
+                .toSet()
+
+            val idsLocais = gradesLocais
+                .map { it.id }
+                .toSet()
+
+            val gradesParaSalvar = gradesRemotos
+                .filter { gradeRemote ->
+                    gradeRemote.id !in idsLocais
+                }
+                .map { it.toLocalModel() }
+
+            if (gradesParaSalvar.isNotEmpty()) {
+                localDataSource.insertAllGrades(gradesParaSalvar)
             }
 
-            localDataSource.insertAllGrades(gradesLocais)
+            val idsGradesParaExcluirDoLocal = gradesLocais
+                .filter { gradeLocal ->
+                    gradeLocal.id !in idsRemotos &&
+                            gradeLocal.statusSincronizacao == StatusSincronizacao.SINCRONIZADO
+                }
+                .map { gradeLocal ->
+                    gradeLocal.id
+                }
+
+            if (idsGradesParaExcluirDoLocal.isNotEmpty()) {
+                localDataSource.deleteVariasGrades(idsGradesParaExcluirDoLocal)
+            }
 
             Result.success(Unit)
         } catch (e: Exception) {

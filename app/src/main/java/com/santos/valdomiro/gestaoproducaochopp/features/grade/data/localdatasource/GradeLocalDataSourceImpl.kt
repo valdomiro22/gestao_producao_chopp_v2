@@ -58,6 +58,14 @@ class GradeLocalDataSourceImpl @Inject constructor(
             }
     }
 
+    override suspend fun insertAllGrades(grades: List<GradeLocalModel>) {
+        gradeDao.insertAllGrades(grades)
+    }
+
+    override suspend fun deleteVariasGrades(ids: List<String>) {
+        gradeDao.deleteVariasGrades(ids = ids)
+    }
+
     private suspend fun <T> mapearExceptions(action: suspend () -> T): T {
         return try {
             action()
@@ -74,9 +82,5 @@ class GradeLocalDataSourceImpl @Inject constructor(
             is Exception -> e
             else -> ErroBancoDadosDesconhecidoException(e)
         }
-    }
-
-    override suspend fun insertAllGrades(grades: List<GradeLocalModel>) {
-        gradeDao.insertAllGrades(grades)
     }
 }
