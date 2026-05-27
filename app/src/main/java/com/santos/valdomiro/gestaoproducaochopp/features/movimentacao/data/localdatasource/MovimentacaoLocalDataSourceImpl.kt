@@ -96,6 +96,10 @@ class MovimentacaoLocalDataSourceImpl @Inject constructor(
         movimentacaoDao.insertAllMovimentacoes(movimentacoes = movimentacoes)
     }
 
+    override suspend fun deleteVariasMovimentacoes(ids: List<String>) {
+        movimentacaoDao.deleteVariasMovimentacoes(ids = ids)
+    }
+
     private suspend fun <T> mapearExceptions(action: suspend () -> T): T {
         return try {
             action()

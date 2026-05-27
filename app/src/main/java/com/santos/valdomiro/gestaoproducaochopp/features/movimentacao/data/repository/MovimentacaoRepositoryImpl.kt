@@ -1,6 +1,5 @@
 package com.santos.valdomiro.gestaoproducaochopp.features.movimentacao.data.repository
 
-import android.util.Log
 import com.santos.valdomiro.gestaoproducaochopp.common.enums.StatusSincronizacao
 import com.santos.valdomiro.gestaoproducaochopp.features.movimentacao.data.localdatasource.MovimentacaoLocalDataSource
 import com.santos.valdomiro.gestaoproducaochopp.features.movimentacao.data.mapper.toEntity
@@ -9,10 +8,13 @@ import com.santos.valdomiro.gestaoproducaochopp.features.movimentacao.data.mappe
 import com.santos.valdomiro.gestaoproducaochopp.features.movimentacao.data.remotedatasource.MovimentacaoRemoteDataSource
 import com.santos.valdomiro.gestaoproducaochopp.features.movimentacao.domain.entity.MovimentacaoEntity
 import com.santos.valdomiro.gestaoproducaochopp.features.movimentacao.domain.repository.MovimentacaoRepository
-import com.santos.valdomiro.gestaoproducaochopp.util.TAG
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
 import javax.inject.Inject
+import kotlin.collections.isNotEmpty
+import kotlin.collections.map
+import kotlin.collections.toSet
 
 class MovimentacaoRepositoryImpl @Inject constructor(
     private val localDataSource: MovimentacaoLocalDataSource,
@@ -109,8 +111,8 @@ class MovimentacaoRepositoryImpl @Inject constructor(
                     .filter { movimentacaoLocal ->
                         movimentacaoLocal.statusSincronizacao != StatusSincronizacao.AGUARDANDO_EXCLUSAO
                     }
-                    .map { barrilLocal ->
-                        barrilLocal.toEntity()
+                    .map { movimentacaoLocal ->
+                        movimentacaoLocal.toEntity()
                     }
             }
     }
@@ -122,8 +124,8 @@ class MovimentacaoRepositoryImpl @Inject constructor(
                     .filter { movimentacaoLocal ->
                         movimentacaoLocal.statusSincronizacao != StatusSincronizacao.AGUARDANDO_EXCLUSAO
                     }
-                    .map { barrilLocal ->
-                        barrilLocal.toEntity()
+                    .map { movimentacaoLocal ->
+                        movimentacaoLocal.toEntity()
                     }
             }
     }
@@ -215,13 +217,42 @@ class MovimentacaoRepositoryImpl @Inject constructor(
 
     override suspend fun sincronizarMovimentacoesDoRemoto(): Result<Unit> {
         return try {
-            val movimentacoesRemotas = remoteDataSource.getAllMovimentacoes()
+            val movimentacoesRemotos = remoteDataSource.getAllMovimentacoes()
 
-            val movimentacoesLocais = movimentacoesRemotas.map { gradeRemote ->
-                gradeRemote.toLocalModel()
+            val movimentacoesLocais = localDataSource
+                .getAllMovimentacoes()
+                .first()
+
+            val idsRemotos = movimentacoesRemotos
+                .map { it.id }
+                .toSet()
+
+            val idsLocais = movimentacoesLocais
+                .map { it.id }
+                .toSet()
+
+            val movimentacoesParaSalvar = movimentacoesRemotos
+                .filter { movimentacaoRemote ->
+                    movimentacaoRemote.id !in idsLocais
+                }
+                .map { movimentacaoRemote ->
+                    movimentacaoRemote.toLocalModel()
+                }
+
+            if (movimentacoesParaSalvar.isNotEmpty()) {
+                localDataSource.insertAllMovimentacoes(movimentacoesParaSalvar)
             }
 
-            localDataSource.insertAllMovimentacoes(movimentacoesLocais)
+            val idsBarrisParaExcluirDoLocal = movimentacoesLocais
+                .filter { movimentacaoLocal ->
+                    movimentacaoLocal.id !in idsRemotos &&
+                            movimentacaoLocal.statusSincronizacao == StatusSincronizacao.SINCRONIZADO
+                }
+                .map { it.id }
+
+            if (idsBarrisParaExcluirDoLocal.isNotEmpty()) {
+                localDataSource.deleteVariasMovimentacoes(idsBarrisParaExcluirDoLocal)
+            }
 
             Result.success(Unit)
         } catch (e: Exception) {

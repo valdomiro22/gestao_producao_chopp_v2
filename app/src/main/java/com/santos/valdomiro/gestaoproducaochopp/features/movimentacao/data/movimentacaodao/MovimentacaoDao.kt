@@ -23,6 +23,9 @@ interface MovimentacaoDao {
     @Delete
     suspend fun delete(movimentacao: MovimentacaoLocalModel)
 
+    @Query("DELETE FROM barril WHERE id IN (:ids)")
+    suspend fun deleteVariasMovimentacoes(ids: List<String>)
+
     @Query("SELECT * FROM movimentacao ORDER BY criadoEm DESC")
     fun getAll(): Flow<List<MovimentacaoLocalModel>>
 
