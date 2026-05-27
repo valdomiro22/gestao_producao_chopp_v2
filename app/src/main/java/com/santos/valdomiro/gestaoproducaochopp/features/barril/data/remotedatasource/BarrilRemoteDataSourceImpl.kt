@@ -29,19 +29,19 @@ class BarrilRemoteDataSourceImpl @Inject constructor(
         }
     }
 
-    override suspend fun updateBarril(id: String, barril: BarrilRemoteModel) {
+    override suspend fun updateBarril(barril: BarrilRemoteModel) {
         mapearExecution {
             firestore.collection(barrilCollection)
-                .document(id)
+                .document(barril.id)
                 .update(barril.toMap())
                 .await()
         }
     }
 
-    override suspend fun getBarril(id: String): BarrilRemoteModel? {
+    override suspend fun getBarril(barrilId: String): BarrilRemoteModel? {
         return mapearExecution {
             val snapshot = firestore.collection(barrilCollection)
-                .document(id)
+                .document(barrilId)
                 .get()
                 .await()
 
@@ -49,10 +49,10 @@ class BarrilRemoteDataSourceImpl @Inject constructor(
         }
     }
 
-    override suspend fun deleteBarril(id: String) {
+    override suspend fun deleteBarril(barrilId: String) {
         mapearExecution {
             firestore.collection(barrilCollection)
-                .document(id)
+                .document(barrilId)
                 .delete()
                 .await()
         }

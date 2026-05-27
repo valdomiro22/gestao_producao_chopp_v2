@@ -214,22 +214,17 @@ class MovimentacaoRepositoryImpl @Inject constructor(
     }
 
     override suspend fun sincronizarMovimentacoesDoRemoto(): Result<Unit> {
-        Log.d(TAG, "sincronizarMovimentacoesDoRemoto: Entrou no metodo")
         return try {
             val movimentacoesRemotas = remoteDataSource.getAllMovimentacoes()
-        Log.d(TAG, "sincronizarMovimentacoesDoRemoto: Buscou no remote")
 
             val movimentacoesLocais = movimentacoesRemotas.map { gradeRemote ->
                 gradeRemote.toLocalModel()
             }
-        Log.d(TAG, "sincronizarMovimentacoesDoRemoto: Converteu")
 
             localDataSource.insertAllMovimentacoes(movimentacoesLocais)
-        Log.d(TAG, "sincronizarMovimentacoesDoRemoto: Sincronizou")
 
             Result.success(Unit)
         } catch (e: Exception) {
-        Log.d(TAG, "sincronizarMovimentacoesDoRemoto: Deu erro: $e")
             Result.failure(e)
         }
     }

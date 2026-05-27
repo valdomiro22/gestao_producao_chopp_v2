@@ -1,5 +1,6 @@
 package com.santos.valdomiro.gestaoproducaochopp.features.barril.data.repository
 
+import android.util.Log
 import com.santos.valdomiro.gestaoproducaochopp.features.barril.data.localdatasource.BarrilLocalDataSource
 import com.santos.valdomiro.gestaoproducaochopp.features.barril.data.mapper.toEntity
 import com.santos.valdomiro.gestaoproducaochopp.features.barril.data.mapper.toLocalModel
@@ -8,7 +9,9 @@ import com.santos.valdomiro.gestaoproducaochopp.common.enums.StatusSincronizacao
 import com.santos.valdomiro.gestaoproducaochopp.features.barril.data.remotedatasource.BarrilRemoteDataSource
 import com.santos.valdomiro.gestaoproducaochopp.features.barril.domain.entity.BarrilEntity
 import com.santos.valdomiro.gestaoproducaochopp.features.barril.domain.repository.BarrilRepository
+import com.santos.valdomiro.gestaoproducaochopp.util.TAG
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
@@ -35,6 +38,7 @@ class BarrilRepositoryImpl @Inject constructor(
                     statusSincronizacao = StatusSincronizacao.SINCRONIZADO
                 )
             } catch (e: Exception) {
+                Log.e(TAG, "insertBarril: Erro ao sincronizar Barril como o repositório remoto", e)
             }
 
             Result.success(Unit)
@@ -52,7 +56,6 @@ class BarrilRepositoryImpl @Inject constructor(
 
             try {
                 remoteDataSource.updateBarril(
-                    id = barrilPendente.id,
                     barril = barrilPendente.toRemoteModel()
                 )
 
@@ -61,6 +64,7 @@ class BarrilRepositoryImpl @Inject constructor(
                     statusSincronizacao = StatusSincronizacao.SINCRONIZADO
                 )
             } catch (e: Exception) {
+                Log.e(TAG, "updateBarril: Erro ao sincronizar Barril como o repositório remoto", e)
             }
 
             Result.success(Unit)
@@ -94,12 +98,11 @@ class BarrilRepositoryImpl @Inject constructor(
             localDataSource.updateBarril(barrilParaExcluir.toLocalModel())
 
             try {
-                remoteDataSource.deleteBarril(
-                    id = barrilParaExcluir.id  // TODO - Enviar o barril inteiro, como no locaDataSource()
-                )
+                remoteDataSource.deleteBarril(barrilId = barrilParaExcluir.id)
 
                 localDataSource.deleteBarril(barril = barrilParaExcluir.toLocalModel())
             } catch (e: Exception) {
+                Log.e(TAG, "deleteBarril: Erro ao sincronizar Barril como o repositório remoto", e)
             }
 
             Result.success(Unit)
@@ -136,13 +139,44 @@ class BarrilRepositoryImpl @Inject constructor(
 
     override suspend fun sincronizarBarrisDoRemoto(): Result<Unit> {
         return try {
-            val barrisRemotas = remoteDataSource.getAllBarris()
+            val barrisRemotos = remoteDataSource.getAllBarris()
 
-            val barrisLocais = barrisRemotas.map { barrilRemote ->
-                barrilRemote.toLocalModel()
+            val barrisLocais = localDataSource
+                .getAllBarris()
+                .first()
+
+            val idsRemotos = barrisRemotos
+                .map { barrilRemote -> barrilRemote.id }
+                .toSet()
+
+            val idsLocais = barrisLocais
+                .map { barrilLocal -> barrilLocal.id }
+                .toSet()
+
+            val barrisParaSalvar = barrisRemotos
+                .filter { barrilRemote ->
+                    barrilRemote.id !in idsLocais
+                }
+                .map { barrilRemote ->
+                    barrilRemote.toLocalModel()
+                }
+
+            if (barrisParaSalvar.isNotEmpty()) {
+                localDataSource.insertAllBarris(barrisParaSalvar)
             }
 
-            localDataSource.insertAllBarris(barrisLocais)
+            val idsBarrisParaExcluirDoLocal = barrisLocais
+                .filter { barrilLocal ->
+                    barrilLocal.id !in idsRemotos &&
+                            barrilLocal.statusSincronizacao == StatusSincronizacao.SINCRONIZADO
+                }
+                .map { barrilLocal ->
+                    barrilLocal.id
+                }
+
+            if (idsBarrisParaExcluirDoLocal.isNotEmpty()) {
+                localDataSource.deleteVariosBarris(idsBarrisParaExcluirDoLocal)
+            }
 
             Result.success(Unit)
         } catch (e: Exception) {

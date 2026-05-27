@@ -4,8 +4,8 @@ import com.santos.valdomiro.gestaoproducaochopp.features.barril.data.model.Barri
 
 interface BarrilRemoteDataSource {
     suspend fun insertBarril(barril: BarrilRemoteModel)
-    suspend fun updateBarril(id: String, barril: BarrilRemoteModel)
-    suspend fun getBarril(id: String): BarrilRemoteModel?
-    suspend fun deleteBarril(id: String)
+    suspend fun updateBarril(barril: BarrilRemoteModel)
+    suspend fun getBarril(barrilId: String): BarrilRemoteModel?
+    suspend fun deleteBarril(barrilId: String)
     suspend fun getAllBarris(): List<BarrilRemoteModel>
 }

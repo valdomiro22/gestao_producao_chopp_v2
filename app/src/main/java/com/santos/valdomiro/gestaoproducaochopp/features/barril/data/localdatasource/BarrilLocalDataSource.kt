@@ -12,4 +12,5 @@ interface BarrilLocalDataSource {
     fun getOneById(barrilId: String): Flow<BarrilLocalModel?>
     fun getAllBarris(): Flow<List<BarrilLocalModel>>
     suspend fun insertAllBarris(barris: List<BarrilLocalModel>)
+    suspend fun deleteVariosBarris(ids: List<String>)
 }

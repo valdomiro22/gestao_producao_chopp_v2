@@ -24,6 +24,9 @@ interface BarrilDao {
     @Delete
     suspend fun delete(barril: BarrilLocalModel)
 
+    @Query("DELETE FROM barril WHERE id IN (:ids)")
+    suspend fun deleteVariosBarris(ids: List<String>)
+
     @Query("SELECT * FROM barril ORDER BY criadoEm DESC")
     fun getAll(): Flow<List<BarrilLocalModel>>
 

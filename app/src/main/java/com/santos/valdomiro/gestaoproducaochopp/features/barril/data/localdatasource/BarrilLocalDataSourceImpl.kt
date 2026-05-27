@@ -64,6 +64,10 @@ class BarrilLocalDataSourceImpl @Inject constructor(
         barrilDao.insertAllBarris(barris)
     }
 
+    override suspend fun deleteVariosBarris(ids: List<String>) {
+        barrilDao.deleteVariosBarris(ids = ids)
+    }
+
     private suspend fun <T> mapearExceptions(action: suspend () -> T): T {
         return try {
             action()
