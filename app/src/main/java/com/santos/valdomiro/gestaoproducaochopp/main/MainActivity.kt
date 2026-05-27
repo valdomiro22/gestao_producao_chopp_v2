@@ -17,10 +17,7 @@ class MainActivity : ComponentActivity() {
 
         setContent {
             GestaoProducaoChoppTheme {
-                MainAppScreen(
-                    startDestination = Route.ListaGradesRoute.route
-//                    startDestination = Route.AdicionarProdutoRoute.route
-                )
+                AppRootScreen()
             }
         }
     }

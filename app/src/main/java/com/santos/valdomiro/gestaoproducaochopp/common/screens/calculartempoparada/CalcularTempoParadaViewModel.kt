@@ -1,12 +1,13 @@
-package com.santos.valdomiro.gestaodeproducaodechoppandroidstudio.common.screens
+package com.santos.valdomiro.gestaoproducaochopp.common.screens.calculartempoparada
 
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
+import androidx.lifecycle.ViewModel
 import java.time.Duration
 import java.time.LocalTime
 
-class CalcularTempoParadaViewModel : androidx.lifecycle.ViewModel() {
+class CalcularTempoParadaViewModel : ViewModel() {
 
     var inicio by mutableStateOf<LocalTime?>(null)
         private set

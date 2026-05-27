@@ -1,5 +1,6 @@
 package com.santos.valdomiro.gestaoproducaochopp.navigation
 
+import android.window.SplashScreen
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.Modifier
@@ -8,7 +9,8 @@ import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
-import com.santos.valdomiro.gestaoproducaochopp.common.screens.CalcularTempoParadaScreen
+import com.santos.valdomiro.gestaoproducaochopp.common.screens.calculartempoparada.CalcularTempoParadaScreen
+import com.santos.valdomiro.gestaoproducaochopp.common.screens.splashscreen.SplashScreen
 import com.santos.valdomiro.gestaoproducaochopp.features.barril.presentation.screens.adicionarbarril.AdicionarBarrilScreen
 import com.santos.valdomiro.gestaoproducaochopp.features.barril.presentation.screens.editarbarril.EditarBarrilScreen
 import com.santos.valdomiro.gestaoproducaochopp.features.barril.presentation.screens.listabarris.ListaBarrisScreen
@@ -40,6 +42,8 @@ fun AppNavigation(
             startDestination = startDestination,
             modifier = modifier
         ) {
+
+            // Home
             composable(
                 route = "home/{producaoId}",
                 arguments = listOf(navArgument("producaoId") { type = NavType.StringType })

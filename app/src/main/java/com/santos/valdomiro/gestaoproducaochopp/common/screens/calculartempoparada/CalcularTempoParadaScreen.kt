@@ -1,4 +1,4 @@
-package com.santos.valdomiro.gestaoproducaochopp.common.screens
+package com.santos.valdomiro.gestaoproducaochopp.common.screens.calculartempoparada
 
 import android.annotation.SuppressLint
 import androidx.compose.foundation.layout.Arrangement
@@ -37,10 +37,8 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.santos.valdomiro.gestaodeproducaodechoppandroidstudio.common.screens.CalcularTempoParadaViewModel
 import com.santos.valdomiro.gestaoproducaochopp.common.AppDrawer
 import com.santos.valdomiro.gestaoproducaochopp.common.components.TimePickerDialogComponent
 import com.santos.valdomiro.gestaoproducaochopp.navigation.LocalNavController
