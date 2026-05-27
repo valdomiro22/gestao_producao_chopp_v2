@@ -24,7 +24,6 @@ import kotlinx.coroutines.launch
 @Composable
 fun MainAppScreen (
     startDestination: String,
-    viewModel: SincronizacaoInicialViewModel = hiltViewModel()
 ) {
     val navController = rememberNavController()
 
@@ -36,10 +35,6 @@ fun MainAppScreen (
 
     val currentBackStackEntry by navController.currentBackStackEntryAsState()
     val selectedRoute = currentBackStackEntry?.destination?.route ?: startDestination
-
-    LaunchedEffect(Unit) {
-        viewModel.sincronizarAoAbrirApp()
-    }
 
     ModalNavigationDrawer(
         drawerState = drawerState,

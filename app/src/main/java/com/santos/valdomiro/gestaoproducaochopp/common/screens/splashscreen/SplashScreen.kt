@@ -30,9 +30,7 @@ fun SplashScreen(
 ) {
     LaunchedEffect(Unit) {
         viewModel.sincronizarAoAbrirApp()
-
         delay(2000)
-
         onFinish()
     }
 
