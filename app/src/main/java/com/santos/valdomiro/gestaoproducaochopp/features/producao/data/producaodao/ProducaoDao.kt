@@ -24,6 +24,9 @@ interface ProducaoDao {
     @Delete
     suspend fun delete(producao: ProducaoLocalModel)
 
+    @Query("DELETE FROM producao WHERE id IN (:ids)")
+    suspend fun deleteVariasProducoes(ids: List<String>)
+
     @Query("SELECT * FROM producao ORDER BY criadoEm DESC")
     fun getAll(): Flow<List<ProducaoLocalModel>>
 

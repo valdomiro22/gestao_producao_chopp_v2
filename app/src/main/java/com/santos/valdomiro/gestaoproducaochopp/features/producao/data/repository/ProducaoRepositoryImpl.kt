@@ -2,18 +2,18 @@ package com.santos.valdomiro.gestaoproducaochopp.features.producao.data.reposito
 
 import android.util.Log
 import com.santos.valdomiro.gestaoproducaochopp.common.enums.StatusSincronizacao
+import com.santos.valdomiro.gestaoproducaochopp.features.producao.data.localdatasource.ProducaoLocalDataSource
 import com.santos.valdomiro.gestaoproducaochopp.features.producao.data.mapper.toEntity
 import com.santos.valdomiro.gestaoproducaochopp.features.producao.data.mapper.toLocalModel
-import com.santos.valdomiro.gestaoproducaochopp.features.producao.data.localdatasource.ProducaoLocalDataSource
 import com.santos.valdomiro.gestaoproducaochopp.features.producao.data.mapper.toRemoteModel
 import com.santos.valdomiro.gestaoproducaochopp.features.producao.data.remotedatasource.ProducaoRemoteDatasource
 import com.santos.valdomiro.gestaoproducaochopp.features.producao.domain.entity.ProducaoEntity
 import com.santos.valdomiro.gestaoproducaochopp.features.producao.domain.repository.ProducaoRepository
 import com.santos.valdomiro.gestaoproducaochopp.util.TAG
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
 import javax.inject.Inject
-import kotlin.collections.map
 
 class ProducaoRepositoryImpl @Inject constructor(
     private val localDataSource: ProducaoLocalDataSource,
@@ -55,7 +55,6 @@ class ProducaoRepositoryImpl @Inject constructor(
 
             try {
                 remoteDataSource.updateProducao(
-                    id = producaoPendente.id,
                     producao = producaoPendente.toRemoteModel()
                 )
 
@@ -104,7 +103,7 @@ class ProducaoRepositoryImpl @Inject constructor(
 
             try {
                 // 2. Apaga no Firestore
-                remoteDataSource.deleteProducao(id = producao.id)
+                remoteDataSource.deleteProducao(producaoId = producao.id)
 
                 // 3. Só depois que apagou no Firestore, apaga definitivamente no Room
                 localDataSource.deleteProducao(
@@ -161,13 +160,40 @@ class ProducaoRepositoryImpl @Inject constructor(
 
     override suspend fun sincronizarProducoesDoRemoto(): Result<Unit> {
         return try {
-            val producoesRemotas = remoteDataSource.getAllProducoes()
+            val producoesRemotos = remoteDataSource.getAllProducoes()
 
-            val producoesLocais = producoesRemotas.map { producaoRemote ->
-                producaoRemote.toLocalModel()
+            val producoesLocais = localDataSource
+                .getAllProducoes()
+                .first()
+
+            val idsRemotos = producoesRemotos
+                .map { it.id }
+                .toSet()
+
+            val idsLocais = producoesLocais
+                .map { it.id }
+                .toSet()
+
+            val producoesParaSalvar = producoesRemotos
+                .filter { producaoRemote ->
+                    producaoRemote.id !in idsLocais
+                }
+                .map { it.toLocalModel() }
+
+            if (producoesParaSalvar.isNotEmpty()) {
+                localDataSource.insertAllProducoes(producoesParaSalvar)
             }
 
-            localDataSource.insertAllProducoes(producoesLocais)
+            val idsProducoesParaExcluirDoLocal = producoesLocais
+                .filter { producoesLocal ->
+                    producoesLocal.id !in idsRemotos &&
+                            producoesLocal.statusSincronizacao == StatusSincronizacao.SINCRONIZADO
+                }
+                .map { it.id }
+
+            if (idsProducoesParaExcluirDoLocal.isNotEmpty()) {
+                localDataSource.deleteVariasProducoes(idsProducoesParaExcluirDoLocal)
+            }
 
             Result.success(Unit)
         } catch (e: Exception) {

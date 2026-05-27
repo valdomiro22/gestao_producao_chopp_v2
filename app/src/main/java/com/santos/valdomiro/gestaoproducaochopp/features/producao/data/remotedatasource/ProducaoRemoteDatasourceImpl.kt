@@ -32,21 +32,20 @@ class ProducaoRemoteDatasourceImpl @Inject constructor(
     }
 
     override suspend fun updateProducao(
-        id: String,
         producao: ProducaoRemoteModel
     ) {
         mapearExecution {
             firestore.collection(producaoCollection)
-                .document(id)
+                .document(producao.id)
                 .set(producao, SetOptions.merge())
                 .await()
         }
     }
 
-    override suspend fun getProducao(id: String): ProducaoRemoteModel? {
+    override suspend fun getProducao(producaoId: String): ProducaoRemoteModel? {
         return mapearExecution {
             val snapshot = firestore.collection(producaoCollection)
-                .document(id)
+                .document(producaoId)
                 .get()
                 .await()
 
@@ -54,13 +53,13 @@ class ProducaoRemoteDatasourceImpl @Inject constructor(
         }
     }
 
-    override suspend fun deleteProducao(id: String) {
+    override suspend fun deleteProducao(producaoId: String) {
         mapearExecution {
             val batch = firestore.batch()
 
             val movimentacoesSnapshot = firestore
                 .collection(movimentacaoCollection)
-                .whereEqualTo("producaoId", id)
+                .whereEqualTo("producaoId", producaoId)
                 .get()
                 .await()
 
@@ -70,7 +69,7 @@ class ProducaoRemoteDatasourceImpl @Inject constructor(
 
             val producaoRef = firestore
                 .collection(producaoCollection)
-                .document(id)
+                .document(producaoId)
 
             batch.delete(producaoRef)
 
