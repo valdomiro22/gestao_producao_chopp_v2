@@ -53,7 +53,7 @@ fun ControleDoBuffer(
     val volumePendenteFormatado = formatador.format(volumePendente)
     val volumeConsumidoFormatado = formatador.format(volumeConsumido)
 
-    val bufferOk = volumeNecessario >= nivelMaxBuffer
+    val bufferOk = volumePendente >= nivelMaxBuffer
 
     val progresso = if (volumeNecessario <= 0.0) {
         0f
@@ -160,7 +160,8 @@ fun ControleDoBuffer(
                     .fillMaxWidth()
                     .clip(RoundedCornerShape(100.dp)),
                 color = corStatus,
-                trackColor = MaterialTheme.colorScheme.surfaceVariant
+                trackColor = MaterialTheme.colorScheme.surfaceVariant,
+                drawStopIndicator = {}
             )
 
             if (bufferOk) {

@@ -86,16 +86,11 @@ fun ItemMovimentacao(
 fun ItemHoraData(conteudo: String) {
     Box(
         modifier = Modifier
-            .background(
-                color = Color(0xFFE8EEF3),
-                shape = RoundedCornerShape(4.dp)
-            )
             .padding(horizontal = 6.dp, vertical = 2.dp)
     ) {
         Text(
             text = conteudo,
             fontSize = 13.sp,
-            color = Color(0xFF2D4A53),
             fontWeight = FontWeight.Medium
         )
     }

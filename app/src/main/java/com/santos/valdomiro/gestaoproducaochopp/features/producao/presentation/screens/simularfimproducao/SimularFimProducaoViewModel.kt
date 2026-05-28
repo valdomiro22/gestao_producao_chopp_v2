@@ -117,11 +117,6 @@ class SimularFimProducaoViewModel @Inject constructor(
             newState = newState.copy(erroQtProduzida = "Digite a quantidade produzida")
         }
 
-        if (state.nivelMaxTanque.isEmpty()) {
-            isValid = false
-            newState = newState.copy(erroNivelMaxTanque = "Digite o nível maximo do buffer")
-        }
-
         _uiState.update { newState }
         return isValid
     }

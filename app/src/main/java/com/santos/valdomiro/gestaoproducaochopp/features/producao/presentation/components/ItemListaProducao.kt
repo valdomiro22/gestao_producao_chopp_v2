@@ -142,7 +142,9 @@ fun ItemListaProducao(
                     modifier = Modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.spacedBy(24.dp)
                 ) {
-                    Column {
+                    Column(
+                        horizontalAlignment = Alignment.CenterHorizontally
+                    ) {
                         Text(
                             text = "PRODUZIDO",
                             style = MaterialTheme.typography.labelSmall,
@@ -150,14 +152,16 @@ fun ItemListaProducao(
                         )
 
                         Text(
-                            text = "${producao.quantidadeProduzida} un",
+                            text = "${producao.quantidadeProduzida}",
                             style = MaterialTheme.typography.titleMedium,
                             fontWeight = FontWeight.Bold,
                             color = MaterialTheme.colorScheme.onSurface
                         )
                     }
 
-                    Column {
+                    Column(
+                        horizontalAlignment = Alignment.CenterHorizontally
+                    ) {
                         Text(
                             text = "PROGRAMADO",
                             style = MaterialTheme.typography.labelSmall,
@@ -165,7 +169,7 @@ fun ItemListaProducao(
                         )
 
                         Text(
-                            text = "${producao.quantidadeProgramada} un",
+                            text = "${producao.quantidadeProgramada}",
                             style = MaterialTheme.typography.titleMedium,
                             fontWeight = FontWeight.Bold,
                             color = MaterialTheme.colorScheme.onSurfaceVariant
@@ -182,7 +186,9 @@ fun ItemListaProducao(
                         .height(8.dp),
                     color = corStatusLateral,
                     trackColor = MaterialTheme.colorScheme.surfaceVariant,
-                    strokeCap = StrokeCap.Round
+                    strokeCap = StrokeCap.Round,
+                    drawStopIndicator = {}
+
                 )
             }
 

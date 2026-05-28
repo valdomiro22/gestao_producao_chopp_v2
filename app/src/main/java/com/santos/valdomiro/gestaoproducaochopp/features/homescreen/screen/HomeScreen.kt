@@ -45,7 +45,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -53,7 +52,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.santos.valdomiro.gestaoproducaochopp.common.AppDrawer
-import com.santos.valdomiro.gestaoproducaochopp.common.components.ErroComponent
 import com.santos.valdomiro.gestaoproducaochopp.common.enums.Turno
 import com.santos.valdomiro.gestaoproducaochopp.common.state.UiState
 import com.santos.valdomiro.gestaoproducaochopp.features.homescreen.components.CardStatusProducaoComponent
@@ -120,7 +118,7 @@ fun HomeScreen(
                 val pdDetalhada = (state as? UiState.Success)?.data ?: run {
                     ProducaoNaoEncontradaComponent(
                         mensagem = "Selecione uma Produção na tela da lista de Produções",
-                        onTentarNovamente = {
+                        goListaDeGrades = {
                             buscarProducaoDetalhadaViewModel.buscarProducaoDatalhada(producaoId)
                         },
                         onVoltar = {
@@ -325,8 +323,8 @@ fun HomeScreen(
             state.isError -> {
                 ProducaoNaoEncontradaComponent(
                     mensagem = "Selecione uma Produção na tela da lista de Produções",
-                    onTentarNovamente = {
-                        buscarProducaoDetalhadaViewModel.buscarProducaoDatalhada(producaoId)
+                    goListaDeGrades = {
+                        navController.navigate(Route.ListaGradesRoute.route)
                     },
                     onVoltar = {
                         navController.popBackStack()

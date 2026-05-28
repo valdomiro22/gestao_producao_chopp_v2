@@ -29,7 +29,7 @@ import androidx.compose.ui.unit.sp
 fun ProducaoNaoEncontradaComponent(
     modifier: Modifier = Modifier,
     mensagem: String = "Não foi possível encontrar os dados desta produção.",
-    onTentarNovamente: (() -> Unit)? = null,
+    goListaDeGrades: (() -> Unit)? = null,
     onVoltar: (() -> Unit)? = null
 ) {
     Column(
@@ -79,13 +79,13 @@ fun ProducaoNaoEncontradaComponent(
             textAlign = TextAlign.Center
         )
 
-        if (onTentarNovamente != null) {
+        if (goListaDeGrades != null) {
             Spacer(modifier = Modifier.height(24.dp))
 
             Button(
-                onClick = onTentarNovamente
+                onClick = goListaDeGrades
             ) {
-                Text("Tentar novamente")
+                Text("Lista de Grades")
             }
         }
 

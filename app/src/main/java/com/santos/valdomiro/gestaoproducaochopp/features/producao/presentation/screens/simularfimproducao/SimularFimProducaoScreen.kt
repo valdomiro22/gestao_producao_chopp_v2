@@ -111,26 +111,14 @@ fun SimularFimProducaoScreen(
                         label = "Quantidade produzida"
                     )
                     if (state.erroQtProduzida != null) ErroComponent(state.erroQtProduzida!!)
-
-                    CustomOutlinedTextField(
-                        modifier = Modifier.fillMaxWidth(),
-                        value = state.nivelMaxTanque,
-                        onValueChange = viewModel::onNivelMaxChanged,
-                        placeholder = "Ex: 392",
-                        isErro = state.erroNivelMaxTanque != null,
-                        inputType = KeyboardType.Number,
-                        label = "Nível máximo do Buffer"
-                    )
-                    if (state.erroNivelMaxTanque != null) ErroComponent(state.erroNivelMaxTanque!!)
-
-                    Spacer(modifier = Modifier.height(8.dp))
+                    Spacer(modifier = Modifier.height(4.dp))
 
                     ButtomFillMaxWidth(
                         text = "Simular",
                         onClick = { viewModel.simular() }
                     )
 
-                    Spacer(modifier = Modifier.height(16.dp))
+                    Spacer(modifier = Modifier.height(8.dp))
 
                     CardNomeValor(titulo = "Tipo de barril", valor = "30L")
 
