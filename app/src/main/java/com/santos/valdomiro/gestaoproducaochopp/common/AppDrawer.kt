@@ -26,6 +26,7 @@ import androidx.compose.material3.NavigationDrawerItemDefaults
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.text.font.FontWeight
@@ -52,6 +53,7 @@ fun AppDrawer(
         val drawerItems = listOf(
             Route.HomeRoute,
             Route.CalcularTempoDeParadaRoute,
+            Route.VerificarValidadeRoute,
             Route.ListaGradesRoute,
             Route.ListaProducoesRoute,
             Route.ListaBarrisRoute,
@@ -100,17 +102,6 @@ fun AppDrawer(
             ),
             shape = RoundedCornerShape(12.dp)
         )
-
-        // Versão do App (Opcional, mas profissional)
-        Text(
-            text = "v1.0.4",
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(bottom = 16.dp),
-            textAlign = TextAlign.Center,
-            style = MaterialTheme.typography.labelSmall,
-            color = MaterialTheme.colorScheme.onSurfaceVariant
-        )
     }
 }
 
@@ -120,24 +111,23 @@ private fun DrawerHeader() {
         modifier = Modifier
             .fillMaxWidth()
             .background(
-                brush = Brush.verticalGradient(
-                    colors = listOf(
                         MaterialTheme.colorScheme.primary,
-                        MaterialTheme.colorScheme.primaryContainer
-                    )
-                )
             )
             .padding(top = 48.dp, start = 16.dp, end = 16.dp, bottom = 24.dp)
     ) {
-        Column {
+        Column(
+            modifier = Modifier
+                .fillMaxWidth(),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
             // Ícone circular para dar identidade visual
             Surface(
-                modifier = Modifier.size(48.dp),
+                modifier = Modifier.size(80.dp),
                 shape = CircleShape,
                 color = MaterialTheme.colorScheme.onPrimary.copy(alpha = 0.2f)
             ) {
                 Icon(
-                    imageVector = Icons.Default.Person, // Exemplo de ícone de produção
+                    imageVector = Icons.Default.Person,
                     contentDescription = null,
                     modifier = Modifier.padding(8.dp),
                     tint = MaterialTheme.colorScheme.onPrimary

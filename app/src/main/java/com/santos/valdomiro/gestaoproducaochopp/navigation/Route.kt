@@ -1,5 +1,7 @@
 package com.santos.valdomiro.gestaoproducaochopp.navigation
 
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.rounded.DateRange
 import androidx.compose.ui.graphics.vector.ImageVector
 
 sealed class Route(
@@ -50,6 +52,9 @@ sealed class Route(
 
     // Calcular tempo de parada
     data object CalcularTempoDeParadaRoute: Route(route = "calcular-tempo-parada", title = "Tempo de Parada")
+
+    // Verificar validade
+    data object VerificarValidadeRoute: Route(route = "verificar-validade", title = "Verificar validade")
 
     // Simular fim de Produção
     data object SimularFimProducaoRoute :
