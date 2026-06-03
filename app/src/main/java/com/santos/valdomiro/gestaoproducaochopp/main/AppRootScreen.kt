@@ -1,28 +1,20 @@
 package com.santos.valdomiro.gestaoproducaochopp.main
 
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
-import com.santos.valdomiro.gestaoproducaochopp.common.screens.splashscreen.SplashScreen
+import androidx.compose.runtime.LaunchedEffect
+import androidx.hilt.navigation.compose.hiltViewModel
+import com.santos.valdomiro.gestaoproducaochopp.common.usecase.SincronizacaoInicialViewModel
 import com.santos.valdomiro.gestaoproducaochopp.navigation.Route
 
 @Composable
-fun AppRootScreen() {
-    var splashFinalizada by remember {
-        mutableStateOf(false)
+fun AppRootScreen(
+    viewModel: SincronizacaoInicialViewModel = hiltViewModel()
+) {
+    LaunchedEffect(Unit) {
+        viewModel.sincronizarAoAbrirApp()
     }
 
-    if (splashFinalizada) {
-        MainAppScreen(
-            startDestination = Route.ListaGradesRoute.route
-        )
-    } else {
-        SplashScreen(
-            onFinish = {
-                splashFinalizada = true
-            }
-        )
-    }
+    MainAppScreen(
+        startDestination = Route.ListaGradesRoute.route
+    )
 }

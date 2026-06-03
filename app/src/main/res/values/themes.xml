@@ -4,6 +4,15 @@
     <style name="Theme.GestaoProducaoChopp" parent="android:style/Theme.Material.Light.NoActionBar">
         <item name="android:windowNoTitle">true</item>
         <item name="android:windowActionBar">false</item>
+
+        <!-- Cor da splash nativa -->
+        <item name="android:windowSplashScreenBackground">#070E13</item>
+
+        <!-- Logo que aparece na splash nativa -->
+        <item name="android:windowSplashScreenAnimatedIcon">@drawable/logo_splash</item>
+
+        <!-- Fundo depois que a splash sai -->
+        <item name="android:windowBackground">#070E13</item>
     </style>
 
 </resources>
