@@ -22,6 +22,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.santos.valdomiro.gestaoproducaochopp.R
 import com.santos.valdomiro.gestaoproducaochopp.common.usecase.SincronizacaoInicialViewModel
 import kotlinx.coroutines.delay
+import kotlin.time.Duration.Companion.milliseconds
 
 @Composable
 fun SplashScreen(
@@ -30,7 +31,7 @@ fun SplashScreen(
 ) {
     LaunchedEffect(Unit) {
         viewModel.sincronizarAoAbrirApp()
-        delay(2000)
+        delay(2000.milliseconds)
         onFinish()
     }
 

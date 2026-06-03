@@ -88,20 +88,20 @@ fun AppDrawer(
         }
 
         // Rodapé / Botão de Sair
-        HorizontalDivider(modifier = Modifier.padding(horizontal = 16.dp))
+//        HorizontalDivider(modifier = Modifier.padding(horizontal = 16.dp))
 
-        NavigationDrawerItem(
-            label = { Text("Sair da Conta") },
-            selected = false,
-            onClick = onLogoutClick,
-            icon = { Icon(Icons.AutoMirrored.Filled.ExitToApp, contentDescription = "Sair") },
-            modifier = Modifier.padding(12.dp),
-            colors = NavigationDrawerItemDefaults.colors(
-                unselectedIconColor = MaterialTheme.colorScheme.error,
-                unselectedTextColor = MaterialTheme.colorScheme.error
-            ),
-            shape = RoundedCornerShape(12.dp)
-        )
+//        NavigationDrawerItem(
+//            label = { Text("Sair da Conta") },
+//            selected = false,
+//            onClick = onLogoutClick,
+//            icon = { Icon(Icons.AutoMirrored.Filled.ExitToApp, contentDescription = "Sair") },
+//            modifier = Modifier.padding(12.dp),
+//            colors = NavigationDrawerItemDefaults.colors(
+//                unselectedIconColor = MaterialTheme.colorScheme.error,
+//                unselectedTextColor = MaterialTheme.colorScheme.error
+//            ),
+//            shape = RoundedCornerShape(12.dp)
+//        )
     }
 }
 

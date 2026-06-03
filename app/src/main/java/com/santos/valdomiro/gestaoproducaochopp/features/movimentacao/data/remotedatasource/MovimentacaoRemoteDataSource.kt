@@ -1,6 +1,7 @@
 package com.santos.valdomiro.gestaoproducaochopp.features.movimentacao.data.remotedatasource
 
 import com.santos.valdomiro.gestaoproducaochopp.features.movimentacao.data.model.MovimentacaoRemoteModel
+import kotlinx.coroutines.flow.Flow
 
 interface MovimentacaoRemoteDataSource {
     suspend fun insertMovimentacao(movimentacao: MovimentacaoRemoteModel)
@@ -8,7 +9,17 @@ interface MovimentacaoRemoteDataSource {
     suspend fun getMovimentacao(movimentacaoId: String): MovimentacaoRemoteModel?
     suspend fun deleteMovimentacao(movimentacaoId: String)
     suspend fun getAllMovimentacoes(): List<MovimentacaoRemoteModel>
-    suspend fun getAllMovimentacoesDaProducao(producaoId: String): List<MovimentacaoRemoteModel>
-    suspend fun getAllMovimentacoesOfHorario(horarioReferente: Int, producaoId: String): List<MovimentacaoRemoteModel>
+
+    fun observarMovimentacoesDaProducao(
+        producaoId: String
+    ): Flow<List<MovimentacaoRemoteModel>>
+
+    fun observarMovimentacoesDoHorario(
+        horarioReferente: String,
+        producaoId: String
+    ): Flow<List<MovimentacaoRemoteModel>>
+
     suspend fun deleteMovimentacoesDaProducao(producaoId: String)
+
+    fun getAllMovimentacoesRealtime(): Flow<List<MovimentacaoRemoteModel>>
 }

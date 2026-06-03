@@ -1,12 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <style name="Theme.GestaoProducaoChopp.Starting" parent="Theme.SplashScreen">
-        <item name="windowSplashScreenBackground">#05080D</item>
-        <item name="windowSplashScreenAnimatedIcon">@drawable/logo_gestao_producao</item>
-        <item name="postSplashScreenTheme">@style/Theme.GestaoProducaoChopp</item>
-    </style>
-
     <style name="Theme.GestaoProducaoChopp" parent="android:style/Theme.Material.Light.NoActionBar">
         <item name="android:windowNoTitle">true</item>
         <item name="android:windowActionBar">false</item>

@@ -98,9 +98,14 @@ fun HomeScreen(
     var menuExpandido by remember { mutableStateOf(false) }  // Para o controle do DropdownMenu
     val turnoAtual by homeViewModel.turnoSelecionado.collectAsState()
 
-    LaunchedEffect(Unit) {
+    LaunchedEffect(producaoId) {
+        mapMovimentacoesViewModel.iniciarSincronizacaoRealtime()
+
         buscarProducaoDetalhadaViewModel.buscarProducaoDatalhada(producaoId)
-        mapMovimentacoesViewModel.getMovimentacoesDaProducao(producaoId = producaoId)
+
+        mapMovimentacoesViewModel.getMovimentacoesDaProducao(
+            producaoId = producaoId
+        )
     }
 
     ModalNavigationDrawer(

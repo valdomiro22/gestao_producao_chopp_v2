@@ -22,4 +22,6 @@ interface MovimentacaoRepository {
         producaoId: String
     ): Flow<List<MovimentacaoEntity>>
     suspend fun sincronizarMovimentacoesDoRemoto(): Result<Unit>
+
+    fun sincronizarMovimentacoesRealtime(): Flow<Unit>
 }

@@ -2,12 +2,16 @@ package com.santos.valdomiro.gestaoproducaochopp.features.movimentacao.data.remo
 
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.FirebaseFirestoreException
+import com.google.firebase.firestore.Query
 import com.google.firebase.firestore.SetOptions
 import com.santos.valdomiro.gestaoproducaochopp.common.exceptions.AcessoNegadoException
 import com.santos.valdomiro.gestaoproducaochopp.common.exceptions.ErroBancoDadosDesconhecidoException
 import com.santos.valdomiro.gestaoproducaochopp.common.exceptions.NaoEncontradoException
 import com.santos.valdomiro.gestaoproducaochopp.common.exceptions.ServicoIndisponivelException
 import com.santos.valdomiro.gestaoproducaochopp.features.movimentacao.data.model.MovimentacaoRemoteModel
+import kotlinx.coroutines.channels.awaitClose
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.tasks.await
 import javax.inject.Inject
 
@@ -87,37 +91,66 @@ class MovimentacaoRemoteDataSourceImpl @Inject constructor(
         }
     }
 
-    override suspend fun getAllMovimentacoesDaProducao(
+    override fun observarMovimentacoesDoHorario(
+        horarioReferente: String,
         producaoId: String
-    ): List<MovimentacaoRemoteModel> {
-        return mapearExecution {
-            val snapshot = firestore
-                .collection(movimentacaoCollection)
-                .whereEqualTo("producaoId", producaoId)
-                .get()
-                .await()
+    ): Flow<List<MovimentacaoRemoteModel>> = callbackFlow {
 
-            snapshot.documents.mapNotNull {
-                it.toObject(MovimentacaoRemoteModel::class.java)
+        val listener = firestore
+            .collection(movimentacaoCollection)
+            .whereEqualTo("horarioReferente", horarioReferente)
+            .whereEqualTo("producaoId", producaoId)
+            .orderBy("criadoEm", Query.Direction.DESCENDING)
+            .addSnapshotListener { snapshot, error ->
+
+                if (error != null) {
+                    close(error)
+                    return@addSnapshotListener
+                }
+
+                val lista = snapshot
+                    ?.documents
+                    ?.mapNotNull { document ->
+                        document.toObject(MovimentacaoRemoteModel::class.java)
+                    }
+                    ?: emptyList()
+
+                trySend(lista)
             }
+
+        awaitClose {
+            listener.remove()
         }
     }
 
-    override suspend fun getAllMovimentacoesOfHorario(
-        horarioReferente: Int, producaoId: String
-    ): List<MovimentacaoRemoteModel> {
-        return mapearExecution {
-            val snapshot = firestore
-                .collection(movimentacaoCollection)
-                .whereEqualTo("horarioReferente", horarioReferente)
-                .whereEqualTo("producaoId", producaoId)
-                .orderBy("criadoEm", com.google.firebase.firestore.Query.Direction.DESCENDING)
-                .get()
-                .await()
 
-            snapshot.documents.mapNotNull {
-                it.toObject(MovimentacaoRemoteModel::class.java)
+    override fun observarMovimentacoesDaProducao(
+        producaoId: String
+    ): Flow<List<MovimentacaoRemoteModel>> = callbackFlow {
+
+        val listener = firestore
+            .collection(movimentacaoCollection)
+            .whereEqualTo("producaoId", producaoId)
+            .orderBy("criadoEm", Query.Direction.DESCENDING)
+            .addSnapshotListener { snapshot, error ->
+
+                if (error != null) {
+                    close(error)
+                    return@addSnapshotListener
+                }
+
+                val lista = snapshot
+                    ?.documents
+                    ?.mapNotNull { document ->
+                        document.toObject(MovimentacaoRemoteModel::class.java)
+                    }
+                    ?: emptyList()
+
+                trySend(lista)
             }
+
+        awaitClose {
+            listener.remove()
         }
     }
 
@@ -137,6 +170,31 @@ class MovimentacaoRemoteDataSourceImpl @Inject constructor(
             }
         } catch (e: Exception) {
             throw e
+        }
+    }
+
+    override fun getAllMovimentacoesRealtime(): Flow<List<MovimentacaoRemoteModel>> = callbackFlow {
+        val listener = firestore
+            .collection(movimentacaoCollection)
+            .addSnapshotListener { snapshot, error ->
+
+                if (error != null) {
+                    close(error)
+                    return@addSnapshotListener
+                }
+
+                val movimentacoes = snapshot
+                    ?.documents
+                    ?.mapNotNull { document ->
+                        document.toObject(MovimentacaoRemoteModel::class.java)
+                    }
+                    ?: emptyList()
+
+                trySend(movimentacoes)
+            }
+
+        awaitClose {
+            listener.remove()
         }
     }
 

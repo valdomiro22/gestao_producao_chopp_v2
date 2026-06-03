@@ -259,4 +259,32 @@ class MovimentacaoRepositoryImpl @Inject constructor(
             Result.failure(e)
         }
     }
+
+    override fun sincronizarMovimentacoesRealtime(): Flow<Unit> {
+        return remoteDataSource.getAllMovimentacoesRealtime()
+            .map { movimentacoesRemotas ->
+
+                val movimentacoesLocais = localDataSource
+                    .getAllMovimentacoes()
+                    .first()
+
+                val idsLocais = movimentacoesLocais
+                    .map { it.id }
+                    .toSet()
+
+                val movimentacoesParaSalvar = movimentacoesRemotas
+                    .filter { movimentacaoRemote ->
+                        movimentacaoRemote.id !in idsLocais
+                    }
+                    .map { movimentacaoRemote ->
+                        movimentacaoRemote.toLocalModel()
+                    }
+
+                if (movimentacoesParaSalvar.isNotEmpty()) {
+                    localDataSource.insertAllMovimentacoes(movimentacoesParaSalvar)
+                }
+
+                Unit
+            }
+    }
 }
